@@ -27,7 +27,7 @@ Rules:
 - Do not include any text outside the JSON array`;
 
 export async function generatePersonas(productDescription) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('https://prismapi.arshamchabok.workers.dev', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

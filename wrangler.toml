@@ -1,0 +1,9 @@
+name = "prism-api"
+main = "worker.js"
+type = "javascript"
+
+[build]
+command = ""
+
+[dev]
+port = 8787
