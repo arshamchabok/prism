@@ -6,487 +6,21 @@
   <title>Prism — Customer Persona Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0a0a0f;
-      --bg2: #111118;
-      --bg3: #16161f;
-      --border: rgba(255,255,255,0.07);
-      --border-hover: rgba(255,255,255,0.14);
-      --text: #f0eff8;
-      --text-muted: #8a89a0;
-      --text-dim: #4a4a60;
-      --accent: #7c6cfa;
-      --accent2: #c084fc;
-      --accent-glow: rgba(124, 108, 250, 0.2);
-      --green: #34d399;
-      --amber: #fbbf24;
-      --coral: #fb7185;
-      --teal: #22d3ee;
-      --card-radius: 16px;
-    }
-
-    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; }
-
-    /* ---- LAYOUT ---- */
-    #app { min-height: 100vh; display: flex; flex-direction: column; }
-
-    /* ---- HEADER ---- */
-    header {
-      padding: 2rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(10,10,15,0.85);
-      backdrop-filter: blur(12px);
-      z-index: 10;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.5rem;
-      color: var(--text);
-      letter-spacing: -0.02em;
-    }
-    .logo-prism {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
-    }
-    .logo-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(124,108,250,0.12);
-      border: 1px solid rgba(124,108,250,0.25);
-      padding: 3px 8px;
-      border-radius: 6px;
-    }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .badge-count {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ---- HERO ---- */
-    .hero {
-      padding: 5rem 2.5rem 3.5rem;
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-    .hero-eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
-    }
-    .hero h1 {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-    .hero h1 em {
-      font-style: italic;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-
-    /* ---- INPUT AREA ---- */
-    .input-section {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 2.5rem 3rem;
-      width: 100%;
-    }
-    .input-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .input-card:focus-within {
-      border-color: rgba(124,108,250,0.4);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-    textarea {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      line-height: 1.7;
-      padding: 1.25rem 1.5rem;
-      resize: none;
-      min-height: 110px;
-    }
-    textarea::placeholder { color: var(--text-dim); }
-    .input-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      border-top: 1px solid var(--border);
-    }
-    .char-count { font-size: 12px; color: var(--text-dim); }
-    .examples-hint { font-size: 12px; color: var(--text-dim); }
-    .examples-hint button {
-      background: none;
-      border: none;
-      color: var(--accent);
-      cursor: pointer;
-      font-size: 12px;
-      font-family: inherit;
-      padding: 0;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-    .generate-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 0.65rem 1.4rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .generate-btn:hover:not(:disabled) { background: #6b5bf0; transform: translateY(-1px); }
-    .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    /* ---- EXAMPLE PILLS ---- */
-    .examples-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 1rem;
-    }
-    .example-pill {
-      font-size: 12px;
-      color: var(--text-muted);
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 5px 14px;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .example-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
-
-    /* ---- LOADING ---- */
-    .loading-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 4rem 2rem;
-    }
-    .loading-prism {
-      animation: spin 3s linear infinite;
-    }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .loading-text {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.3rem;
-      color: var(--text-muted);
-      letter-spacing: -0.01em;
-    }
-    .loading-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      text-align: center;
-    }
-    .loading-step {
-      font-size: 13px;
-      color: var(--text-dim);
-      transition: color 0.3s;
-    }
-    .loading-step.active { color: var(--accent); }
-    .loading-step.done { color: var(--green); }
-
-    /* ---- RESULTS ---- */
-    .results-section {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2.5rem 5rem;
-      width: 100%;
-    }
-    .results-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .results-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.4rem;
-      letter-spacing: -0.02em;
-    }
-    .results-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-    .reset-btn {
-      font-size: 13px;
-      color: var(--text-muted);
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 16px;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s;
-    }
-    .reset-btn:hover { border-color: var(--border-hover); color: var(--text); }
-
-    .personas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    /* ---- PERSONA CARD ---- */
-    .persona-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      animation: fadeUp 0.5s ease both;
-      transition: border-color 0.2s, transform 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .persona-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-    .persona-card:nth-child(1) { animation-delay: 0.05s; }
-    .persona-card:nth-child(2) { animation-delay: 0.15s; }
-    .persona-card:nth-child(3) { animation-delay: 0.25s; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-header {
-      padding: 1.5rem 1.5rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .persona-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 0.9rem;
-    }
-    .persona-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 15px;
-      flex-shrink: 0;
-    }
-    .persona-card:nth-child(1) .persona-avatar { background: rgba(124,108,250,0.15); color: var(--accent); border: 1px solid rgba(124,108,250,0.25); }
-    .persona-card:nth-child(2) .persona-avatar { background: rgba(34,211,238,0.1); color: var(--teal); border: 1px solid rgba(34,211,238,0.2); }
-    .persona-card:nth-child(3) .persona-avatar { background: rgba(251,113,133,0.1); color: var(--coral); border: 1px solid rgba(251,113,133,0.2); }
-
-    .persona-name-block {}
-    .persona-name {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--text);
-    }
-    .persona-title {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 1px;
-    }
-    .persona-location {
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-    .persona-age-badge {
-      margin-left: auto;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      background: var(--bg3);
-      border-radius: 6px;
-      padding: 3px 8px;
-    }
-    .persona-summary {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    .card-body { padding: 1rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 1.1rem; }
-
-    .persona-quote {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.5;
-      color: var(--text);
-      padding-left: 1rem;
-      border-left: 2px solid;
-      position: relative;
-    }
-    .persona-card:nth-child(1) .persona-quote { border-color: var(--accent); }
-    .persona-card:nth-child(2) .persona-quote { border-color: var(--teal); }
-    .persona-card:nth-child(3) .persona-quote { border-color: var(--coral); }
-
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 6px;
-    }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      line-height: 1;
-    }
-    .persona-card:nth-child(1) .tag { border-color: rgba(124,108,250,0.2); color: rgba(167,155,252,0.9); background: rgba(124,108,250,0.07); }
-    .persona-card:nth-child(2) .tag { border-color: rgba(34,211,238,0.2); color: rgba(103,232,249,0.9); background: rgba(34,211,238,0.07); }
-    .persona-card:nth-child(3) .tag { border-color: rgba(251,113,133,0.2); color: rgba(253,164,175,0.9); background: rgba(251,113,133,0.07); }
-
-    .list-items { display: flex; flex-direction: column; gap: 5px; }
-    .list-item {
-      display: flex;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      align-items: flex-start;
-    }
-    .list-bullet {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--text-dim);
-      flex-shrink: 0;
-      margin-top: 7px;
-    }
-    .persona-card:nth-child(1) .list-bullet { background: var(--accent); opacity: 0.6; }
-    .persona-card:nth-child(2) .list-bullet { background: var(--teal); opacity: 0.6; }
-    .persona-card:nth-child(3) .list-bullet { background: var(--coral); opacity: 0.6; }
-
-    .hook-box {
-      margin-top: auto;
-      background: var(--bg3);
-      border-radius: 10px;
-      padding: 0.9rem 1rem;
-      border: 1px solid var(--border);
-    }
-    .hook-box .section-label { margin-bottom: 5px; }
-    .hook-text { font-size: 13px; color: var(--text); line-height: 1.5; font-weight: 500; }
-
-    /* ---- DISCOVERY BADGE ---- */
-    .discovery-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .discovery-label { font-size: 12px; color: var(--text-dim); }
-
-    /* ---- FOOTER ---- */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .footer-left { font-size: 12px; color: var(--text-dim); }
-    .footer-right { display: flex; gap: 16px; }
-    .footer-right a { font-size: 12px; color: var(--text-dim); text-decoration: none; }
-    .footer-right a:hover { color: var(--text-muted); }
-
-    /* ---- ERROR ---- */
-    .error-box {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 1.5rem;
-      background: rgba(251,113,133,0.08);
-      border: 1px solid rgba(251,113,133,0.2);
-      border-radius: 12px;
-      color: var(--coral);
-      font-size: 14px;
-      text-align: center;
-    }
-
-    /* ---- UTILS ---- */
-    .hidden { display: none !important; }
-
-    @media (max-width: 640px) {
-      header { padding: 1.25rem 1.25rem; }
-      .hero { padding: 3rem 1.25rem 2rem; }
-      .input-section { padding: 0 1.25rem 2rem; }
-      .results-section { padding: 0 1.25rem 3rem; }
-      .personas-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
 <div id="app">
 
-  <!-- HEADER -->
   <header>
     <div class="logo">
       <svg class="logo-prism" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon points="14,2 26,22 2,22" fill="none" stroke="url(#prism-grad)" stroke-width="1.5" stroke-linejoin="round"/>
         <line x1="14" y1="2" x2="14" y2="22" stroke="rgba(124,108,250,0.3)" stroke-width="1"/>
-        <line x1="14" y1="22" x2="4" y2="10" stroke="rgba(192,132,252,0.3)" stroke-width="1"/>
-        <line x1="14" y1="22" x2="24" y2="10" stroke="rgba(34,211,238,0.3)" stroke-width="1"/>
+        <line x1="14" y1="22" x2="4"  y2="10" stroke="rgba(192,132,252,0.3)" stroke-width="1"/>
+        <line x1="14" y1="22" x2="24" y2="10" stroke="rgba(34,211,238,0.3)"  stroke-width="1"/>
         <defs>
           <linearGradient id="prism-grad" x1="2" y1="2" x2="26" y2="22" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#7c6cfa"/>
+            <stop offset="0%"   stop-color="#7c6cfa"/>
             <stop offset="100%" stop-color="#22d3ee"/>
           </linearGradient>
         </defs>
@@ -499,25 +33,17 @@
     </div>
   </header>
 
-  <!-- HERO -->
   <section class="hero" id="hero-section">
     <div class="hero-eyebrow">AI-Powered Audience Intelligence</div>
     <h1>Know your customer<br>before they know <em>you</em></h1>
     <p>Describe your product or service. Prism generates three research-grade customer personas — distinct buyers, real motivations, precise messaging hooks — in under ten seconds.</p>
   </section>
 
-  <!-- INPUT -->
   <section class="input-section" id="input-section">
     <div class="input-card">
-      <textarea
-        id="product-input"
-        placeholder="Describe your product or service… e.g. &ldquo;A SaaS tool that helps freelancers send invoices and track payments automatically&rdquo;"
-        maxlength="800"
-      ></textarea>
+      <textarea id="product-input" placeholder="Describe your product or service…" maxlength="800"></textarea>
       <div class="input-footer">
-        <div>
-          <span class="char-count"><span id="char-display">0</span> / 800</span>
-        </div>
+        <span class="char-count"><span id="char-display">0</span> / 800</span>
         <button class="generate-btn" id="generate-btn" disabled>
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
             <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -526,8 +52,8 @@
         </button>
       </div>
     </div>
-    <div class="examples-row" id="examples-row">
-      <span style="font-size:12px;color:var(--text-dim);align-self:center;">Try:</span>
+    <div class="examples-row">
+      <span class="examples-row-label">Try:</span>
       <button class="example-pill" data-example="A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping">Meal kit delivery</button>
       <button class="example-pill" data-example="A B2B project management platform built for remote software engineering teams who need real-time collaboration across time zones">B2B project management</button>
       <button class="example-pill" data-example="A mobile app that helps first-time homebuyers understand the mortgage process, compare loan options, and track their application status">First-time homebuyer app</button>
@@ -535,14 +61,13 @@
     </div>
   </section>
 
-  <!-- LOADING -->
   <section class="loading-section hidden" id="loading-section">
     <svg class="loading-prism" width="48" height="48" viewBox="0 0 48 48" fill="none">
       <polygon points="24,4 44,40 4,40" fill="none" stroke="url(#lg2)" stroke-width="2" stroke-linejoin="round"/>
       <defs>
         <linearGradient id="lg2" x1="4" y1="4" x2="44" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#7c6cfa"/>
-          <stop offset="50%" stop-color="#c084fc"/>
+          <stop offset="0%"   stop-color="#7c6cfa"/>
+          <stop offset="50%"  stop-color="#c084fc"/>
           <stop offset="100%" stop-color="#22d3ee"/>
         </linearGradient>
       </defs>
@@ -556,17 +81,15 @@
     </div>
   </section>
 
-  <!-- ERROR -->
-  <div class="hidden" id="error-section" style="max-width:780px;margin:0 auto;padding:0 2.5rem 2rem;width:100%;">
+  <div class="error-section hidden" id="error-section">
     <div class="error-box" id="error-box"></div>
   </div>
 
-  <!-- RESULTS -->
   <section class="results-section hidden" id="results-section">
     <div class="results-header">
       <div>
         <div class="results-title">Your Customer Personas</div>
-        <div class="results-subtitle" id="results-subtitle">Generated for: <em id="product-summary-display"></em></div>
+        <div class="results-subtitle">Generated for: <em id="product-summary-display"></em></div>
       </div>
       <button class="reset-btn" id="reset-btn">← New product</button>
     </div>
@@ -585,244 +108,9 @@
 
 </div>
 
-<script>
-const textarea = document.getElementById('product-input');
-const charDisplay = document.getElementById('char-display');
-const generateBtn = document.getElementById('generate-btn');
-const heroSection = document.getElementById('hero-section');
-const inputSection = document.getElementById('input-section');
-const loadingSection = document.getElementById('loading-section');
-const resultsSection = document.getElementById('results-section');
-const errorSection = document.getElementById('error-section');
-const errorBox = document.getElementById('error-box');
-const personasGrid = document.getElementById('personas-grid');
-const resetBtn = document.getElementById('reset-btn');
-const sessionCountEl = document.getElementById('session-count');
-const productSummaryDisplay = document.getElementById('product-summary-display');
-
-let sessionCount = parseInt(localStorage.getItem('prism-count') || '0');
-updateSessionBadge();
-
-function updateSessionBadge() {
-  sessionCountEl.textContent = sessionCount > 0 ? `${sessionCount} persona set${sessionCount > 1 ? 's' : ''} generated` : '';
-}
-
-// Char counter
-textarea.addEventListener('input', () => {
-  const len = textarea.value.trim().length;
-  charDisplay.textContent = textarea.value.length;
-  generateBtn.disabled = len < 10;
-});
-
-// Example pills
-document.querySelectorAll('.example-pill').forEach(pill => {
-  pill.addEventListener('click', () => {
-    textarea.value = pill.dataset.example;
-    charDisplay.textContent = textarea.value.length;
-    generateBtn.disabled = false;
-    textarea.focus();
-  });
-});
-
-// Reset
-resetBtn.addEventListener('click', resetUI);
-function resetUI() {
-  resultsSection.classList.add('hidden');
-  errorSection.classList.add('hidden');
-  heroSection.classList.remove('hidden');
-  inputSection.classList.remove('hidden');
-  textarea.value = '';
-  charDisplay.textContent = '0';
-  generateBtn.disabled = true;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Generate
-generateBtn.addEventListener('click', generate);
-
-async function generate() {
-  const input = textarea.value.trim();
-  if (input.length < 10) return;
-
-  heroSection.classList.add('hidden');
-  inputSection.classList.add('hidden');
-  errorSection.classList.add('hidden');
-  resultsSection.classList.add('hidden');
-  loadingSection.classList.remove('hidden');
-
-  animateLoadingSteps();
-
-  const systemPrompt = `You are a senior market strategist and customer research expert. Your task is to generate exactly THREE detailed, research-grade customer personas for a product or service described by the user.
-
-Each persona must represent a GENUINELY DISTINCT buyer segment — different roles, budgets, decision-making styles, motivations, and discovery channels. Do not create variations of the same person.
-
-Respond ONLY with a valid JSON array (no markdown fences, no preamble, no trailing text). The array must contain exactly 3 persona objects with this exact structure:
-
-[
-  {
-    "name": "Full Name",
-    "age": 34,
-    "jobTitle": "Job Title",
-    "location": "City, Country",
-    "summary": "One sentence describing who this person is in the context of the product (under 20 words)",
-    "quote": "A direct quote in their authentic voice capturing their core frustration or desire (25-40 words, first person)",
-    "goals": ["goal 1", "goal 2", "goal 3"],
-    "painPoints": ["pain point 1", "pain point 2", "pain point 3"],
-    "discoveryChannels": ["channel 1", "channel 2", "channel 3"],
-    "messagingHook": "The single most compelling message or framing for this persona — the sentence that would stop them in their tracks (20-35 words)"
-  }
-]
-
-Rules:
-- Make names realistic and diverse (different ethnicities, genders, ages)
-- Ages should vary meaningfully across personas (e.g. 28, 42, 57 — not all 30-35)
-- Goals, pain points, and discovery channels: 3 items each, concise (under 12 words each)
-- The messaging hook must be specific to this persona's psychology — not generic marketing copy
-- Do not include any text outside the JSON array`;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: `Product/Service: ${input}` }]
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error?.message || `API error ${response.status}`);
-    }
-
-    const data = await response.json();
-    const raw = data.content?.find(b => b.type === 'text')?.text || '';
-
-    let personas;
-    try {
-      const cleaned = raw.replace(/```json|```/g, '').trim();
-      personas = JSON.parse(cleaned);
-    } catch {
-      throw new Error('Failed to parse persona data. Please try again.');
-    }
-
-    if (!Array.isArray(personas) || personas.length === 0) {
-      throw new Error('Unexpected response format. Please try again.');
-    }
-
-    sessionCount++;
-    localStorage.setItem('prism-count', sessionCount);
-    updateSessionBadge();
-
-    renderPersonas(personas, input);
-
-  } catch (err) {
-    loadingSection.classList.add('hidden');
-    errorSection.classList.remove('hidden');
-    errorBox.textContent = `Something went wrong: ${err.message}`;
-    heroSection.classList.remove('hidden');
-    inputSection.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
-
-function animateLoadingSteps() {
-  const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
-  steps.forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.remove('active', 'done');
-  });
-
-  let current = 0;
-  const interval = setInterval(() => {
-    if (current > 0) {
-      document.getElementById(steps[current - 1]).classList.remove('active');
-      document.getElementById(steps[current - 1]).classList.add('done');
-    }
-    if (current < steps.length) {
-      document.getElementById(steps[current]).classList.add('active');
-      current++;
-    } else {
-      clearInterval(interval);
-    }
-  }, 1400);
-}
-
-function getInitials(name) {
-  return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
-}
-
-function renderPersonas(personas, input) {
-  loadingSection.classList.add('hidden');
-  personasGrid.innerHTML = '';
-
-  const summary = input.length > 60 ? input.slice(0, 57) + '…' : input;
-  productSummaryDisplay.textContent = summary;
-
-  personas.forEach((p, i) => {
-    const card = document.createElement('div');
-    card.className = 'persona-card';
-
-    const goals = Array.isArray(p.goals) ? p.goals : [];
-    const pains = Array.isArray(p.painPoints) ? p.painPoints : [];
-    const channels = Array.isArray(p.discoveryChannels) ? p.discoveryChannels : [];
-
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="persona-meta">
-          <div class="persona-avatar">${getInitials(p.name || 'P' + (i+1))}</div>
-          <div class="persona-name-block">
-            <div class="persona-name">${esc(p.name)}</div>
-            <div class="persona-title">${esc(p.jobTitle)}</div>
-            <div class="persona-location">${esc(p.location)}</div>
-          </div>
-          <div class="persona-age-badge">${esc(String(p.age))}</div>
-        </div>
-        <div class="persona-summary">${esc(p.summary)}</div>
-      </div>
-      <div class="card-body">
-        <div class="persona-quote">&ldquo;${esc(p.quote)}&rdquo;</div>
-
-        ${goals.length ? `<div>
-          <div class="section-label">Goals &amp; Motivations</div>
-          <div class="list-items">${goals.map(g => `<div class="list-item"><div class="list-bullet"></div><span>${esc(g)}</span></div>`).join('')}</div>
-        </div>` : ''}
-
-        ${pains.length ? `<div>
-          <div class="section-label">Daily Pain Points</div>
-          <div class="list-items">${pains.map(pp => `<div class="list-item"><div class="list-bullet"></div><span>${esc(pp)}</span></div>`).join('')}</div>
-        </div>` : ''}
-
-        ${channels.length ? `<div>
-          <div class="section-label">How They Discover Products</div>
-          <div class="tag-list">${channels.map(c => `<span class="tag">${esc(c)}</span>`).join('')}</div>
-        </div>` : ''}
-
-        <div class="hook-box">
-          <div class="section-label">Messaging Hook</div>
-          <div class="hook-text">&ldquo;${esc(p.messagingHook)}&rdquo;</div>
-        </div>
-      </div>
-    `;
-
-    personasGrid.appendChild(card);
-  });
-
-  resultsSection.classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function esc(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+<script type="module">
+  import { initApp } from './src/app.js';
+  initApp();
 </script>
-
 </body>
 </html>
