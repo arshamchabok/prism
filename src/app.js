@@ -1,7 +1,6 @@
 import { generatePersonas } from './api.js';
 import { updateSessionBadge } from './components/Header.js';
 import { bindInputPanel } from './components/InputPanel.js';
-import { animateLoadingSteps } from './components/LoadingPanel.js';
 import { populateResults } from './components/ResultsPanel.js';
 
 // ── State ──────────────────────────────────────────────
@@ -33,7 +32,6 @@ function goToLoading() {
   hide('error-section');
   hide('results-section');
   show('loading-section');
-  animateLoadingSteps();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

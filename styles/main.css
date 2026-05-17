@@ -1,16 +1,17 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.hidden { display: none !important; }
 
 :root {
-  --bg: #ffffff;
-  --bg2: rgba(255, 255, 255, 0.96);
-  --bg3: rgba(255, 247, 247, 0.98);
-  --surface: rgba(255, 255, 255, 0.98);
-  --border: rgba(219, 39, 60, 0.16);
-  --border-hover: rgba(219, 39, 60, 0.28);
-  --shadow: 0 28px 60px rgba(219, 39, 60, 0.12);
-  --text: #111118;
-  --text-muted: #6b7280;
-  --text-dim: #4b5563;
+  --bg: #0a0a0f;
+  --bg2: rgba(10, 8, 20, 0.96);
+  --bg3: rgba(12, 8, 22, 0.98);
+  --surface: rgba(20, 16, 36, 0.82);
+  --border: rgba(124, 108, 250, 0.18);
+  --border-hover: rgba(124, 108, 250, 0.35);
+  --shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+  --text: #f0f0f8;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
   --accent: #b91c1c;
   --accent2: #ef4444;
   --accent3: #f43f5e;
@@ -27,10 +28,7 @@ html {
 
 html, body {
   min-height: 100%;
-  background:
-    radial-gradient(circle at top left, rgba(254, 202, 202, 0.28), transparent 22%),
-    radial-gradient(circle at 80% 10%, rgba(248, 113, 113, 0.18), transparent 18%),
-    linear-gradient(180deg, #ffffff 0%, #f8f3f3 38%, #fff6f6 100%);
+  background: #0a0a0f url('../assets/hero-bg.png') center/cover no-repeat fixed;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
@@ -95,6 +93,10 @@ header {
 
 /* ---- HERO ---- */
 .hero {
+  width: 100%;
+}
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.6);
   padding: 5rem 2.5rem 3.5rem;
   text-align: center;
   max-width: 720px;
@@ -221,10 +223,14 @@ textarea::placeholder { color: var(--text-dim); }
   max-width: 780px;
   margin: 0 auto;
 }
-.loading-prism { animation: spin 3s linear infinite; }
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.tri-trace {
+  stroke-dasharray: 123;
+  animation: trace-triangle 2s ease-in-out infinite;
+}
+@keyframes trace-triangle {
+  0%   { stroke-dashoffset: 123; }
+  50%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -123; }
 }
 .loading-text {
   font-family: 'Instrument Serif', serif;
@@ -232,14 +238,6 @@ textarea::placeholder { color: var(--text-dim); }
   color: var(--text-muted);
   letter-spacing: -0.01em;
 }
-.loading-steps { display: flex; flex-direction: column; gap: 8px; text-align: center; }
-.loading-step {
-  font-size: 13px;
-  color: var(--text-dim);
-  transition: color 0.3s ease;
-}
-.loading-step.active { color: var(--accent); }
-.loading-step.done { color: var(--green); }
 
 /* ---- RESULTS ---- */
 .results-section {
