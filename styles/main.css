@@ -30,7 +30,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: #0a0a0f url('../assets/hero-bg.png') center center / auto 100vh no-repeat;
+  background: #0a0a0f url('../assets/hero-bg.png') center center / 100% auto no-repeat;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
