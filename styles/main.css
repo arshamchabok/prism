@@ -28,7 +28,12 @@ html {
 
 html, body {
   min-height: 100%;
-  background: #0a0a0f url('../assets/hero-bg.png') center/contain no-repeat fixed;
+  background-color: #0a0a0f;
+  background-image: url('../assets/hero-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
