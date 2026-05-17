@@ -1,6 +1,6 @@
-name = "prism-api"
+name = "prismapi"
 main = "worker.js"
-type = "javascript"
+compatibility_date = "2026-05-17"
 
 [build]
 command = ""

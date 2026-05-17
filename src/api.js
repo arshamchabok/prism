@@ -36,7 +36,7 @@ export async function generatePersonas(productDescription) {
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: `Product/Service: ${productDescription}` }]
     })
-  });
+  }); 
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));

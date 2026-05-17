@@ -28,9 +28,12 @@ async function handleRequest(request, event) {
     });
   }
 
-  const apiKey = event.env.ANTHROPIC_API_KEY;
+  const apiKey = typeof ANTHROPIC_API_KEY !== 'undefined' ? ANTHROPIC_API_KEY : null;
   if (!apiKey) {
-    return new Response('Missing ANTHROPIC_API_KEY', { status: 500, headers: corsHeaders });
+    return new Response('Missing ANTHROPIC_API_KEY', {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 
   const body = await request.text();
@@ -49,6 +52,7 @@ async function handleRequest(request, event) {
   responseHeaders.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
   responseHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   responseHeaders.set('Access-Control-Allow-Credentials', 'true');
+  responseHeaders.set('Access-Control-Expose-Headers', 'Content-Type');
 
   return new Response(responseBody, {
     status: response.status,
