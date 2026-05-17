@@ -24,16 +24,13 @@
 
 html {
   scroll-behavior: smooth;
+  background: #0a0a0f;
+  min-height: 100%;
 }
 
-html, body {
-  min-height: 100%;
-  background-color: #0a0a0f;
-  background-image: url('../assets/hero-bg.png');
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
+body {
+  min-height: 100vh;
+  background: #0a0a0f url('../assets/hero-bg.png') center center / cover no-repeat;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
