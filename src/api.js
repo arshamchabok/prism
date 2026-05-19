@@ -32,7 +32,7 @@ export async function generatePersonas(productDescription) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 1000,
+      max_tokens: 2000,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: `Product/Service: ${productDescription}` }]
     })
@@ -45,6 +45,7 @@ export async function generatePersonas(productDescription) {
 
   const data = await response.json();
   const raw = data.content?.find(b => b.type === 'text')?.text || '';
+  console.log('Claude raw response:', raw);
   const cleaned = raw.replace(/```json|```/g, '').trim();
 
   let personas;
