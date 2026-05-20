@@ -93,7 +93,7 @@ function renderFashionPersonaCard(persona) {
     styleArchetype, monthlyBudget,
     quote, goals = [],
     shoppingBehavior = [], discoveryChannels = [],
-    messagingHook
+    messagingHook, imageReaction
   } = persona;
 
   return `
@@ -133,6 +133,12 @@ function renderFashionPersonaCard(persona) {
           <div>
             <div class="section-label">How They Discover Brands</div>
             <div class="tag-list">${renderTags(discoveryChannels)}</div>
+          </div>` : ''}
+
+        ${imageReaction ? `
+          <div class="image-reaction-box">
+            <div class="section-label">Their Reaction to Your Image</div>
+            <div class="image-reaction-text">${esc(imageReaction)}</div>
           </div>` : ''}
 
         <div class="hook-box">

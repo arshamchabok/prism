@@ -16,7 +16,8 @@ Respond ONLY with a valid JSON array (no markdown fences, no preamble, no traili
     "goals": ["fashion-specific goal 1", "fashion-specific goal 2", "fashion-specific goal 3"],
     "shoppingBehavior": ["Online or in-store preference and why", "Impulse or planned purchase style", "Fast fashion or premium or luxury tier"],
     "discoveryChannels": ["specific platform or context 1", "specific platform or context 2", "specific platform or context 3"],
-    "messagingHook": "The single most compelling sentence for this persona — written to their fashion psychology, style identity, and emotional relationship with clothing (20–35 words)"
+    "messagingHook": "The single most compelling sentence for this persona — written to their fashion psychology, style identity, and emotional relationship with clothing (20–35 words)",
+    "imageReaction": "Only include this field when an image was provided. 1–2 sentences describing how this specific persona would react to seeing the image — would they buy immediately, scroll past, save for later, share with friends? Make it personal to their style archetype and psychology."
   }
 ]
 
@@ -29,7 +30,10 @@ Rules:
 - shoppingBehavior: exactly 3 strings, one per dimension: (1) online vs in-store channel preference, (2) impulse vs planned purchase behavior, (3) fast fashion vs premium vs luxury tier loyalty
 - discoveryChannels (3 items): be specific — e.g. "TikTok #OOTD hauls", "Vogue editorial spreads", "Fashion week street style photography", "Pinterest mood boards", "Trusted friends' recommendations", "Instagram micro-influencers", "In-store browsing on weekends"
 - messagingHook: must speak to this persona's specific fashion identity and emotional trigger — not generic ad copy. What headline stops them mid-scroll?
-- Do not include any text outside the JSON array`;
+- imageReaction: only include this field when an image was provided. 1–2 sentences on how this persona would react to seeing that specific image — immediate purchase, scroll past, screenshot to save, send to a friend? Ground the reaction in their style archetype and emotional relationship with fashion
+- Do not include any text outside the JSON array
+
+If an image is provided, analyze it carefully for: the color palette and mood, the style aesthetic (minimalist, maximalist, streetwear, luxury, bohemian, etc.), the apparent price point and quality level, the target gender and age group suggested by the styling, the occasion it's designed for (casual, formal, athletic, editorial), and any brand identity signals. Use these visual cues as the PRIMARY input for persona generation, and treat any text description as supplementary context. Each persona must explicitly reference what they saw in the image — their style archetype and purchase triggers should directly reflect the visual aesthetic.`;
 
 export async function generateFashionPersonas(brandDescription, imageData = null) {
   let userContent;
