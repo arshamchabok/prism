@@ -1,9 +1,7 @@
 import { generateFashionPersonas } from './fashion-api.js';
-import { updateSessionBadge } from './components/Header.js';
 import { esc, getInitials, truncate } from './utils/helpers.js';
 
 // ── State ──────────────────────────────────────────────
-let sessionCount = parseInt(localStorage.getItem('prism-fashion-count') || '0');
 let uploadedImage = null; // { base64: string, mediaType: string }
 
 // ── Helpers ────────────────────────────────────────────
@@ -189,10 +187,6 @@ async function handleGenerate(brandInput) {
   try {
     const personas = await generateFashionPersonas(brandInput, imageToSend);
 
-    sessionCount++;
-    localStorage.setItem('prism-fashion-count', sessionCount);
-    updateSessionBadge(sessionCount);
-
     const label = brandInput || (imageToSend ? 'uploaded image' : '');
     goToResults(personas, label);
   } catch (err) {
@@ -264,7 +258,6 @@ function bindFashionInputPanel(onGenerate) {
 
 // ── Init ───────────────────────────────────────────────
 export function initFashionApp() {
-  updateSessionBadge(sessionCount);
   bindFashionInputPanel(handleGenerate);
 
   const resetBtn = document.getElementById('reset-btn');
