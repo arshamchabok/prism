@@ -1,10 +1,10 @@
 import { generateFashionPersonas } from './fashion-api.js';
 import { updateSessionBadge } from './components/Header.js';
-import { bindInputPanel } from './components/InputPanel.js';
 import { esc, getInitials, truncate } from './utils/helpers.js';
 
 // ── State ──────────────────────────────────────────────
 let sessionCount = parseInt(localStorage.getItem('prism-fashion-count') || '0');
+let uploadedImage = null; // { base64: string, mediaType: string }
 
 // ── Helpers ────────────────────────────────────────────
 function show(id) { document.getElementById(id)?.classList.remove('hidden'); }
@@ -24,6 +24,55 @@ function showInput() {
 function hideInput() {
   hide('hero-section');
   hide('input-section');
+}
+
+// ── Generate button state ──────────────────────────────
+function checkGenerateReady() {
+  const textarea = document.getElementById('product-input');
+  const generateBtn = document.getElementById('generate-btn');
+  if (!generateBtn) return;
+  const hasText = (textarea?.value.trim().length ?? 0) >= 5;
+  generateBtn.disabled = !hasText && !uploadedImage;
+}
+
+// ── Image upload ───────────────────────────────────────
+function readImageFile(file) {
+  if (!file || !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    uploadedImage = { base64: dataUrl.split(',')[1], mediaType: file.type };
+
+    const previewImg    = document.getElementById('preview-img');
+    const uploadPrompt  = document.getElementById('upload-prompt');
+    const uploadPreview = document.getElementById('upload-preview');
+    const uploadFilename = document.getElementById('upload-filename');
+
+    if (previewImg)    previewImg.src = dataUrl;
+    if (uploadFilename) uploadFilename.textContent = file.name;
+    uploadPrompt?.classList.add('hidden');
+    uploadPreview?.classList.remove('hidden');
+
+    checkGenerateReady();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  uploadedImage = null;
+
+  const previewImg    = document.getElementById('preview-img');
+  const uploadInput   = document.getElementById('image-upload');
+  const uploadPrompt  = document.getElementById('upload-prompt');
+  const uploadPreview = document.getElementById('upload-preview');
+
+  if (previewImg)  previewImg.src = '';
+  if (uploadInput) uploadInput.value = '';
+  uploadPrompt?.classList.remove('hidden');
+  uploadPreview?.classList.add('hidden');
+
+  checkGenerateReady();
 }
 
 // ── Card rendering ─────────────────────────────────────
@@ -63,7 +112,7 @@ function renderFashionPersonaCard(persona) {
         </div>
         <div class="fashion-badges">
           ${styleArchetype ? `<span class="style-archetype-badge">${esc(styleArchetype)}</span>` : ''}
-          ${monthlyBudget ? `<span class="budget-badge">${esc(monthlyBudget)}</span>` : ''}
+          ${monthlyBudget  ? `<span class="budget-badge">${esc(monthlyBudget)}</span>` : ''}
         </div>
       </div>
 
@@ -97,11 +146,11 @@ function renderFashionPersonaCard(persona) {
   `;
 }
 
-function populateFashionResults(personas, brandInput) {
+function populateFashionResults(personas, label) {
   const summaryEl = document.getElementById('product-summary-display');
-  const gridEl = document.getElementById('personas-grid');
-  if (summaryEl) summaryEl.textContent = truncate(brandInput);
-  if (gridEl) gridEl.innerHTML = personas.map(renderFashionPersonaCard).join('');
+  const gridEl    = document.getElementById('personas-grid');
+  if (summaryEl) summaryEl.textContent = truncate(label);
+  if (gridEl)    gridEl.innerHTML = personas.map(renderFashionPersonaCard).join('');
 }
 
 // ── View transitions ───────────────────────────────────
@@ -113,9 +162,9 @@ function goToLoading() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function goToResults(personas, brandInput) {
+function goToResults(personas, label) {
   hide('loading-section');
-  populateFashionResults(personas, brandInput);
+  populateFashionResults(personas, label);
   show('results-section');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -124,27 +173,28 @@ function goToReset() {
   hide('results-section');
   hide('error-box');
   showInput();
-  const textarea = document.getElementById('product-input');
+  const textarea   = document.getElementById('product-input');
   const charDisplay = document.getElementById('char-display');
-  const generateBtn = document.getElementById('generate-btn');
-  if (textarea) textarea.value = '';
+  if (textarea)   textarea.value = '';
   if (charDisplay) charDisplay.textContent = '0';
-  if (generateBtn) generateBtn.disabled = true;
+  clearImage();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ── Core action ────────────────────────────────────────
 async function handleGenerate(brandInput) {
+  const imageToSend = uploadedImage;
   goToLoading();
 
   try {
-    const personas = await generateFashionPersonas(brandInput);
+    const personas = await generateFashionPersonas(brandInput, imageToSend);
 
     sessionCount++;
     localStorage.setItem('prism-fashion-count', sessionCount);
     updateSessionBadge(sessionCount);
 
-    goToResults(personas, brandInput);
+    const label = brandInput || (imageToSend ? 'uploaded image' : '');
+    goToResults(personas, label);
   } catch (err) {
     hide('loading-section');
     showError(err.message);
@@ -153,10 +203,69 @@ async function handleGenerate(brandInput) {
   }
 }
 
+// ── Input panel binding ────────────────────────────────
+function bindFashionInputPanel(onGenerate) {
+  const textarea    = document.getElementById('product-input');
+  const charDisplay = document.getElementById('char-display');
+  const generateBtn = document.getElementById('generate-btn');
+  const uploadZone  = document.getElementById('upload-zone');
+  const uploadInput = document.getElementById('image-upload');
+  const uploadClear = document.getElementById('upload-clear');
+
+  textarea?.addEventListener('input', () => {
+    if (charDisplay) charDisplay.textContent = textarea.value.length;
+    checkGenerateReady();
+  });
+
+  document.querySelectorAll('.example-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      if (textarea) {
+        textarea.value = pill.dataset.example;
+        if (charDisplay) charDisplay.textContent = textarea.value.length;
+        textarea.focus();
+      }
+      checkGenerateReady();
+    });
+  });
+
+  generateBtn?.addEventListener('click', () => {
+    const text = textarea?.value.trim() || '';
+    if (text.length >= 5 || uploadedImage) onGenerate(text);
+  });
+
+  // Click to open file picker (ignore clicks on the clear button)
+  uploadZone?.addEventListener('click', (e) => {
+    if (!e.target.closest('#upload-clear')) uploadInput?.click();
+  });
+
+  uploadInput?.addEventListener('change', () => {
+    if (uploadInput.files[0]) readImageFile(uploadInput.files[0]);
+  });
+
+  uploadZone?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('drag-over');
+  });
+  uploadZone?.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('drag-over');
+  });
+  uploadZone?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer?.files[0];
+    if (file) readImageFile(file);
+  });
+
+  uploadClear?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearImage();
+  });
+}
+
 // ── Init ───────────────────────────────────────────────
 export function initFashionApp() {
   updateSessionBadge(sessionCount);
-  bindInputPanel(handleGenerate);
+  bindFashionInputPanel(handleGenerate);
 
   const resetBtn = document.getElementById('reset-btn');
   if (resetBtn) resetBtn.addEventListener('click', goToReset);

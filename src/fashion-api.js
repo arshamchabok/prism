@@ -31,7 +31,30 @@ Rules:
 - messagingHook: must speak to this persona's specific fashion identity and emotional trigger — not generic ad copy. What headline stops them mid-scroll?
 - Do not include any text outside the JSON array`;
 
-export async function generateFashionPersonas(brandDescription) {
+export async function generateFashionPersonas(brandDescription, imageData = null) {
+  let userContent;
+
+  if (imageData) {
+    userContent = [
+      {
+        type: 'image',
+        source: {
+          type: 'base64',
+          media_type: imageData.mediaType,
+          data: imageData.base64
+        }
+      },
+      {
+        type: 'text',
+        text: brandDescription
+          ? `Analyze this fashion image and the following brand description: ${brandDescription}. Generate 3 distinct customer personas.`
+          : 'Analyze this fashion image. Generate 3 distinct customer personas for the clothing brand or style shown.'
+      }
+    ];
+  } else {
+    userContent = `Clothing Brand: ${brandDescription}`;
+  }
+
   const response = await fetch('https://prismapi.arshamchabok.workers.dev', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -39,7 +62,7 @@ export async function generateFashionPersonas(brandDescription) {
       model: 'claude-sonnet-4-5',
       max_tokens: 3000,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: `Clothing Brand: ${brandDescription}` }]
+      messages: [{ role: 'user', content: userContent }]
     })
   });
 
