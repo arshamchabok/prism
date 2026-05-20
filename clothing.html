@@ -3,10 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prism — Customer Persona Generator</title>
+  <title>Prism: Fashion — Customer Persona Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css" />
+  <style>
+    .fashion-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .style-archetype-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      color: #a78bfa;
+      background: rgba(124, 108, 250, 0.1);
+    }
+    .budget-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.08);
+    }
+  </style>
 </head>
 <body>
 <div id="app">
@@ -26,23 +54,24 @@
         </defs>
       </svg>
       Prism
-      <span class="logo-tag">Beta</span>
+      <span class="logo-tag">Fashion</span>
     </div>
     <div class="header-right">
-      <a href="clothing.html" class="nav-link">Fashion</a>
+      <span class="badge-count" id="session-count"></span>
+      <a href="index.html" class="nav-link">← Back to Prism</a>
     </div>
   </header>
 
   <section class="hero" id="hero-section">
     <div class="hero-overlay">
-<h1>Know your customer<br>before they know <em>you</em></h1>
-      <p>Type what you sell. Get three razor sharp customer profiles back in seconds. Each one tells you exactly who they are, what they want, and the one sentence that makes them buy.</p>
+      <h1>Know your shopper's style<br>before they know <em>yours</em></h1>
+      <p>Describe your clothing brand. Get three distinct fashion customer profiles in seconds — each one reveals a style archetype, spending habits, discovery channels, and the hook that makes them convert.</p>
     </div>
   </section>
 
   <section class="input-section" id="input-section">
     <div class="input-card">
-      <textarea id="product-input" placeholder="e.g. &ldquo;A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping&rdquo;" maxlength="800"></textarea>
+      <textarea id="product-input" placeholder="Describe your clothing brand… e.g. &ldquo;A minimalist womenswear label offering timeless, sustainable basics for urban professionals&rdquo;" maxlength="800"></textarea>
       <div class="input-footer">
         <span class="char-count"><span id="char-display">0</span> / 800</span>
         <button class="generate-btn" id="generate-btn" disabled>
@@ -55,10 +84,10 @@
     </div>
     <div class="examples-row">
       <span class="examples-row-label">Try:</span>
-      <button class="example-pill" data-example="A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping">Meal kit delivery</button>
-      <button class="example-pill" data-example="A B2B project management platform built for remote software engineering teams who need real-time collaboration across time zones">B2B project management</button>
-      <button class="example-pill" data-example="A mobile app that helps first-time homebuyers understand the mortgage process, compare loan options, and track their application status">First-time homebuyer app</button>
-      <button class="example-pill" data-example="An online marketplace connecting independent graphic designers with small business owners who need affordable brand identity work">Freelance design marketplace</button>
+      <button class="example-pill" data-example="A minimalist womenswear brand offering timeless, sustainable basics made from organic cotton for urban professionals">Minimalist basics</button>
+      <button class="example-pill" data-example="A high-end streetwear label releasing monthly limited drops targeting Gen Z sneakerheads and culture makers in major cities">Limited drop streetwear</button>
+      <button class="example-pill" data-example="A luxury leather goods brand selling handcrafted bags and accessories to discerning shoppers who value heritage craftsmanship over trends">Luxury leather goods</button>
+      <button class="example-pill" data-example="A size-inclusive activewear brand empowering women of all body types with bold, functional performance wear designed for everyday movement">Size-inclusive activewear</button>
     </div>
   </section>
 
@@ -73,20 +102,18 @@
       </defs>
       <polygon class="tri-trace" points="24,4 44,40 4,40" fill="none" stroke="url(#lg-load)" stroke-width="2.5" stroke-linejoin="round"/>
     </svg>
-    <div class="loading-text">Refracting your audience…</div>
+    <div class="loading-text">Styling your audience…</div>
   </section>
 
-  <div class="error-section hidden" id="error-section">
-    <div class="error-box" id="error-box"></div>
-  </div>
+  <div class="error-section hidden" id="error-box"></div>
 
   <section class="results-section hidden" id="results-section">
     <div class="results-header">
       <div>
-        <div class="results-title">Your Customer Personas</div>
+        <div class="results-title">Your Fashion Personas</div>
         <div class="results-subtitle">Generated for: <em id="product-summary-display"></em></div>
       </div>
-      <button class="reset-btn" id="reset-btn">← New product</button>
+      <button class="reset-btn" id="reset-btn">← New brand</button>
     </div>
     <div class="personas-grid" id="personas-grid"></div>
   </section>
@@ -94,8 +121,9 @@
   <div style="flex:1"></div>
 
   <footer>
-    <span class="footer-left">Prism &mdash; AI-powered customer intelligence</span>
+    <span class="footer-left">Prism: Fashion &mdash; AI-powered fashion customer intelligence</span>
     <div class="footer-right">
+      <a href="index.html">Prism</a>
       <a href="about.html">About</a>
       <a href="#">Privacy</a>
     </div>
@@ -104,8 +132,8 @@
 </div>
 
 <script type="module">
-  import { initApp } from './src/app.js';
-  initApp();
+  import { initFashionApp } from './src/fashion-app.js';
+  initFashionApp();
 </script>
 </body>
 </html>

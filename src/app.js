@@ -1,10 +1,6 @@
 import { generatePersonas } from './api.js';
-import { updateSessionBadge } from './components/Header.js';
 import { bindInputPanel } from './components/InputPanel.js';
 import { populateResults } from './components/ResultsPanel.js';
-
-// ── State ──────────────────────────────────────────────
-let sessionCount = parseInt(localStorage.getItem('prism-count') || '0');
 
 // ── Helpers ────────────────────────────────────────────
 function show(id) { document.getElementById(id)?.classList.remove('hidden'); }
@@ -62,11 +58,6 @@ async function handleGenerate(productInput) {
 
   try {
     const personas = await generatePersonas(productInput);
-
-    sessionCount++;
-    localStorage.setItem('prism-count', sessionCount);
-    updateSessionBadge(sessionCount);
-
     goToResults(personas, productInput);
   } catch (err) {
     hide('loading-section');
@@ -78,7 +69,6 @@ async function handleGenerate(productInput) {
 
 // ── Init ───────────────────────────────────────────────
 export function initApp() {
-  updateSessionBadge(sessionCount);
   bindInputPanel(handleGenerate);
 
   const resetBtn = document.getElementById('reset-btn');
