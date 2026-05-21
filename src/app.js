@@ -15,6 +15,7 @@ function showError(message) {
 function showInput() {
   show('hero-section');
   show('input-section');
+  show('fashion-banner');
 }
 
 function hideInput() {
@@ -25,6 +26,7 @@ function hideInput() {
 // ── View transitions ───────────────────────────────────
 function goToLoading() {
   hideInput();
+  hide('fashion-banner');
   hide('error-section');
   hide('results-section');
   show('loading-section');
