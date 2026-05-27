@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import Hero from '../components/Hero.jsx'
@@ -9,15 +10,46 @@ import { truncate } from '../utils/helpers.js'
 
 export default function MainPage() {
   const { view, personas, productInput, error, sessionCount, handleGenerate, reset } = usePersonaGeneration()
+  const inputWrapRef = useRef(null)
+  const hasRevealed = useRef(false)
+
+  useEffect(() => {
+    if (view !== 'input' && view !== 'error') return
+    const wrap = inputWrapRef.current
+    if (!wrap) return
+    const section = wrap.querySelector('.input-section')
+    if (!section) return
+
+    // After the first reveal (e.g. after reset), show immediately without waiting for scroll
+    if (hasRevealed.current) {
+      section.classList.add('visible')
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add('visible')
+          hasRevealed.current = true
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [view])
 
   return (
-    <div id="app">
+    <div id="app" className="page-main">
       <Header sessionCount={sessionCount} variant="main" />
 
       {(view === 'input' || view === 'error') && (
         <>
-          <Hero variant="main" />
-          <InputPanel onGenerate={handleGenerate} />
+          <Hero variant="main" fullscreen />
+          <div ref={inputWrapRef}>
+            <InputPanel onGenerate={handleGenerate} />
+          </div>
         </>
       )}
 

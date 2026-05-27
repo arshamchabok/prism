@@ -17,7 +17,7 @@ export default function Header({ sessionCount = 0, variant = 'main' }) {
           </defs>
         </svg>
         Prism
-        <span className="logo-tag">{variant === 'fashion' ? 'Fashion' : 'Beta'}</span>
+        {variant === 'fashion' && <span className="logo-tag">Fashion</span>}
       </div>
       <div className="header-right">
         {variant === 'fashion' ? (
