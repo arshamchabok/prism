@@ -4,15 +4,15 @@ export default function Hero({ variant = 'main' }) {
   return (
     <section className="hero">
       <Prism
-        animationType="rotate"
-        scale={3.6}
-        glow={1.2}
-        noise={0.4}
-        transparent={true}
-        timeScale={0.4}
-        colorFrequency={0.8}
-        bloom={1.2}
-        suspendWhenOffscreen={true}
+        animationType="3drotate"
+        timeScale={0.5}
+        scale={2}
+        height={4.4}
+        baseWidth={5.5}
+        noise={0}
+        glow={0.7}
+        hueShift={0}
+        colorFrequency={1}
       />
       <div className="hero-overlay">
         {variant !== 'fashion' && (
