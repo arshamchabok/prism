@@ -15,9 +15,6 @@ export default function Hero({ variant = 'main', fullscreen = false }) {
         colorFrequency={1}
       />
       <div className="hero-overlay">
-        {variant !== 'fashion' && (
-          <div className="hero-eyebrow">AI-Powered Audience Intelligence</div>
-        )}
         {variant === 'fashion' ? (
           <>
             <h1>Know your shopper's style<br />before they know <em>yours</em></h1>
@@ -26,7 +23,7 @@ export default function Hero({ variant = 'main', fullscreen = false }) {
         ) : (
           <>
             <h1>Know your customer<br />before they know <em>you</em></h1>
-            <p>Describe your product or service. Prism generates three research-grade customer personas — distinct buyers, real motivations, precise messaging hooks — in under ten seconds.</p>
+            <p>Type what you sell. Get three razor sharp customer profiles back in seconds.</p>
           </>
         )}
       </div>
