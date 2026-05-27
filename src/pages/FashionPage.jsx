@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import Hero from '../components/Hero.jsx'
@@ -10,20 +10,45 @@ import { truncate } from '../utils/helpers.js'
 
 export default function FashionPage() {
   const { view, personas, brandInput, error, handleGenerate, reset } = useFashionGeneration()
+  const inputWrapRef = useRef(null)
+  const hasRevealed = useRef(false)
 
   useEffect(() => {
-    document.body.classList.add('page-fashion')
-    return () => document.body.classList.remove('page-fashion')
-  }, [])
+    if (view !== 'input' && view !== 'error') return
+    const wrap = inputWrapRef.current
+    if (!wrap) return
+    const section = wrap.querySelector('.input-section')
+    if (!section) return
+
+    if (hasRevealed.current) {
+      section.classList.add('visible')
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add('visible')
+          hasRevealed.current = true
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [view])
 
   return (
-    <div id="app">
+    <div id="app" className="page-fashion">
       <Header variant="fashion" />
 
       {(view === 'input' || view === 'error') && (
         <>
-          <Hero variant="fashion" />
-          <FashionInputPanel onGenerate={handleGenerate} />
+          <Hero variant="fashion" fullscreen />
+          <div ref={inputWrapRef}>
+            <FashionInputPanel onGenerate={handleGenerate} />
+          </div>
         </>
       )}
 
