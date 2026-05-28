@@ -526,11 +526,15 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 6rem;
 }
 .hero--fullscreen .hero-overlay {
   padding-top: 0;
   padding-bottom: 0;
+}
+.input-wrapper {
+  position: relative;
 }
 
 /* Input section slides up as a unit */

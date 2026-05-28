@@ -1,7 +1,8 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import Hero from '../components/Hero.jsx'
+import GradualBlur from '../components/GradualBlur.jsx'
 import InputPanel from '../components/InputPanel.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
@@ -12,6 +13,7 @@ export default function MainPage() {
   const { view, personas, productInput, error, sessionCount, handleGenerate, reset } = usePersonaGeneration()
   const inputWrapRef = useRef(null)
   const fashionBarRef = useRef(null)
+  const [revealed, setRevealed] = useState(false)
 
   useEffect(() => {
     if (view !== 'input' && view !== 'error') return
@@ -21,6 +23,7 @@ export default function MainPage() {
         const section = inputWrapRef.current?.querySelector('.input-section')
         if (section) section.classList.add('revealed')
         if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
+        setRevealed(true)
       }
     }
 
@@ -31,6 +34,7 @@ export default function MainPage() {
 
   const handleReset = () => {
     reset()
+    setRevealed(false)
     window.scrollTo(0, 0)
   }
 
@@ -42,7 +46,18 @@ export default function MainPage() {
         <>
           <Hero variant="main" fullscreen />
           <div ref={inputWrapRef}>
-            <InputPanel onGenerate={handleGenerate} />
+            <div className={`input-wrapper${revealed ? ' revealed' : ''}`}>
+              <GradualBlur
+                position="bottom"
+                height="100%"
+                strength={revealed ? 0 : 3}
+                divCount={8}
+                curve="bezier"
+                animated={true}
+                duration="0.8s"
+              />
+              <InputPanel onGenerate={handleGenerate} />
+            </div>
           </div>
         </>
       )}
