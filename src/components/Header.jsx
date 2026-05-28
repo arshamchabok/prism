@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function Header({ sessionCount = 0, variant = 'main' }) {
+export default function Header({ variant = 'main' }) {
   return (
     <header>
       <div className="logo">
@@ -16,17 +16,11 @@ export default function Header({ sessionCount = 0, variant = 'main' }) {
         Prism
         {variant === 'fashion' && <span className="logo-tag">Fashion</span>}
       </div>
-      <div className="header-right">
-        {variant === 'fashion' ? (
+      {variant === 'fashion' && (
+        <div className="header-right">
           <Link to="/" className="nav-link">← Back to Prism</Link>
-        ) : (
-          <span className="badge-count">
-            {sessionCount > 0
-              ? `${sessionCount} persona set${sessionCount > 1 ? 's' : ''} generated`
-              : ''}
-          </span>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   )
 }

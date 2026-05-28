@@ -67,11 +67,11 @@ body {
 
 /* ---- HEADER ---- */
 header {
-  padding: 1.75rem 2.5rem;
+  padding: 0.75rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   position: sticky;
   top: 0;
   background: rgba(10,10,15,0.82);
@@ -83,11 +83,11 @@ header {
   align-items: center;
   gap: 12px;
   font-family: 'Instrument Serif', serif;
-  font-size: 1.45rem;
+  font-size: 1.2rem;
   color: var(--text);
   letter-spacing: -0.03em;
 }
-.logo-prism { width: 30px; height: 30px; flex-shrink: 0; }
+.logo-prism { width: 24px; height: 24px; flex-shrink: 0; }
 .logo-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
@@ -133,6 +133,34 @@ header {
   text-align: center;
   max-width: 720px;
   margin: 0 auto;
+}
+
+/* Main page: hero fixed, fullscreen, centered */
+.page-main .hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+  min-height: unset;
+}
+.page-main .hero .hero-overlay {
+  padding: 0 2.5rem;
+  transform-origin: center center;
+}
+.page-main .hero h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-style: italic;
+}
+.page-main .hero p {
+  font-size: 1.1rem;
+  color: rgba(240, 240, 248, 0.6);
 }
 .hero-eyebrow {
   font-size: 11px;
@@ -513,21 +541,13 @@ footer {
   color: #c4b5fd;
   cursor: pointer;
   text-decoration: none;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 0.65s ease, transform 0.65s ease, filter 0.2s;
-}
-.fashion-bar.visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 300ms;
+  transition: filter 0.2s;
 }
 .fashion-bar:hover {
   filter: brightness(1.12);
 }
 
 /* ---- SCROLL REVEAL ---- */
-.page-main,
 .page-fashion {
   min-height: 200vh;
 }
@@ -548,14 +568,12 @@ footer {
   position: relative;
 }
 
-/* Input section slides up as a unit */
-.page-main .input-section,
+/* Fashion page input section slides up as a unit */
 .page-fashion .input-section {
   opacity: 0;
   transform: translateY(100px);
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.page-main .input-section.revealed,
 .page-fashion .input-section.revealed {
   opacity: 1;
   transform: translateY(0);
