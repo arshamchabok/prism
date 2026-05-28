@@ -11,6 +11,7 @@ import { truncate } from '../utils/helpers.js'
 export default function MainPage() {
   const { view, personas, productInput, error, sessionCount, handleGenerate, reset } = usePersonaGeneration()
   const inputWrapRef = useRef(null)
+  const fashionBarRef = useRef(null)
   const hasRevealed = useRef(false)
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function MainPage() {
     // After the first reveal (e.g. after reset), show immediately without waiting for scroll
     if (hasRevealed.current) {
       section.classList.add('visible')
+      if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
       return
     }
 
@@ -30,6 +32,7 @@ export default function MainPage() {
       ([entry]) => {
         if (entry.isIntersecting) {
           section.classList.add('visible')
+          if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
           hasRevealed.current = true
           observer.disconnect()
         }
@@ -81,7 +84,7 @@ export default function MainPage() {
       <div style={{ flex: 1 }} />
 
       {view !== 'loading' && (
-        <Link to="/fashion" className="fashion-bar">
+        <Link ref={fashionBarRef} to="/fashion" className="fashion-bar">
           ✦ Try Prism: Fashion — Upload a lookbook or describe your brand →
         </Link>
       )}
