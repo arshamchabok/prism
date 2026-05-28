@@ -1,19 +1,6 @@
-import Prism from './Prism.jsx'
-
 export default function Hero({ variant = 'main', fullscreen = false }) {
   return (
     <section className={`hero${fullscreen ? ' hero--fullscreen' : ''}`}>
-      <Prism
-        animationType="3drotate"
-        timeScale={0.5}
-        scale={2}
-        height={4.4}
-        baseWidth={5.5}
-        noise={0}
-        glow={0.7}
-        hueShift={0}
-        colorFrequency={1}
-      />
       <div className="hero-overlay">
         {variant === 'fashion' ? (
           <>
