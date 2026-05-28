@@ -11,33 +11,26 @@ import { truncate } from '../utils/helpers.js'
 export default function FashionPage() {
   const { view, personas, brandInput, error, handleGenerate, reset } = useFashionGeneration()
   const inputWrapRef = useRef(null)
-  const hasRevealed = useRef(false)
 
   useEffect(() => {
     if (view !== 'input' && view !== 'error') return
-    const wrap = inputWrapRef.current
-    if (!wrap) return
-    const section = wrap.querySelector('.input-section')
-    if (!section) return
 
-    if (hasRevealed.current) {
-      section.classList.add('visible')
-      return
+    const onScroll = () => {
+      if (window.scrollY > 100) {
+        const section = inputWrapRef.current?.querySelector('.input-section')
+        if (section) section.classList.add('revealed')
+      }
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          section.classList.add('visible')
-          hasRevealed.current = true
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-    observer.observe(section)
-    return () => observer.disconnect()
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [view])
+
+  const handleReset = () => {
+    reset()
+    window.scrollTo(0, 0)
+  }
 
   return (
     <div id="app" className="page-fashion">
@@ -69,7 +62,7 @@ export default function FashionPage() {
                 Generated for: <em>{truncate(brandInput)}</em>
               </div>
             </div>
-            <button className="reset-btn" onClick={reset}>← New brand</button>
+            <button className="reset-btn" onClick={handleReset}>← New brand</button>
           </div>
           <div className="personas-grid">
             {personas.map((p, i) => <FashionPersonaCard key={i} persona={p} />)}

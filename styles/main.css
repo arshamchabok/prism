@@ -133,7 +133,7 @@ header {
 }
 .hero h1 {
   font-family: 'Instrument Serif', serif;
-  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
   line-height: 1.05;
   letter-spacing: -0.04em;
   color: var(--text);
@@ -503,8 +503,8 @@ footer {
   cursor: pointer;
   text-decoration: none;
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease, filter 0.2s;
+  transform: translateY(60px);
+  transition: opacity 0.65s ease, transform 0.65s ease, filter 0.2s;
 }
 .fashion-bar.visible {
   opacity: 1;
@@ -516,6 +516,11 @@ footer {
 }
 
 /* ---- SCROLL REVEAL ---- */
+.page-main,
+.page-fashion {
+  min-height: 200vh;
+}
+
 .hero--fullscreen {
   height: calc(100vh - 5.5rem);
   display: flex;
@@ -528,32 +533,17 @@ footer {
   padding-bottom: 0;
 }
 
-/* Input card — delay 0ms */
-.page-main .input-card,
-.page-fashion .input-card {
+/* Input section slides up as a unit */
+.page-main .input-section,
+.page-fashion .input-section {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(100px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.page-main .input-section.visible .input-card,
-.page-fashion .input-section.visible .input-card {
+.page-main .input-section.revealed,
+.page-fashion .input-section.revealed {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* Example pills — delay 150ms */
-.page-main .examples-row,
-.page-fashion .examples-row {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  transition-delay: 0ms;
-}
-.page-main .input-section.visible .examples-row,
-.page-fashion .input-section.visible .examples-row {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 150ms;
 }
 
 /* Scroll indicator */

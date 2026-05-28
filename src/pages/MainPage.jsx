@@ -12,36 +12,27 @@ export default function MainPage() {
   const { view, personas, productInput, error, sessionCount, handleGenerate, reset } = usePersonaGeneration()
   const inputWrapRef = useRef(null)
   const fashionBarRef = useRef(null)
-  const hasRevealed = useRef(false)
 
   useEffect(() => {
     if (view !== 'input' && view !== 'error') return
-    const wrap = inputWrapRef.current
-    if (!wrap) return
-    const section = wrap.querySelector('.input-section')
-    if (!section) return
 
-    // After the first reveal (e.g. after reset), show immediately without waiting for scroll
-    if (hasRevealed.current) {
-      section.classList.add('visible')
-      if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
-      return
+    const onScroll = () => {
+      if (window.scrollY > 100) {
+        const section = inputWrapRef.current?.querySelector('.input-section')
+        if (section) section.classList.add('revealed')
+        if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
+      }
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          section.classList.add('visible')
-          if (fashionBarRef.current) fashionBarRef.current.classList.add('visible')
-          hasRevealed.current = true
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-    observer.observe(section)
-    return () => observer.disconnect()
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [view])
+
+  const handleReset = () => {
+    reset()
+    window.scrollTo(0, 0)
+  }
 
   return (
     <div id="app" className="page-main">
@@ -73,7 +64,7 @@ export default function MainPage() {
                 Generated for: <em>{truncate(productInput)}</em>
               </div>
             </div>
-            <button className="reset-btn" onClick={reset}>← New product</button>
+            <button className="reset-btn" onClick={handleReset}>← New product</button>
           </div>
           <div className="personas-grid">
             {personas.map((p, i) => <PersonaCard key={i} persona={p} />)}
