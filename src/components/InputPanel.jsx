@@ -26,12 +26,19 @@ export default function InputPanel({ onGenerate }) {
     if (text.trim().length >= 10) onGenerate(text.trim())
   }
 
+  const handleChange = (e) => {
+    const el = e.target
+    el.style.height = 'auto'
+    el.style.height = Math.min(el.scrollHeight, 200) + 'px'
+    setText(el.value)
+  }
+
   return (
     <section className="input-section">
       <div className="input-card">
         <textarea
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={handleChange}
           placeholder='Describe your product or service… e.g. "A SaaS tool that helps freelancers send invoices and track payments automatically"'
           maxLength={800}
         />
