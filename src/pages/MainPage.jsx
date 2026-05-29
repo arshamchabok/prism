@@ -17,7 +17,14 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const inputProgress = Math.min(scrollY / 600, 1)
+  const progress = Math.min(scrollY / 400, 1)
+
+  const heroScale = 1 - 0.15 * progress
+  const heroTranslateY = -40 * progress
+
+  const inputTranslateY = 120 * (1 - progress)
+  const inputBlur = 16 * (1 - progress)
+  const inputOpacity = progress
 
   const handleReset = () => {
     reset()
@@ -30,46 +37,78 @@ export default function MainPage() {
       <Header variant="main" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '300vh', position: 'relative' }}>
-          {/* FIXED: headline — always centered, never moves */}
+        <div style={{ minHeight: '320vh', position: 'relative' }}>
+
+          {/* FIXED: hero — centered on load, scales up and moves on scroll */}
           <div style={{
-            position: 'fixed', top: '35%', left: 0, right: 0, zIndex: 2,
-            textAlign: 'center', pointerEvents: 'none',
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            pointerEvents: 'none',
           }}>
-            <div className="hero-overlay" style={{ padding: '0 2.5rem' }}>
-              <h1>Know your customer<br />before they know <em>you</em></h1>
-              <p>Type what you sell. Get three razor sharp customer profiles back in seconds.</p>
+            <div style={{
+              textAlign: 'center',
+              padding: '0 2.5rem',
+              maxWidth: '900px',
+              transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+              transformOrigin: 'center center',
+            }}>
+              <h1 style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: 'italic',
+                fontSize: 'clamp(3.5rem, 7vw, 6rem)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.04em',
+                color: 'var(--text)',
+                margin: '0 0 1rem',
+              }}>
+                Know your customer before they know{' '}
+                <em style={{
+                  fontStyle: 'italic',
+                  color: '#fb7185',
+                  WebkitTextFillColor: '#fb7185',
+                  background: 'none',
+                  WebkitBackgroundClip: 'unset',
+                  backgroundClip: 'unset',
+                }}>you</em>
+              </h1>
+              <p style={{
+                fontSize: '1.08rem',
+                color: 'rgba(240, 240, 248, 0.6)',
+                maxWidth: '560px',
+                margin: '0 auto',
+                lineHeight: 1.8,
+              }}>
+                Type what you sell. Get three razor sharp customer profiles back in seconds.
+              </p>
             </div>
           </div>
 
-          {/* FIXED: input box — reveals via opacity + blur as user scrolls 0–600px */}
+          {/* FIXED: input box — rises from below as user scrolls 0–400px */}
           <div style={{
             position: 'fixed',
-            top: '65%',
+            top: '62%',
             left: '50%',
-            transform: 'translateX(-50%)',
-            width: '580px',
-            maxWidth: 'calc(100% - 2rem)',
+            width: '100%',
+            maxWidth: '680px',
             zIndex: 3,
-            opacity: inputProgress,
-            filter: `blur(${(1 - inputProgress) * 12}px)`,
-            pointerEvents: inputProgress > 0.5 ? 'auto' : 'none',
-            transition: 'none',
+            transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
+            opacity: inputOpacity,
+            filter: `blur(${inputBlur}px)`,
+            pointerEvents: progress > 0.75 ? 'auto' : 'none',
           }}>
             <InputPanel onGenerate={handleGenerate} />
           </div>
 
-          {/* STATIC: fashion section sits at bottom of the tall page */}
+          {/* STATIC: fashion section — only visible far below, after a lot of scrolling */}
           <div style={{
             position: 'absolute',
-            top: '200vh',
+            top: '220vh',
             left: 0,
             width: '100%',
-            minHeight: '80vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
           }}>
             <section className="fashion-section">
               <span className="fashion-section-eyebrow">✦ Prism: Fashion</span>

@@ -843,6 +843,19 @@ footer {
   margin: 0;
 }
 
+/* ---- MAIN PAGE INPUT OVERRIDES ---- */
+.page-main .input-section {
+  max-width: none;
+  padding: 0 1rem 0.75rem;
+}
+.page-main .input-card {
+  overflow: hidden;
+}
+.page-main textarea {
+  font-size: 0.95rem;
+  overflow: hidden;
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width: 640px) {
   header { padding: 1rem 1.25rem; }
