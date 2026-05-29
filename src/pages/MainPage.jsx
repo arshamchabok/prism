@@ -26,16 +26,16 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–400px — hero shrinks + input reveals
-  const p1 = Math.min(scrollY / 400, 1)
+  // Phase 1: 0–800px — hero shrinks + input reveals
+  const p1 = Math.min(scrollY / 800, 1)
   const heroScale = 1 - 0.15 * p1
   const heroTranslateY = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
   const inputBlur = 16 * (1 - p1)
   const inputOpacity = p1
 
-  // Phase 2: 800–1200px — fashion card + blur overlay reveal, input fades out
-  const p2 = Math.min(Math.max((scrollY - 800) / 400, 0), 1)
+  // Phase 2: 1400–2200px — fashion card + blur overlay reveal, input fades out
+  const p2 = Math.min(Math.max((scrollY - 1400) / 800, 0), 1)
   const fashionScale = 0.85 + 0.15 * p2
   const blurAmount = 12 * p2
   const inputFinalOpacity = inputOpacity * (1 - p2)
@@ -52,7 +52,7 @@ export default function MainPage() {
       <Header variant="main" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '320vh', position: 'relative' }}>
+        <div style={{ minHeight: '500vh', position: 'relative' }}>
 
           {/* FIXED: hero — centered on load */}
           <div style={{
