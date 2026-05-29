@@ -93,7 +93,7 @@ export default function MainPage() {
             top: '62%',
             left: '50%',
             width: '100%',
-            maxWidth: '680px',
+            maxWidth: '620px',
             zIndex: 3,
             transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
             opacity: inputOpacity,
