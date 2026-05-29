@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import InputPanel from '../components/InputPanel.jsx'
+import SpotlightCard from '../components/SpotlightCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
@@ -25,14 +26,19 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const progress = Math.min(scrollY / 400, 1)
+  // Phase 1: 0–400px — hero shrinks + input reveals
+  const p1 = Math.min(scrollY / 400, 1)
+  const heroScale = 1 - 0.15 * p1
+  const heroTranslateY = -150 * p1
+  const inputTranslateY = 120 * (1 - p1)
+  const inputBlur = 16 * (1 - p1)
+  const inputOpacity = p1
 
-  const heroScale = 1 - 0.15 * progress
-  const heroTranslateY = -150 * progress
-
-  const inputTranslateY = 120 * (1 - progress)
-  const inputBlur = 16 * (1 - progress)
-  const inputOpacity = progress
+  // Phase 2: 800–1200px — fashion card + blur overlay reveal, input fades out
+  const p2 = Math.min(Math.max((scrollY - 800) / 400, 0), 1)
+  const fashionScale = 0.85 + 0.15 * p2
+  const blurAmount = 12 * p2
+  const inputFinalOpacity = inputOpacity * (1 - p2)
 
   const handleReset = () => {
     reset()
@@ -48,7 +54,7 @@ export default function MainPage() {
       {(view === 'input' || view === 'error') && (
         <div style={{ minHeight: '320vh', position: 'relative' }}>
 
-          {/* FIXED: hero — centered on load, scales up and moves on scroll */}
+          {/* FIXED: hero — centered on load */}
           <div style={{
             position: 'fixed',
             top: 0, left: 0, right: 0, bottom: 0,
@@ -96,7 +102,7 @@ export default function MainPage() {
             </div>
           </div>
 
-          {/* FIXED: input + pills — all in one fixed group, rises from below */}
+          {/* FIXED: input + pills — rises from below during phase 1, fades out during phase 2 */}
           <div style={{
             position: 'fixed',
             top: '50%',
@@ -105,9 +111,9 @@ export default function MainPage() {
             maxWidth: '700px',
             zIndex: 3,
             transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
-            opacity: inputOpacity,
+            opacity: inputFinalOpacity,
             filter: `blur(${inputBlur}px)`,
-            pointerEvents: progress > 0.75 ? 'auto' : 'none',
+            pointerEvents: p1 > 0.75 && p2 < 0.5 ? 'auto' : 'none',
           }}>
             <InputPanel
               value={inputText}
@@ -128,30 +134,129 @@ export default function MainPage() {
             </div>
           </div>
 
-          {/* STATIC: fashion section — only visible far below */}
-          <div style={{
-            position: 'absolute',
-            top: '220vh',
-            left: 0,
-            width: '100%',
-          }}>
-            <section className="fashion-section">
-              <span className="fashion-section-eyebrow">✦ Prism: Fashion</span>
-              <h2>Built for the way clothing brands actually sell</h2>
-              <p>Upload a lookbook or describe your brand voice. Get three style-aware customer profiles — archetype, spending habits, discovery channels, and the hook that converts.</p>
-              <a href="/clothing.html" className="fashion-section-btn">
-                Open Prism: Fashion
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
-            </section>
-          </div>
+          {/* FIXED: blur overlay — fades in during phase 2, sits between input (z3) and card (z5) */}
+          {p2 > 0 && (
+            <div style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 4,
+              backdropFilter: `blur(${blurAmount}px)`,
+              WebkitBackdropFilter: `blur(${blurAmount}px)`,
+              background: `rgba(5, 4, 12, ${0.4 * p2})`,
+              opacity: p2,
+              pointerEvents: 'none',
+            }} />
+          )}
+
+          {/* FIXED: fashion SpotlightCard — reveals during phase 2, z-index above blur */}
+          {p2 > 0 && (
+            <div
+              className="fashion-reveal-wrapper"
+              style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                width: '70vw',
+                maxWidth: '900px',
+                height: '60vh',
+                minHeight: '320px',
+                zIndex: 5,
+                transform: `translate(-50%, -50%) scale(${fashionScale})`,
+                opacity: p2,
+                pointerEvents: p2 > 0.5 ? 'auto' : 'none',
+              }}
+            >
+              <SpotlightCard className="fashion-spotlight-card" spotlightColor="rgba(34, 211, 238, 0.25)">
+                {/* Decorative color blobs */}
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden', borderRadius: '24px' }}>
+                  <div style={{ position: 'absolute', top: '-15%', right: '-8%', width: '55%', height: '80%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.11) 0%, transparent 65%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', bottom: '-20%', left: '-5%', width: '45%', height: '65%', background: 'radial-gradient(ellipse, rgba(236,72,153,0.09) 0%, transparent 65%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', top: '25%', left: '30%', width: '40%', height: '55%', background: 'radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 65%)', borderRadius: '50%' }} />
+                </div>
+
+                {/* Card link — fills the full card */}
+                <a
+                  href="/clothing.html"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1.25rem',
+                    height: '100%',
+                    padding: '3rem 3.5rem',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    textAlign: 'center',
+                    position: 'relative',
+                    zIndex: 2,
+                  }}
+                >
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    color: '#22d3ee',
+                  }}>
+                    ✦ Prism
+                  </span>
+
+                  <h2 style={{
+                    fontFamily: "'Instrument Serif', serif",
+                    fontStyle: 'italic',
+                    fontSize: 'clamp(2.8rem, 5vw, 5rem)',
+                    lineHeight: 1.05,
+                    letterSpacing: '-0.03em',
+                    margin: 0,
+                    color: 'var(--text)',
+                  }}>
+                    Prism:{' '}
+                    <span style={{
+                      background: 'linear-gradient(135deg, #7c6cfa, #22d3ee)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}>Fashion</span>
+                  </h2>
+
+                  <p style={{
+                    fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
+                    color: 'rgba(240, 240, 248, 0.55)',
+                    maxWidth: '400px',
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}>
+                    For the brands people wear, not just buy.
+                  </p>
+
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    background: 'linear-gradient(135deg, #7c6cfa, #22d3ee)',
+                    color: '#fff',
+                    borderRadius: '999px',
+                    padding: '0.8rem 1.75rem',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    marginTop: '0.5rem',
+                    boxShadow: '0 12px 40px rgba(124, 108, 250, 0.3)',
+                  }}>
+                    Open
+                    <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+                      <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </a>
+              </SpotlightCard>
+            </div>
+          )}
         </div>
       )}
 
       {view === 'error' && (
-        <div className="error-section" style={{ position: 'fixed', bottom: '7rem', left: 0, right: 0, zIndex: 5 }}>
+        <div className="error-section" style={{ position: 'fixed', bottom: '7rem', left: 0, right: 0, zIndex: 6 }}>
           <div className="error-box">Something went wrong: {error}</div>
         </div>
       )}
