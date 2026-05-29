@@ -864,6 +864,9 @@ footer {
 .page-main .input-footer {
   padding: 0.65rem 1.25rem;
 }
+.page-main .examples-row {
+  margin-top: 0.6rem;
+}
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 640px) {

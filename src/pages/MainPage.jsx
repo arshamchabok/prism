@@ -90,7 +90,7 @@ export default function MainPage() {
           {/* FIXED: input box — rises from below as user scrolls 0–400px */}
           <div style={{
             position: 'fixed',
-            top: '62%',
+            top: '57%',
             left: '50%',
             width: '100%',
             maxWidth: '700px',
