@@ -26,6 +26,11 @@ html {
   scroll-behavior: smooth;
   background: #0a0a0f;
   min-height: 100%;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+}
+html::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
 }
 
 body {
@@ -226,6 +231,16 @@ textarea {
   overflow: hidden;
   min-height: 120px;
 }
+textarea {
+  scrollbar-width: thin;       /* Firefox — keep scrollbar in textarea */
+  -ms-overflow-style: auto;
+}
+textarea::-webkit-scrollbar {
+  display: block;              /* Chrome/Safari — keep scrollbar in textarea */
+  width: 4px;
+}
+textarea::-webkit-scrollbar-track { background: transparent; }
+textarea::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
 textarea::placeholder { color: var(--text-dim); }
 .input-footer {
   display: flex;
@@ -611,15 +626,11 @@ footer {
   position: relative;
 }
 
-/* Fashion page input section slides up as a unit */
+/* Fashion page input section — visibility managed by parent scroll container */
 .page-fashion .input-section {
-  opacity: 0;
-  transform: translateY(100px);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.page-fashion .input-section.revealed {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  transition: none;
 }
 
 /* Scroll indicator */
@@ -841,6 +852,34 @@ footer {
   color: var(--text-muted);
   line-height: 1.85;
   margin: 0;
+}
+
+/* ---- FASHION PAGE INPUT OVERRIDES ---- */
+.page-fashion .input-section {
+  max-width: none;
+  padding: 0 0.75rem 0;
+}
+.page-fashion .input-card {
+  overflow: hidden;
+  position: relative;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.page-fashion textarea {
+  font-size: 0.95rem;
+  min-height: 90px;
+  overflow-y: auto;
+  padding: 1.1rem 1.5rem;
+}
+.page-fashion .input-footer {
+  padding: 0.65rem 1.25rem;
+  border-top: none;
+  justify-content: flex-end;
+}
+.page-fashion .upload-zone {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ---- MAIN PAGE INPUT OVERRIDES ---- */
