@@ -20,7 +20,7 @@ export default function MainPage() {
   const progress = Math.min(scrollY / 400, 1)
 
   const heroScale = 1 - 0.15 * progress
-  const heroTranslateY = -40 * progress
+  const heroTranslateY = -120 * progress
 
   const inputTranslateY = 120 * (1 - progress)
   const inputBlur = 16 * (1 - progress)
@@ -93,7 +93,7 @@ export default function MainPage() {
             top: '62%',
             left: '50%',
             width: '100%',
-            maxWidth: '620px',
+            maxWidth: '700px',
             zIndex: 3,
             transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
             opacity: inputOpacity,

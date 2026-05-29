@@ -857,7 +857,7 @@ footer {
 }
 .page-main textarea {
   font-size: 0.95rem;
-  min-height: 70px;
+  min-height: 90px;
   overflow: hidden;
   padding: 1.1rem 1.5rem;
 }
