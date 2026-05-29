@@ -20,7 +20,6 @@ export default function InputPanel({ value, onChange, onGenerate }) {
           maxLength={800}
         />
         <div className="input-footer">
-          <span className="char-count">{value.length} / 800</span>
           <button
             className="generate-btn"
             disabled={value.trim().length < 10}

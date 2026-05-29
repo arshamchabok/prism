@@ -863,6 +863,8 @@ footer {
 }
 .page-main .input-footer {
   padding: 0.65rem 1.25rem;
+  border-top: none;
+  justify-content: flex-end;
 }
 .page-main .input-section {
   padding-bottom: 0;
