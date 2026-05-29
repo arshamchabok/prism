@@ -175,8 +175,8 @@ export default function MainPage() {
                 </div>
 
                 {/* Card link */}
-                <a
-                  href="/clothing.html"
+                <Link
+                  to="/fashion"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -222,7 +222,7 @@ export default function MainPage() {
                       <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
-                </a>
+                </Link>
               </SpotlightCard>
             </div>
           )}
