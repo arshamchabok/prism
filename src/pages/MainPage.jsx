@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import InputPanel from '../components/InputPanel.jsx'
 import SpotlightCard from '../components/SpotlightCard.jsx'
@@ -17,6 +17,7 @@ const EXAMPLES = [
 
 export default function MainPage() {
   const { view, personas, productInput, error, handleGenerate, reset } = usePersonaGeneration()
+  const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
   const [inputText, setInputText] = useState('')
 
@@ -175,8 +176,8 @@ export default function MainPage() {
                 </div>
 
                 {/* Card link */}
-                <Link
-                  to="/fashion"
+                <div
+                  onClick={() => navigate('/fashion')}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -185,7 +186,7 @@ export default function MainPage() {
                     gap: '1.5rem',
                     height: '100%',
                     padding: '3.5rem 4rem',
-                    textDecoration: 'none',
+                    cursor: 'pointer',
                     color: 'inherit',
                     position: 'relative',
                     zIndex: 2,
@@ -222,7 +223,7 @@ export default function MainPage() {
                       <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
-                </Link>
+                </div>
               </SpotlightCard>
             </div>
           )}
