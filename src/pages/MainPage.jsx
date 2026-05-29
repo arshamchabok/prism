@@ -5,6 +5,7 @@ import Hero from '../components/Hero.jsx'
 import InputPanel from '../components/InputPanel.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
+import GradualBlur from '../components/GradualBlur.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
 
@@ -13,18 +14,13 @@ export default function MainPage() {
   const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY
-      const ip = Math.min(y / 300, 1)
-      console.log('scrollY:', y, 'inputProgress:', ip)
-      setScrollY(y)
-    }
+    const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const inputProgress = Math.min(scrollY / 300, 1)
-  const fashionProgress = Math.max(0, Math.min((scrollY - 300) / 300, 1))
+  const inputProgress = Math.min(scrollY / 600, 1)
+  const fashionProgress = Math.max(0, Math.min((scrollY - 600) / 300, 1))
 
   const handleReset = () => {
     reset()
@@ -37,8 +33,7 @@ export default function MainPage() {
       <Header variant="main" />
 
       {(view === 'input' || view === 'error') && (
-        // Non-fixed wrapper — creates scrollable space so window.scroll fires
-        <div style={{ minHeight: '200vh' }}>
+        <div style={{ minHeight: '300vh' }}>
           <Hero
             variant="main"
             overlayStyle={{
@@ -48,14 +43,25 @@ export default function MainPage() {
           />
 
           <div style={{
-            position: 'fixed', top: '58vh', left: 0, right: 0, zIndex: 2,
+            position: 'fixed', top: '68vh', left: 0, right: 0, zIndex: 2,
             opacity: inputProgress,
             transform: `translateY(${(1 - inputProgress) * 80}px)`,
-            filter: `blur(${(1 - inputProgress) * 16}px)`,
             transition: 'none',
             pointerEvents: inputProgress > 0.5 ? 'auto' : 'none',
           }}>
-            <InputPanel onGenerate={handleGenerate} />
+            <div style={{ position: 'relative' }}>
+              <InputPanel onGenerate={handleGenerate} />
+              <GradualBlur
+                target="parent"
+                position="top"
+                height="100%"
+                strength={inputProgress < 1 ? (1 - inputProgress) * 4 : 0}
+                divCount={8}
+                curve="bezier"
+                exponential={true}
+                opacity={1 - inputProgress}
+              />
+            </div>
           </div>
 
           <div style={{

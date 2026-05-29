@@ -195,7 +195,7 @@ header {
 
 /* ---- INPUT PANEL ---- */
 .input-section {
-  max-width: 780px;
+  max-width: 580px;
   margin: 0 auto;
   padding: 0 2.5rem 3rem;
   width: 100%;
@@ -223,7 +223,7 @@ textarea {
   line-height: 1.85;
   padding: 1.5rem 1.75rem;
   resize: none;
-  min-height: 170px;
+  min-height: 80px;
 }
 textarea::placeholder { color: var(--text-dim); }
 .input-footer {
