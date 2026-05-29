@@ -167,84 +167,58 @@ export default function MainPage() {
               }}
             >
               <SpotlightCard className="fashion-spotlight-card" spotlightColor="rgba(34, 211, 238, 0.25)">
-                {/* Decorative color blobs */}
+                {/* Prism light refraction — right side of card, behind text */}
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden', borderRadius: '24px' }}>
-                  <div style={{ position: 'absolute', top: '-15%', right: '-8%', width: '55%', height: '80%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.11) 0%, transparent 65%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', bottom: '-20%', left: '-5%', width: '45%', height: '65%', background: 'radial-gradient(ellipse, rgba(236,72,153,0.09) 0%, transparent 65%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', top: '25%', left: '30%', width: '40%', height: '55%', background: 'radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 65%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '65%', height: '90%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.09) 0%, transparent 60%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: '50%', height: '60%', background: 'radial-gradient(ellipse, rgba(236,72,153,0.08) 0%, transparent 60%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', top: '30%', right: '15%', width: '35%', height: '45%', background: 'radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 60%)', borderRadius: '50%' }} />
                 </div>
 
-                {/* Card link — fills the full card */}
+                {/* Card link */}
                 <a
                   href="/clothing.html"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     justifyContent: 'center',
-                    gap: '1.25rem',
+                    gap: '1.5rem',
                     height: '100%',
-                    padding: '3rem 3.5rem',
+                    padding: '3.5rem 4rem',
                     textDecoration: 'none',
                     color: 'inherit',
-                    textAlign: 'center',
                     position: 'relative',
                     zIndex: 2,
+                    maxWidth: '62%',
                   }}
                 >
-                  <span style={{
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    color: '#22d3ee',
-                  }}>
-                    ✦ Prism
-                  </span>
-
                   <h2 style={{
                     fontFamily: "'Instrument Serif', serif",
                     fontStyle: 'italic',
-                    fontSize: 'clamp(2.8rem, 5vw, 5rem)',
+                    fontSize: 'clamp(2.8rem, 4.5vw, 4.8rem)',
                     lineHeight: 1.05,
                     letterSpacing: '-0.03em',
                     margin: 0,
-                    color: 'var(--text)',
+                    color: '#f0eff8',
                   }}>
                     Prism:{' '}
-                    <span style={{
-                      background: 'linear-gradient(135deg, #7c6cfa, #22d3ee)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}>Fashion</span>
+                    <span style={{ color: '#fb7185' }}>Fashion</span>
                   </h2>
 
                   <p style={{
-                    fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
-                    color: 'rgba(240, 240, 248, 0.55)',
-                    maxWidth: '400px',
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 'clamp(0.85rem, 1.1vw, 1rem)',
+                    color: '#8a89a0',
+                    maxWidth: '60ch',
                     lineHeight: 1.7,
                     margin: 0,
                   }}>
-                    For the brands people wear, not just buy.
+                    Fashion is not bought, it is identified with. Prism: Fashion reads the aesthetic of your collection and returns three style aware customer profiles, each with their own archetype, spending habits, discovery channels, and the single message that turns a scroller into a buyer.
                   </p>
 
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    background: 'linear-gradient(135deg, #7c6cfa, #22d3ee)',
-                    color: '#fff',
-                    borderRadius: '999px',
-                    padding: '0.8rem 1.75rem',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    marginTop: '0.5rem',
-                    boxShadow: '0 12px 40px rgba(124, 108, 250, 0.3)',
-                  }}>
+                  <span className="fashion-card-btn">
                     Open
-                    <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
+                    <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
                       <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
