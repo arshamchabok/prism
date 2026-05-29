@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header.jsx'
-import Hero from '../components/Hero.jsx'
 import InputPanel from '../components/InputPanel.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
-import GradualBlur from '../components/GradualBlur.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
 
@@ -20,7 +18,6 @@ export default function MainPage() {
   }, [])
 
   const inputProgress = Math.min(scrollY / 600, 1)
-  const fashionProgress = Math.max(0, Math.min((scrollY - 600) / 300, 1))
 
   const handleReset = () => {
     reset()
@@ -33,43 +30,46 @@ export default function MainPage() {
       <Header variant="main" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '300vh' }}>
-          <Hero
-            variant="main"
-            overlayStyle={{
-              transform: `translateY(calc(-10vh - ${inputProgress * 40}px)) scale(${1 - inputProgress * 0.15})`,
-              transition: 'none',
-            }}
-          />
-
+        <div style={{ minHeight: '300vh', position: 'relative' }}>
+          {/* FIXED: headline — always centered, never moves */}
           <div style={{
-            position: 'fixed', top: '72vh', left: 0, right: 0, zIndex: 2,
-            opacity: inputProgress,
-            transform: `translateY(${(1 - inputProgress) * 80}px)`,
-            transition: 'none',
-            pointerEvents: inputProgress > 0.5 ? 'auto' : 'none',
+            position: 'fixed', top: '35%', left: 0, right: 0, zIndex: 2,
+            textAlign: 'center', pointerEvents: 'none',
           }}>
-            <div style={{ position: 'relative' }}>
-              <InputPanel onGenerate={handleGenerate} />
-              <GradualBlur
-                target="parent"
-                position="top"
-                height="100%"
-                strength={inputProgress < 1 ? (1 - inputProgress) * 4 : 0}
-                divCount={8}
-                curve="bezier"
-                exponential={true}
-                opacity={1 - inputProgress}
-              />
+            <div className="hero-overlay" style={{ padding: '0 2.5rem' }}>
+              <h1>Know your customer<br />before they know <em>you</em></h1>
+              <p>Type what you sell. Get three razor sharp customer profiles back in seconds.</p>
             </div>
           </div>
 
+          {/* FIXED: input box — reveals via opacity + blur as user scrolls 0–600px */}
           <div style={{
-            position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2,
-            opacity: fashionProgress,
-            transform: `translateY(${(1 - fashionProgress) * 60}px)`,
+            position: 'fixed',
+            top: '65%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '580px',
+            maxWidth: 'calc(100% - 2rem)',
+            zIndex: 3,
+            opacity: inputProgress,
+            filter: `blur(${(1 - inputProgress) * 12}px)`,
+            pointerEvents: inputProgress > 0.5 ? 'auto' : 'none',
             transition: 'none',
-            pointerEvents: fashionProgress > 0.5 ? 'auto' : 'none',
+          }}>
+            <InputPanel onGenerate={handleGenerate} />
+          </div>
+
+          {/* STATIC: fashion section sits at bottom of the tall page */}
+          <div style={{
+            position: 'absolute',
+            top: '200vh',
+            left: 0,
+            width: '100%',
+            minHeight: '80vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
             <section className="fashion-section">
               <span className="fashion-section-eyebrow">✦ Prism: Fashion</span>
