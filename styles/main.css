@@ -864,8 +864,8 @@ footer {
 .page-main .input-footer {
   padding: 0.65rem 1.25rem;
 }
-.page-main .examples-row {
-  margin-top: 0.6rem;
+.page-main .input-section {
+  padding-bottom: 0;
 }
 
 /* ---- RESPONSIVE ---- */

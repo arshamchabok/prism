@@ -7,9 +7,17 @@ import PersonaCard from '../components/PersonaCard.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
 
+const EXAMPLES = [
+  { label: 'Meal kit delivery', text: 'A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping' },
+  { label: 'B2B project management', text: 'A B2B project management platform built for remote software engineering teams who need real-time collaboration across time zones' },
+  { label: 'First-time homebuyer app', text: 'A mobile app that helps first-time homebuyers understand the mortgage process, compare loan options, and track their application status' },
+  { label: 'Freelance design marketplace', text: 'An online marketplace connecting independent graphic designers with small business owners who need affordable brand identity work' },
+]
+
 export default function MainPage() {
   const { view, personas, productInput, error, handleGenerate, reset } = usePersonaGeneration()
   const [scrollY, setScrollY] = useState(0)
+  const [inputText, setInputText] = useState('')
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -20,7 +28,7 @@ export default function MainPage() {
   const progress = Math.min(scrollY / 400, 1)
 
   const heroScale = 1 - 0.15 * progress
-  const heroTranslateY = -120 * progress
+  const heroTranslateY = -150 * progress
 
   const inputTranslateY = 120 * (1 - progress)
   const inputBlur = 16 * (1 - progress)
@@ -28,6 +36,7 @@ export default function MainPage() {
 
   const handleReset = () => {
     reset()
+    setInputText('')
     setScrollY(0)
     window.scrollTo(0, 0)
   }
@@ -87,10 +96,10 @@ export default function MainPage() {
             </div>
           </div>
 
-          {/* FIXED: input box — rises from below as user scrolls 0–400px */}
+          {/* FIXED: input + pills — all in one fixed group, rises from below */}
           <div style={{
             position: 'fixed',
-            top: '54%',
+            top: '50%',
             left: '50%',
             width: '100%',
             maxWidth: '700px',
@@ -100,10 +109,26 @@ export default function MainPage() {
             filter: `blur(${inputBlur}px)`,
             pointerEvents: progress > 0.75 ? 'auto' : 'none',
           }}>
-            <InputPanel onGenerate={handleGenerate} />
+            <InputPanel
+              value={inputText}
+              onChange={setInputText}
+              onGenerate={handleGenerate}
+            />
+            <div className="examples-row" style={{ padding: '0 0.75rem' }}>
+              <span className="examples-row-label">Try:</span>
+              {EXAMPLES.map(e => (
+                <button
+                  key={e.label}
+                  className="example-pill"
+                  onClick={() => setInputText(e.text)}
+                >
+                  {e.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* STATIC: fashion section — only visible far below, after a lot of scrolling */}
+          {/* STATIC: fashion section — only visible far below */}
           <div style={{
             position: 'absolute',
             top: '220vh',
