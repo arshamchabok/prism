@@ -67,7 +67,7 @@ export default function DeployInputPanel({ value, onChange, url, onUrlChange, on
             type="button"
             aria-label="Add landing page or competitor URL"
             title="Add landing page or competitor URL"
-            style={urlActive ? { color: '#22d3ee' } : {}}
+            style={urlActive ? { color: '#a78bfa' } : {}}
           >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />

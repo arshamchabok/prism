@@ -26,7 +26,7 @@ function maybeNewPage(doc, y, needed = 30) {
   return y
 }
 
-export function downloadPersonasPdf(personas, description, isFashion = false, isDeploy = false, isPlate = false) {
+export function downloadPersonasPdf(personas, description, isFashion = false, isDeploy = false, isPlate = false, isFitness = false) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const pageW = doc.internal.pageSize.getWidth()
   const contentW = pageW - MARGIN * 2
@@ -38,7 +38,7 @@ export function downloadPersonasPdf(personas, description, isFashion = false, is
   doc.setTextColor(240, 240, 248)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(18)
-  const title = isFashion ? 'Prism: Fashion' : isDeploy ? 'Prism: Deploy' : isPlate ? 'Prism: Plate' : 'Prism'
+  const title = isFashion ? 'Prism: Fashion' : isDeploy ? 'Prism: Deploy' : isPlate ? 'Prism: Plate' : isFitness ? 'Prism: Fitness' : 'Prism'
   doc.text(title, MARGIN, 16)
 
   doc.setFont('helvetica', 'normal')
@@ -85,6 +85,31 @@ export function downloadPersonasPdf(personas, description, isFashion = false, is
     const meta = [p.age && `Age ${p.age}`, p.jobTitle, p.location].filter(Boolean).join('  ·  ')
     doc.text(meta, MARGIN + 4, y + 7.5)
     y += 17
+
+    // Fitness badges
+    if (isFitness && (p.fitnessPersona || p.experienceLevel)) {
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8.5)
+      doc.setTextColor(52, 211, 153)
+      const badges = [p.fitnessPersona && `◆ ${p.fitnessPersona}`, p.experienceLevel].filter(Boolean).join('    ')
+      doc.text(badges, MARGIN, y)
+      y += 5
+      if (p.fitnessGoal) {
+        doc.setFont('helvetica', 'italic')
+        doc.setFontSize(8)
+        doc.setTextColor(100, 100, 130)
+        y = wrap(doc, `Goal: ${p.fitnessGoal}`, MARGIN, y, contentW)
+        y += 2
+      }
+      if (p.biggestObstacle) {
+        y = wrap(doc, `Obstacle: ${p.biggestObstacle}`, MARGIN, y, contentW)
+        y += 2
+      }
+      if (p.commitmentDriver) {
+        y = wrap(doc, `Stays for: ${p.commitmentDriver}`, MARGIN, y, contentW)
+        y += 3
+      }
+    }
 
     // Plate badges
     if (isPlate && (p.diningPersona || p.averageSpend)) {

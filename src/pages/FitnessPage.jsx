@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header.jsx'
-import DeployInputPanel from '../components/DeployInputPanel.jsx'
+import FitnessInputPanel from '../components/FitnessInputPanel.jsx'
 import SpotlightCard from '../components/SpotlightCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
-import DeployPersonaCard from '../components/DeployPersonaCard.jsx'
-import { useDeployGeneration } from '../hooks/useDeployGeneration.js'
+import FitnessPersonaCard from '../components/FitnessPersonaCard.jsx'
+import { useFitnessGeneration } from '../hooks/useFitnessGeneration.js'
 import { truncate } from '../utils/helpers.js'
 import { downloadPersonasPdf } from '../utils/downloadPdf.js'
 
-const DEPLOY_EXAMPLES = [
-  { label: 'Sales intelligence', text: 'AI-powered sales intelligence platform helping enterprise SDRs identify and engage high-intent B2B accounts through intent signals and automated research' },
-  { label: 'HR automation', text: 'HR automation software for mid-market companies streamlining benefits enrollment, onboarding workflows, and compliance reporting' },
-  { label: 'DevOps observability', text: 'Developer observability SaaS helping platform engineering teams monitor microservice health, trace distributed systems, and debug production incidents' },
-  { label: 'Construction PM', text: 'B2B project management tool for construction firms tracking subcontractor schedules, budget variance, and safety compliance across job sites' },
+const FITNESS_EXAMPLES = [
+  { label: 'Boutique HIIT studio', text: 'A boutique HIIT studio offering 45-minute group classes for busy professionals who want efficient results without a long gym commitment' },
+  { label: 'Online personal trainer', text: 'An online personal training service pairing remote clients with certified coaches for 12-week customized strength and nutrition programs' },
+  { label: 'Yoga & wellness studio', text: 'A yoga and mindfulness wellness studio serving adults seeking stress relief, flexibility, and a supportive community in an urban neighborhood' },
+  { label: 'CrossFit gym', text: 'A CrossFit affiliate gym focused on building a tight-knit community of athletes who push each other toward elite functional fitness' },
 ]
 
-export default function DeployPage() {
-  const { view, personas, brandInput, error, handleGenerate, reset } = useDeployGeneration()
+export default function FitnessPage() {
+  const { view, personas, brandInput, error, handleGenerate, reset } = useFitnessGeneration()
   const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
   const [inputText, setInputText] = useState('')
-  const [inputUrl, setInputUrl] = useState('')
+  const [goalType, setGoalType] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -50,14 +50,14 @@ export default function DeployPage() {
   const handleReset = () => {
     reset()
     setInputText('')
-    setInputUrl('')
+    setGoalType(null)
     setScrollY(0)
     window.scrollTo(0, 0)
   }
 
   return (
-    <div id="app" className="page-deploy">
-      <Header variant="deploy" />
+    <div id="app" className="page-fitness">
+      <Header variant="fitness" />
 
       {(view === 'input' || view === 'error') && (
         <div style={{ minHeight: '500vh', position: 'relative' }}>
@@ -88,15 +88,15 @@ export default function DeployPage() {
                 color: 'var(--text)',
                 margin: '0 0 1rem',
               }}>
-                Know your buyer<br />before they{' '}
+                Know your member<br />before they{' '}
                 <em style={{
                   fontStyle: 'italic',
-                  color: '#a78bfa',
-                  WebkitTextFillColor: '#a78bfa',
+                  color: '#34d399',
+                  WebkitTextFillColor: '#34d399',
                   background: 'none',
                   WebkitBackgroundClip: 'unset',
                   backgroundClip: 'unset',
-                }}>sign.</em>
+                }}>commit.</em>
               </h1>
               <p style={{
                 fontSize: '1.08rem',
@@ -105,7 +105,7 @@ export default function DeployPage() {
                 margin: '0 auto',
                 lineHeight: 1.8,
               }}>
-                Describe your software and get three precision profiles of the people who decide, champion, and use it.
+                Describe your gym, program, or wellness brand and get three precision profiles of the people who start, stick, and transform.
               </p>
             </div>
           </div>
@@ -123,16 +123,16 @@ export default function DeployPage() {
             filter: `blur(${inputBlur}px)`,
             pointerEvents: p1 > 0.75 && p2 < 0.5 ? 'auto' : 'none',
           }}>
-            <DeployInputPanel
+            <FitnessInputPanel
               value={inputText}
               onChange={setInputText}
-              url={inputUrl}
-              onUrlChange={setInputUrl}
+              goalType={goalType}
+              onGoalTypeChange={setGoalType}
               onGenerate={handleGenerate}
             />
             <div className="examples-row" style={{ padding: '0 0.75rem' }}>
               <span className="examples-row-label">Try:</span>
-              {DEPLOY_EXAMPLES.map(e => (
+              {FITNESS_EXAMPLES.map(e => (
                 <button key={e.label} className="example-pill" onClick={() => setInputText(e.text)}>
                   {e.label}
                 </button>
@@ -172,12 +172,12 @@ export default function DeployPage() {
                 pointerEvents: p2 > 0.5 ? 'auto' : 'none',
               }}
             >
-              <SpotlightCard className="fashion-spotlight-card" spotlightColor="rgba(167, 139, 250, 0.22)">
-                {/* Purple color blobs */}
+              <SpotlightCard className="fashion-spotlight-card" spotlightColor="rgba(52, 211, 153, 0.18)">
+                {/* Green color blobs */}
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden', borderRadius: '24px' }}>
-                  <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '60%', height: '85%', background: 'radial-gradient(ellipse, rgba(167,139,250,0.1) 0%, transparent 60%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: '45%', height: '60%', background: 'radial-gradient(ellipse, rgba(124,108,250,0.07) 0%, transparent 60%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', top: '30%', right: '18%', width: '30%', height: '45%', background: 'radial-gradient(ellipse, rgba(196,181,253,0.05) 0%, transparent 60%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '60%', height: '85%', background: 'radial-gradient(ellipse, rgba(52,211,153,0.08) 0%, transparent 60%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: '45%', height: '60%', background: 'radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 60%)', borderRadius: '50%' }} />
+                  <div style={{ position: 'absolute', top: '30%', right: '18%', width: '30%', height: '45%', background: 'radial-gradient(ellipse, rgba(124,108,250,0.05) 0%, transparent 60%)', borderRadius: '50%' }} />
                 </div>
 
                 {/* Card content */}
@@ -240,30 +240,30 @@ export default function DeployPage() {
         </div>
       )}
 
-      {view === 'loading' && <LoadingPanel message="Mapping your buying committee…" accentColor="#22d3ee" />}
+      {view === 'loading' && <LoadingPanel message="Training your audience…" accentColor="#34d399" />}
 
       {view === 'results' && (
         <>
           <section className="results-section">
             <div className="results-header">
               <div>
-                <div className="results-title">Your Buyer Profiles</div>
+                <div className="results-title">Your Member Personas</div>
                 <div className="results-subtitle">Generated for: <em>{truncate(brandInput)}</em></div>
               </div>
-              <button className="reset-btn" onClick={handleReset}>← New product</button>
+              <button className="reset-btn" onClick={handleReset}>← New brand</button>
             </div>
             <div className="personas-grid">
-              {personas.map((p, i) => <DeployPersonaCard key={i} persona={p} />)}
+              {personas.map((p, i) => <FitnessPersonaCard key={i} persona={p} />)}
             </div>
           </section>
           <div style={{ textAlign: 'center', padding: '0.5rem 0 2rem' }}>
-            <button className="download-pdf-btn" onClick={() => downloadPersonasPdf(personas, brandInput, false, true)}>
+            <button className="download-pdf-btn" onClick={() => downloadPersonasPdf(personas, brandInput, false, false, false, true)}>
               ↓ Download as PDF
             </button>
           </div>
           <div style={{ flex: 1 }} />
           <footer>
-            <span className="footer-left">Prism: Deploy &mdash; AI-powered B2B buyer intelligence</span>
+            <span className="footer-left">Prism: Fitness &mdash; AI-powered fitness audience intelligence</span>
             <div className="footer-right">
               <Link to="/">Prism</Link>
               <Link to="/fashion">Fashion</Link>
