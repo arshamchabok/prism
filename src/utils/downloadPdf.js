@@ -26,7 +26,7 @@ function maybeNewPage(doc, y, needed = 30) {
   return y
 }
 
-export function downloadPersonasPdf(personas, description, isFashion = false, isDeploy = false) {
+export function downloadPersonasPdf(personas, description, isFashion = false, isDeploy = false, isPlate = false) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const pageW = doc.internal.pageSize.getWidth()
   const contentW = pageW - MARGIN * 2
@@ -38,7 +38,7 @@ export function downloadPersonasPdf(personas, description, isFashion = false, is
   doc.setTextColor(240, 240, 248)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(18)
-  const title = isFashion ? 'Prism: Fashion' : isDeploy ? 'Prism: Deploy' : 'Prism'
+  const title = isFashion ? 'Prism: Fashion' : isDeploy ? 'Prism: Deploy' : isPlate ? 'Prism: Plate' : 'Prism'
   doc.text(title, MARGIN, 16)
 
   doc.setFont('helvetica', 'normal')
@@ -85,6 +85,30 @@ export function downloadPersonasPdf(personas, description, isFashion = false, is
     const meta = [p.age && `Age ${p.age}`, p.jobTitle, p.location].filter(Boolean).join('  ·  ')
     doc.text(meta, MARGIN + 4, y + 7.5)
     y += 17
+
+    // Plate badges
+    if (isPlate && (p.diningPersona || p.averageSpend)) {
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8.5)
+      doc.setTextColor(251, 191, 36)
+      const badges = [p.diningPersona && `◆ ${p.diningPersona}`, p.averageSpend].filter(Boolean).join('    ')
+      doc.text(badges, MARGIN, y)
+      y += 5
+      if (p.diningFrequency || p.occasionType) {
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(100, 100, 130)
+        const habits = [p.diningFrequency, p.occasionType].filter(Boolean).join('  ·  ')
+        doc.text(habits, MARGIN, y)
+        y += 4
+      }
+      if (p.discoveryChannel || p.loyaltyDriver) {
+        doc.setFontSize(8)
+        const loyalty = [p.discoveryChannel && `Found via: ${p.discoveryChannel}`, p.loyaltyDriver && `Loyalty: ${p.loyaltyDriver}`].filter(Boolean).join('  ·  ')
+        y = wrap(doc, loyalty, MARGIN, y, contentW)
+        y += 2
+      }
+    }
 
     // Fashion badges
     if (isFashion && (p.styleArchetype || p.monthlyBudget)) {
