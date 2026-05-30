@@ -62,11 +62,10 @@ export default function FashionInputPanel({ value, onChange, image, onImageChang
 
         {/* Image preview — only visible when a file is loaded */}
         {image && (
-          <div className="upload-preview" style={{ padding: '0.4rem 1.5rem 0.4rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div className="upload-preview" style={{ padding: '0.4rem 1.5rem' }}>
             <img src={image.previewUrl} alt="Uploaded preview" id="preview-img" />
             <div className="upload-preview-info">
               <span className="upload-filename">{image.name}</span>
-              <span className="upload-hint">Image ready — add text for more context, or generate now</span>
             </div>
             <button className="upload-clear" onClick={clearImage} type="button" title="Remove image">
               &times;
