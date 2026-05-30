@@ -217,7 +217,7 @@ export default function FashionPage() {
                     lineHeight: 1.7,
                     margin: 0,
                   }}>
-                    Know your customer before they know you. Describe any product or service and get three precision customer profiles — demographics, motivations, objections, and the single message that converts a visitor into a buyer.
+                    Know your customer before they know you. Describe any product or service and get three precision customer profiles covering demographics, motivations, objections, and the single message that converts a visitor into a buyer.
                   </p>
 
                   <span className="fashion-card-btn">
