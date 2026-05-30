@@ -13,6 +13,21 @@ function getLabel(pct) {
   return label
 }
 
+function buildGradient(hex) {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  const lr = Math.min(255, Math.round(r + (255 - r) * 0.45))
+  const lg = Math.min(255, Math.round(g + (255 - g) * 0.45))
+  const lb = Math.min(255, Math.round(b + (255 - b) * 0.45))
+  const dr = Math.round(r * 0.6)
+  const dg = Math.round(g * 0.6)
+  const db = Math.round(b * 0.6)
+  const lighter = `rgb(${lr},${lg},${lb})`
+  const darker = `rgb(${dr},${dg},${db})`
+  return `conic-gradient(${darker}, ${hex}, ${lighter}, ${hex}, ${darker})`
+}
+
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -43,26 +58,21 @@ export default function LoadingPanel({ message = 'Refracting your audience…', 
   }, [])
 
   const label = getLabel(progress)
+  const gradient = buildGradient(accentColor)
+  const sideStyle = { background: gradient }
+  const shadowStyle = { background: accentColor }
 
   return (
     <section className="loading-section">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <defs>
-          <linearGradient id="lg2" x1="4" y1="4" x2="44" y2="40" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#7c6cfa"/>
-            <stop offset="50%" stopColor="#c084fc"/>
-            <stop offset="100%" stopColor="#22d3ee"/>
-          </linearGradient>
-        </defs>
-        <polygon
-          className={prefersReducedMotion ? '' : 'tri-trace'}
-          points="24,4 44,40 4,40"
-          fill="none"
-          stroke="url(#lg2)"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <div className="pyramid-loader">
+        <div className="wrapper">
+          <span className="side side1" style={sideStyle}></span>
+          <span className="side side2" style={sideStyle}></span>
+          <span className="side side3" style={sideStyle}></span>
+          <span className="side side4" style={sideStyle}></span>
+          <span className="shadow" style={shadowStyle}></span>
+        </div>
+      </div>
 
       <div className="loading-text">{message}</div>
 

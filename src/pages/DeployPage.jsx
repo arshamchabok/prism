@@ -240,7 +240,7 @@ export default function DeployPage() {
         </div>
       )}
 
-      {view === 'loading' && <LoadingPanel message="Mapping your buying committee…" accentColor="#22d3ee" />}
+      {view === 'loading' && <LoadingPanel message="Mapping your buying committee…" accentColor="#a78bfa" />}
 
       {view === 'results' && (
         <>
