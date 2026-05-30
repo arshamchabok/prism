@@ -200,7 +200,7 @@ header {
 
 /* ---- INPUT PANEL ---- */
 .input-section {
-  max-width: 690px;
+  max-width: 740px;
   margin: 0 auto;
   padding: 0 2.5rem 3rem;
   width: 100%;
@@ -1339,7 +1339,6 @@ footer {
 .vertical-picker {
   position: relative;
   z-index: 10;
-  background: var(--bg);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

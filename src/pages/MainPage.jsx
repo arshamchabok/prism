@@ -80,16 +80,16 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–1400px — hero shrinks, input rises into view
-  const p1 = Math.min(scrollY / 1400, 1)
+  // Phase 1: 0–1900px — hero shrinks, input rises into view
+  const p1 = Math.min(scrollY / 1900, 1)
   const heroScale       = 1 - 0.15 * p1
   const heroTranslateY  = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
   const inputBlur       = 16 * (1 - p1)
   const inputOpacity    = p1
 
-  // Phase 2: 1400px+ — whole fixed zone scrolls naturally up and fades out
-  const exitPx           = Math.max(scrollY - 1400, 0)
+  // Phase 2: 1900px+ — whole fixed zone scrolls naturally up and fades out
+  const exitPx           = Math.max(scrollY - 1900, 0)
   const scrollOutY       = -(exitPx * 0.9)                    // follows page scroll at ~90%
   const scrollOutOpacity = Math.max(1 - exitPx / 380, 0)     // fades over 380px
 
@@ -109,7 +109,7 @@ export default function MainPage() {
       {(view === 'input' || view === 'error') && (
         <>
           {/* Scroll spacer — creates room for phase 1 before picker arrives */}
-          <div style={{ minHeight: 'calc(100vh + 1600px)', position: 'relative' }}>
+          <div style={{ minHeight: 'calc(100vh + 2400px)', position: 'relative' }}>
 
             {/*
               Single fixed container for hero + input.
@@ -177,7 +177,7 @@ export default function MainPage() {
                 top: '50%',
                 left: '50%',
                 width: '100%',
-                maxWidth: '750px',
+                maxWidth: '800px',
                 transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
                 opacity: inputOpacity,
                 filter: `blur(${inputBlur}px)`,

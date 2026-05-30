@@ -33,16 +33,16 @@ export default function PlatePage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–1400px — hero shrinks + input reveals
-  const p1 = Math.min(scrollY / 1400, 1)
+  // Phase 1: 0–1900px — hero shrinks + input reveals
+  const p1 = Math.min(scrollY / 1900, 1)
   const heroScale = 1 - 0.15 * p1
   const heroTranslateY = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
   const inputBlur = 16 * (1 - p1)
   const inputOpacity = p1
 
-  // Phase 2: 2500–3300px — card + blur overlay reveal, input fades out
-  const p2 = Math.min(Math.max((scrollY - 2500) / 800, 0), 1)
+  // Phase 2: 3400–4200px — card + blur overlay reveal, input fades out
+  const p2 = Math.min(Math.max((scrollY - 3400) / 800, 0), 1)
   const cardScale = 0.85 + 0.15 * p2
   const blurAmount = 12 * p2
   const inputFinalOpacity = inputOpacity * (1 - p2)
@@ -60,7 +60,7 @@ export default function PlatePage() {
       <Header variant="plate" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '700vh', position: 'relative' }}>
+        <div style={{ minHeight: '900vh', position: 'relative' }}>
 
           {/* FIXED: hero — centered on load, rises on scroll */}
           <div style={{
@@ -116,7 +116,7 @@ export default function PlatePage() {
             top: '50%',
             left: '50%',
             width: '100%',
-            maxWidth: '750px',
+            maxWidth: '800px',
             zIndex: 3,
             transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
             opacity: inputFinalOpacity,
