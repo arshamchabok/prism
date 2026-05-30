@@ -5,6 +5,7 @@ import InputPanel from '../components/InputPanel.jsx'
 import SpotlightCard from '../components/SpotlightCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
+import FlowingMenu from '../components/FlowingMenu.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
 import { downloadPersonasPdf } from '../utils/downloadPdf.js'
@@ -16,11 +17,58 @@ const EXAMPLES = [
   { label: 'Freelance design marketplace', text: 'An online marketplace connecting independent graphic designers with small business owners who need affordable brand identity work' },
 ]
 
+const VERTICALS = [
+  {
+    label: 'Fashion',
+    accent: '#60a5fa',
+    accentDark: '#3b82f6',
+    route: '/fashion',
+    tag: 'Consumer Brand',
+    tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
+    description: 'Upload a lookbook, describe your aesthetic, or paste a product description. Get three precision customer personas covering style archetype, monthly budget, discovery channels, and the exact message that converts.',
+  },
+  {
+    label: 'Deploy',
+    accent: '#a78bfa',
+    accentDark: '#7c6cfa',
+    route: '/deploy',
+    tag: 'B2B SaaS',
+    tagline: 'Map your buying committee before the first call.',
+    description: 'Economic Buyer, Champion, and End User — built from your product description. Each comes with adoption blockers, churn risks, and the specific message that moves them from interested to signed.',
+  },
+  {
+    label: 'Plate',
+    accent: '#fbbf24',
+    accentDark: '#d97706',
+    route: '/plate',
+    tag: 'Food & Beverage',
+    tagline: 'Know your diner before they order.',
+    description: 'The Regular, the Occasion Diner, and the Discoverer — drawn from your restaurant\'s DNA. Includes dining frequency, discovery channel, loyalty drivers, and the message that fills seats.',
+  },
+  {
+    label: 'Fitness',
+    accent: '#34d399',
+    accentDark: '#059669',
+    route: '/fitness',
+    tag: 'Wellness & Gym',
+    tagline: 'Know your member before they commit.',
+    description: 'The Beginner, the Committed Regular, and the Comeback. Select a goal type for personas calibrated to that specific motivation — from weight loss psychology to performance periodization.',
+  },
+]
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r},${g},${b},${alpha})`
+}
+
 export default function MainPage() {
   const { view, personas, productInput, error, handleGenerate, reset } = usePersonaGeneration()
   const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
   const [inputText, setInputText] = useState('')
+  const [selectedVertical, setSelectedVertical] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -32,19 +80,17 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–800px — hero shrinks + input reveals
+  // Phase 1: 0–800px — hero shrinks, input reveals
   const p1 = Math.min(scrollY / 800, 1)
-  const heroScale = 1 - 0.15 * p1
+  const heroScale      = 1 - 0.15 * p1
   const heroTranslateY = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
-  const inputBlur = 16 * (1 - p1)
-  const inputOpacity = p1
+  const inputBlur      = 16 * (1 - p1)
+  const inputOpacity   = p1
 
-  // Phase 2: 1400–2200px — fashion card + blur overlay reveal, input fades out
-  const p2 = Math.min(Math.max((scrollY - 1400) / 800, 0), 1)
-  const fashionScale = 0.85 + 0.15 * p2
-  const blurAmount = 12 * p2
-  const inputFinalOpacity = inputOpacity * (1 - p2)
+  // Phase 3: 900–1100px — fixed elements fade out as picker section arrives
+  const p3 = Math.min(Math.max((scrollY - 900) / 200, 0), 1)
+  const fixedOpacity = 1 - p3
 
   const handleReset = () => {
     reset()
@@ -53,186 +99,148 @@ export default function MainPage() {
     window.scrollTo(0, 0)
   }
 
+  const v = VERTICALS[selectedVertical]
+
   return (
     <div id="app" className="page-main">
       <Header variant="main" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '500vh', position: 'relative' }}>
+        <>
+          {/* Scroll spacer — creates room for phase 1 + fade-out before picker section */}
+          <div style={{ minHeight: 'calc(100vh + 1200px)', position: 'relative' }}>
 
-          {/* FIXED: hero — centered on load */}
-          <div style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2,
-            pointerEvents: 'none',
-          }}>
-            <div style={{
-              textAlign: 'center',
-              padding: '0 2.5rem',
-              maxWidth: '900px',
-              transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-              transformOrigin: 'center center',
-            }}>
-              <h1 style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontStyle: 'italic',
-                fontSize: 'clamp(3.5rem, 7vw, 6rem)',
-                lineHeight: 1.05,
-                letterSpacing: '-0.04em',
-                color: 'var(--text)',
-                margin: '0 0 1rem',
-              }}>
-                Know your customer before they know{' '}
-                <em style={{
-                  fontStyle: 'italic',
-                  color: '#fb7185',
-                  WebkitTextFillColor: '#fb7185',
-                  background: 'none',
-                  WebkitBackgroundClip: 'unset',
-                  backgroundClip: 'unset',
-                }}>you</em>
-              </h1>
-              <p style={{
-                fontSize: '1.08rem',
-                color: 'rgba(240, 240, 248, 0.6)',
-                maxWidth: '560px',
-                margin: '0 auto',
-                lineHeight: 1.8,
-              }}>
-                Type what you sell. Get three razor sharp customer profiles back in seconds.
-              </p>
-            </div>
-          </div>
-
-          {/* FIXED: input + pills — rises from below during phase 1, fades out during phase 2 */}
-          <div style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            width: '100%',
-            maxWidth: '700px',
-            zIndex: 3,
-            transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
-            opacity: inputFinalOpacity,
-            filter: `blur(${inputBlur}px)`,
-            pointerEvents: p1 > 0.75 && p2 < 0.5 ? 'auto' : 'none',
-          }}>
-            <InputPanel
-              value={inputText}
-              onChange={setInputText}
-              onGenerate={handleGenerate}
-            />
-            <div className="examples-row" style={{ padding: '0 0.75rem' }}>
-              <span className="examples-row-label">Try:</span>
-              {EXAMPLES.map(e => (
-                <button
-                  key={e.label}
-                  className="example-pill"
-                  onClick={() => setInputText(e.text)}
-                >
-                  {e.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* FIXED: blur overlay — fades in during phase 2, sits between input (z3) and card (z5) */}
-          {p2 > 0 && (
+            {/* FIXED: hero — centered on load, rises + fades on scroll */}
             <div style={{
               position: 'fixed',
-              inset: 0,
-              zIndex: 4,
-              backdropFilter: `blur(${blurAmount}px)`,
-              WebkitBackdropFilter: `blur(${blurAmount}px)`,
-              background: `rgba(5, 4, 12, ${0.4 * p2})`,
-              opacity: p2,
+              top: 0, left: 0, right: 0, bottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 2,
               pointerEvents: 'none',
-            }} />
-          )}
-
-          {/* FIXED: fashion SpotlightCard — reveals during phase 2, z-index above blur */}
-          {p2 > 0 && (
-            <div
-              className="fashion-reveal-wrapper"
-              style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                width: '70vw',
+              opacity: fixedOpacity,
+            }}>
+              <div style={{
+                textAlign: 'center',
+                padding: '0 2.5rem',
                 maxWidth: '900px',
-                height: '60vh',
-                minHeight: '320px',
-                zIndex: 5,
-                transform: `translate(-50%, -50%) scale(${fashionScale})`,
-                opacity: p2,
-                pointerEvents: p2 > 0.5 ? 'auto' : 'none',
-              }}
-            >
-              <SpotlightCard className="fashion-spotlight-card" spotlightColor="rgba(34, 211, 238, 0.25)">
-                {/* Prism light refraction — right side of card, behind text */}
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden', borderRadius: '24px' }}>
-                  <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '65%', height: '90%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.09) 0%, transparent 60%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: '50%', height: '60%', background: 'radial-gradient(ellipse, rgba(236,72,153,0.08) 0%, transparent 60%)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', top: '30%', right: '15%', width: '35%', height: '45%', background: 'radial-gradient(ellipse, rgba(251,191,36,0.06) 0%, transparent 60%)', borderRadius: '50%' }} />
-                </div>
-
-                {/* Card link */}
-                <div
-                  onClick={() => navigate('/fashion')}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    justifyContent: 'center',
-                    gap: '1.5rem',
-                    height: '100%',
-                    padding: '3.5rem 4rem',
-                    cursor: 'pointer',
-                    color: 'inherit',
-                    position: 'relative',
-                    zIndex: 2,
-                    maxWidth: '62%',
-                  }}
-                >
-                  <h2 style={{
-                    fontFamily: "'Instrument Serif', serif",
+                transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                transformOrigin: 'center center',
+              }}>
+                <h1 style={{
+                  fontFamily: "'Instrument Serif', serif",
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(3.5rem, 7vw, 6rem)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.04em',
+                  color: 'var(--text)',
+                  margin: '0 0 1rem',
+                }}>
+                  Know your customer before they know{' '}
+                  <em style={{
                     fontStyle: 'italic',
-                    fontSize: 'clamp(2.8rem, 4.5vw, 4.8rem)',
-                    lineHeight: 1.05,
-                    letterSpacing: '-0.03em',
-                    margin: 0,
-                    color: '#f0eff8',
-                  }}>
-                    Prism:{' '}
-                    <span style={{ color: '#60a5fa' }}>Fashion</span>
-                  </h2>
-
-                  <p style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 'clamp(0.85rem, 1.1vw, 1rem)',
-                    color: '#8a89a0',
-                    maxWidth: '60ch',
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}>
-                    Fashion is not bought, it is identified with. Prism: Fashion reads the aesthetic of your collection and returns three style aware customer profiles, each with their own archetype, spending habits, discovery channels, and the single message that turns a scroller into a buyer.
-                  </p>
-
-                  <span className="fashion-card-btn">
-                    Open
-                    <svg width="13" height="13" viewBox="0 0 15 15" fill="none">
-                      <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                </div>
-              </SpotlightCard>
+                    color: '#fb7185',
+                    WebkitTextFillColor: '#fb7185',
+                    background: 'none',
+                    WebkitBackgroundClip: 'unset',
+                    backgroundClip: 'unset',
+                  }}>you</em>
+                </h1>
+                <p style={{
+                  fontSize: '1.08rem',
+                  color: 'rgba(240, 240, 248, 0.6)',
+                  maxWidth: '560px',
+                  margin: '0 auto',
+                  lineHeight: 1.8,
+                }}>
+                  Type what you sell. Get three razor sharp customer profiles back in seconds.
+                </p>
+              </div>
             </div>
-          )}
-        </div>
+
+            {/* FIXED: input + pills — rises from below, fades with hero */}
+            <div style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              width: '100%',
+              maxWidth: '700px',
+              zIndex: 3,
+              transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
+              opacity: inputOpacity * fixedOpacity,
+              filter: `blur(${inputBlur}px)`,
+              pointerEvents: p1 > 0.75 && p3 < 0.5 ? 'auto' : 'none',
+            }}>
+              <InputPanel
+                value={inputText}
+                onChange={setInputText}
+                onGenerate={handleGenerate}
+              />
+              <div className="examples-row" style={{ padding: '0 0.75rem' }}>
+                <span className="examples-row-label">Try:</span>
+                {EXAMPLES.map(e => (
+                  <button
+                    key={e.label}
+                    className="example-pill"
+                    onClick={() => setInputText(e.text)}
+                  >
+                    {e.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* NORMAL SCROLL: vertical picker section */}
+          <section className="vertical-picker">
+            <div className="vp-inner">
+              <div className="vp-left">
+                <FlowingMenu
+                  items={VERTICALS}
+                  selected={selectedVertical}
+                  onSelect={setSelectedVertical}
+                />
+              </div>
+
+              <div className="vp-right">
+                <SpotlightCard
+                  className="vp-card"
+                  spotlightColor={hexToRgba(v.accent, 0.18)}
+                  style={{ borderColor: hexToRgba(v.accent, 0.28) }}
+                >
+                  <div key={selectedVertical} className="vp-content-anim">
+                    <span className="vp-tag" style={{ borderColor: hexToRgba(v.accent, 0.3), color: v.accent }}>
+                      {v.tag}
+                    </span>
+
+                    <h2 className="vp-name">
+                      Prism:{' '}
+                      <em style={{ color: v.accent, fontStyle: 'italic' }}>{v.label}</em>
+                    </h2>
+
+                    <p className="vp-tagline">{v.tagline}</p>
+                    <p className="vp-desc">{v.description}</p>
+
+                    <button
+                      className="vp-launch-btn"
+                      onClick={() => navigate(v.route)}
+                      style={{
+                        background: `linear-gradient(135deg, ${v.accentDark}, ${v.accent})`,
+                        boxShadow: `0 14px 35px ${hexToRgba(v.accent, 0.25)}`,
+                      }}
+                    >
+                      Launch
+                      <svg width="13" height="13" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                        <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                  </div>
+                </SpotlightCard>
+              </div>
+            </div>
+          </section>
+        </>
       )}
 
       {view === 'error' && (

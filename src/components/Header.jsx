@@ -16,19 +16,6 @@ export default function Header({ variant = 'main' }) {
         Prism
       </div>
       <div className="header-right">
-        {variant === 'main' && (
-          <>
-            <Link to="/deploy" className="nav-link" style={{ color: '#a78bfa', borderColor: 'rgba(167,139,250,0.3)' }}>
-              Deploy ↗
-            </Link>
-            <Link to="/plate" className="nav-link" style={{ color: '#fbbf24', borderColor: 'rgba(251,191,36,0.3)' }}>
-              Plate ↗
-            </Link>
-            <Link to="/fitness" className="nav-link" style={{ color: '#34d399', borderColor: 'rgba(52,211,153,0.3)' }}>
-              Fitness ↗
-            </Link>
-          </>
-        )}
         {(variant === 'fashion' || variant === 'deploy' || variant === 'plate' || variant === 'fitness') && (
           <Link to="/" className="nav-link">← Back to Prism</Link>
         )}

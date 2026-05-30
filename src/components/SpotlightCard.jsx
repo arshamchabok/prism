@@ -1,7 +1,7 @@
 import { useRef, useCallback } from 'react'
 import './SpotlightCard.css'
 
-export default function SpotlightCard({ children, className = '', spotlightColor = 'rgba(34, 211, 238, 0.25)' }) {
+export default function SpotlightCard({ children, className = '', spotlightColor = 'rgba(34, 211, 238, 0.25)', style = {} }) {
   const divRef = useRef(null)
 
   const handleMouseMove = useCallback((e) => {
@@ -23,7 +23,7 @@ export default function SpotlightCard({ children, className = '', spotlightColor
     <div
       ref={divRef}
       className={`spotlight-card ${className}`}
-      style={{ '--spotlight-color': spotlightColor }}
+      style={{ '--spotlight-color': spotlightColor, ...style }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
