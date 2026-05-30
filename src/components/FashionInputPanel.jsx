@@ -42,25 +42,53 @@ export default function FashionInputPanel({ value, onChange, image, onImageChang
 
   return (
     <section className="input-section">
-      <div className="input-card">
+      <div
+        className={`input-card${isDragging ? ' drag-over' : ''}`}
+        onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={e => {
+          e.preventDefault()
+          setIsDragging(false)
+          const file = e.dataTransfer?.files[0]
+          if (file) readImageFile(file)
+        }}
+      >
         <textarea
           value={value}
           onChange={handleChange}
           placeholder='Describe your clothing brand… e.g. "A minimalist womenswear label offering timeless, sustainable basics for urban professionals"'
           maxLength={800}
         />
-        <div
-          className={`upload-zone${isDragging ? ' drag-over' : ''}`}
-          onClick={() => fileInputRef.current?.click()}
-          onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={e => {
-            e.preventDefault()
-            setIsDragging(false)
-            const file = e.dataTransfer?.files[0]
-            if (file) readImageFile(file)
-          }}
-        >
+
+        {/* Image preview — only visible when a file is loaded */}
+        {image && (
+          <div className="upload-preview" style={{ padding: '0.4rem 1.5rem 0.4rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <img src={image.previewUrl} alt="Uploaded preview" id="preview-img" />
+            <div className="upload-preview-info">
+              <span className="upload-filename">{image.name}</span>
+              <span className="upload-hint">Image ready — add text for more context, or generate now</span>
+            </div>
+            <button className="upload-clear" onClick={clearImage} type="button" title="Remove image">
+              &times;
+            </button>
+          </div>
+        )}
+
+        {/* Footer: paperclip trigger left, Generate button right */}
+        <div className="input-footer" style={{ justifyContent: 'space-between' }}>
+          <button
+            className="upload-trigger-btn"
+            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            aria-label="Upload image"
+          >
+            <svg
+              width="17" height="17" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+            >
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
           <input
             ref={fileInputRef}
             type="file"
@@ -68,29 +96,6 @@ export default function FashionInputPanel({ value, onChange, image, onImageChang
             style={{ display: 'none' }}
             onChange={e => { if (e.target.files[0]) readImageFile(e.target.files[0]) }}
           />
-          {image ? (
-            <div className="upload-preview">
-              <img src={image.previewUrl} alt="Uploaded preview" id="preview-img" />
-              <div className="upload-preview-info">
-                <span className="upload-filename">{image.name}</span>
-                <span className="upload-hint">Image ready — add text for more context, or generate now</span>
-              </div>
-              <button className="upload-clear" onClick={clearImage} type="button" title="Remove image">
-                &times;
-              </button>
-            </div>
-          ) : (
-            <div className="upload-prompt">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.2"/>
-                <circle cx="5.5" cy="7.5" r="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                <path d="M1 11l3.5-3 2.5 2.5 2-2 4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Drop a photo or click to upload — mood board, outfit, lookbook, or product shot
-            </div>
-          )}
-        </div>
-        <div className="input-footer">
           <button className="generate-btn" disabled={!canGenerate} onClick={handleSubmit}>
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
               <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

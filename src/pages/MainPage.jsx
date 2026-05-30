@@ -207,7 +207,7 @@ export default function MainPage() {
                     color: '#f0eff8',
                   }}>
                     Prism:{' '}
-                    <span style={{ color: '#fb7185' }}>Fashion</span>
+                    <span style={{ color: '#60a5fa' }}>Fashion</span>
                   </h2>
 
                   <p style={{

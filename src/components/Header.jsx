@@ -14,7 +14,6 @@ export default function Header({ variant = 'main' }) {
           <polygon points="14,2 26,24 2,24" fill="none" stroke="url(#prism-grad)" strokeWidth="2" strokeLinejoin="miter"/>
         </svg>
         Prism
-        {variant === 'fashion' && <span className="logo-tag">Fashion</span>}
       </div>
       {variant === 'fashion' && (
         <div className="header-right">

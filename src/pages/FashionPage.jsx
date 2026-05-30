@@ -90,8 +90,8 @@ export default function FashionPage() {
                 Know your shopper's style<br />before they know{' '}
                 <em style={{
                   fontStyle: 'italic',
-                  color: '#fb7185',
-                  WebkitTextFillColor: '#fb7185',
+                  color: '#60a5fa',
+                  WebkitTextFillColor: '#60a5fa',
                   background: 'none',
                   WebkitBackgroundClip: 'unset',
                   backgroundClip: 'unset',
