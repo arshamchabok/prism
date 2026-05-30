@@ -15,11 +15,16 @@ export default function Header({ variant = 'main' }) {
         </svg>
         Prism
       </div>
-      {(variant === 'fashion' || variant === 'deploy') && (
-        <div className="header-right">
+      <div className="header-right">
+        {variant === 'main' && (
+          <Link to="/deploy" className="nav-link" style={{ color: '#22d3ee', borderColor: 'rgba(34,211,238,0.3)' }}>
+            Deploy ↗
+          </Link>
+        )}
+        {(variant === 'fashion' || variant === 'deploy') && (
           <Link to="/" className="nav-link">← Back to Prism</Link>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   )
 }
