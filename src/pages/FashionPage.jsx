@@ -7,6 +7,7 @@ import LoadingPanel from '../components/LoadingPanel.jsx'
 import FashionPersonaCard from '../components/FashionPersonaCard.jsx'
 import { useFashionGeneration } from '../hooks/useFashionGeneration.js'
 import { truncate } from '../utils/helpers.js'
+import { downloadPersonasPdf } from '../utils/downloadPdf.js'
 
 const FASHION_EXAMPLES = [
   { label: 'Minimalist basics', text: 'A minimalist womenswear brand offering timeless, sustainable basics made from organic cotton for urban professionals' },
@@ -239,7 +240,7 @@ export default function FashionPage() {
         </div>
       )}
 
-      {view === 'loading' && <LoadingPanel message="Styling your audience…" />}
+      {view === 'loading' && <LoadingPanel message="Styling your audience…" accentColor="#60a5fa" />}
 
       {view === 'results' && (
         <>
@@ -255,6 +256,11 @@ export default function FashionPage() {
               {personas.map((p, i) => <FashionPersonaCard key={i} persona={p} />)}
             </div>
           </section>
+          <div style={{ textAlign: 'center', padding: '0.5rem 0 2rem' }}>
+            <button className="download-pdf-btn" onClick={() => downloadPersonasPdf(personas, brandInput, true)}>
+              ↓ Download as PDF
+            </button>
+          </div>
           <div style={{ flex: 1 }} />
           <footer>
             <span className="footer-left">Prism: Fashion &mdash; AI-powered fashion customer intelligence</span>

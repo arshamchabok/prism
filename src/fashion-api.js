@@ -10,7 +10,7 @@ Respond ONLY with a valid JSON array (no markdown fences, no preamble, no traili
     "age": 28,
     "jobTitle": "Job Title",
     "location": "City, Country",
-    "styleArchetype": "One word or short phrase — e.g. Minimalist, Streetwear, Classic, Maximalist, Boho, Athleisure, Avant-Garde, Old Money, Dark Academia, Y2K",
+    "styleArchetype": "One word or short phrase — e.g. Minimalist, Streetwear, Classic, Maximalist, Boho, Athleisure, Avant-Garde, Traditional, Dark Academia, Y2K",
     "monthlyBudget": "$200–$400/mo",
     "quote": "A direct quote in their authentic voice about how they relate to fashion and this brand specifically (25–40 words, first person)",
     "goals": ["fashion-specific goal 1", "fashion-specific goal 2", "fashion-specific goal 3"],

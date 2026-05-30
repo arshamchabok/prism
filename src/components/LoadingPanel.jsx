@@ -1,35 +1,48 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const STEPS = [
-  'Analyzing your product space',
-  'Identifying distinct buyer segments',
-  'Building persona profiles',
-  'Crafting messaging hooks'
+  { threshold: 0,  label: 'Analyzing your input' },
+  { threshold: 25, label: 'Identifying distinct segments' },
+  { threshold: 50, label: 'Building persona profiles' },
+  { threshold: 75, label: 'Crafting messaging hooks' },
 ]
 
-export default function LoadingPanel({ message = 'Refracting your audience…' }) {
-  const stepsRef = useRef([])
+function getLabel(pct) {
+  let label = STEPS[0].label
+  for (const s of STEPS) { if (pct >= s.threshold) label = s.label }
+  return label
+}
+
+const prefersReducedMotion =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+export default function LoadingPanel({ message = 'Refracting your audience…', accentColor = '#dc2626' }) {
+  const [progress, setProgress] = useState(0)
+  const intervalRef = useRef(null)
 
   useEffect(() => {
-    const stepEls = stepsRef.current
-    stepEls.forEach(el => { if (el) el.className = 'loading-step' })
+    if (prefersReducedMotion) { setProgress(60); return }
 
-    let current = 0
-    const interval = setInterval(() => {
-      if (current > 0 && stepEls[current - 1]) {
-        stepEls[current - 1].classList.remove('active')
-        stepEls[current - 1].classList.add('done')
-      }
-      if (current < stepEls.length) {
-        if (stepEls[current]) stepEls[current].classList.add('active')
-        current++
-      } else {
-        clearInterval(interval)
-      }
-    }, 1400)
+    const DURATION_MS = 8000
+    const TICK_MS = 80
+    const TARGET = 90
+    const increment = (TARGET / DURATION_MS) * TICK_MS
 
-    return () => clearInterval(interval)
+    intervalRef.current = setInterval(() => {
+      setProgress(prev => {
+        const next = prev + increment
+        if (next >= TARGET) {
+          clearInterval(intervalRef.current)
+          return TARGET
+        }
+        return next
+      })
+    }, TICK_MS)
+
+    return () => clearInterval(intervalRef.current)
   }, [])
+
+  const label = getLabel(progress)
 
   return (
     <section className="loading-section">
@@ -42,7 +55,7 @@ export default function LoadingPanel({ message = 'Refracting your audience…' }
           </linearGradient>
         </defs>
         <polygon
-          className="tri-trace"
+          className={prefersReducedMotion ? '' : 'tri-trace'}
           points="24,4 44,40 4,40"
           fill="none"
           stroke="url(#lg2)"
@@ -50,13 +63,21 @@ export default function LoadingPanel({ message = 'Refracting your audience…' }
           strokeLinejoin="round"
         />
       </svg>
+
       <div className="loading-text">{message}</div>
-      <div className="loading-steps">
-        {STEPS.map((label, i) => (
-          <div key={i} className="loading-step" ref={el => { stepsRef.current[i] = el }}>
-            {label}
-          </div>
-        ))}
+
+      <div className="loading-progress-wrap">
+        <div className="loading-progress-label">{label}</div>
+        <div className="loading-progress-track">
+          <div
+            className="loading-progress-bar"
+            style={{
+              width: `${progress}%`,
+              background: accentColor,
+              transition: prefersReducedMotion ? 'none' : 'width 0.08s linear',
+            }}
+          />
+        </div>
       </div>
     </section>
   )

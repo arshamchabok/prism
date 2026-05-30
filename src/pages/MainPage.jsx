@@ -7,6 +7,7 @@ import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
 import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
+import { downloadPersonasPdf } from '../utils/downloadPdf.js'
 
 const EXAMPLES = [
   { label: 'Meal kit delivery', text: 'A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping' },
@@ -240,7 +241,7 @@ export default function MainPage() {
         </div>
       )}
 
-      {view === 'loading' && <LoadingPanel message="Refracting your audience…" />}
+      {view === 'loading' && <LoadingPanel message="Refracting your audience…" accentColor="#dc2626" />}
 
       {view === 'results' && (
         <>
@@ -256,6 +257,11 @@ export default function MainPage() {
               {personas.map((p, i) => <PersonaCard key={i} persona={p} />)}
             </div>
           </section>
+          <div style={{ textAlign: 'center', padding: '0.5rem 0 2rem' }}>
+            <button className="download-pdf-btn" onClick={() => downloadPersonasPdf(personas, productInput, false)}>
+              ↓ Download as PDF
+            </button>
+          </div>
           <div style={{ flex: 1 }} />
           <footer>
             <span className="footer-left">Prism &mdash; AI-powered customer intelligence</span>
