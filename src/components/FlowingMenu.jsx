@@ -6,7 +6,6 @@ const prefersReduced =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Returns which edge the cursor entered/exited from
 function edgeDirection(e, el) {
   const { width, height, top, left } = el.getBoundingClientRect()
   const nx = (e.clientX - left - width / 2) / (width / 2)
@@ -46,8 +45,8 @@ function MenuItem({ label, accent, isSelected, onClick }) {
     function onLeave(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
       gsap.killTweensOf([fill, marquee])
-      gsap.to(fill,    { x, y,        duration: 0.45, ease: 'power3.in' })
-      gsap.to(marquee, { y: '110%',   duration: 0.4,  ease: 'power3.in' })
+      gsap.to(fill,    { x, y,       duration: 0.45, ease: 'power3.in' })
+      gsap.to(marquee, { y: '110%',  duration: 0.4,  ease: 'power3.in' })
     }
 
     item.addEventListener('mouseenter', onEnter)
@@ -59,27 +58,35 @@ function MenuItem({ label, accent, isSelected, onClick }) {
     }
   }, [])
 
-  // Enough copies so the -50% translate loops seamlessly
-  const marqueeStr = Array(8).fill(`${label} — `).join('')
-
   return (
     <div
       ref={itemRef}
       className={`flow-item${isSelected ? ' flow-item--active' : ''}`}
+      style={{ '--flow-accent': accent }}
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
       aria-pressed={isSelected}
     >
+      {/* Full-bleed colored fill — GSAP translates this in */}
       <span ref={fillRef} className="flow-fill" style={{ background: accent }} />
 
+      {/* Main resting label */}
       <div className="flow-label">
         <span style={isSelected ? { color: accent } : undefined}>{label}</span>
       </div>
 
+      {/* Marquee panel — slides in over the fill */}
       <div ref={marqueeRef} className="flow-marquee">
-        <span className="flow-marquee-track">{marqueeStr}</span>
+        <div className="flow-marquee-track">
+          {Array(8).fill(null).map((_, i) => (
+            <span key={i} className="flow-marquee-item">
+              <span className="flow-marquee-thumb" style={{ background: accent }} />
+              <span className="flow-marquee-word">{label}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   )

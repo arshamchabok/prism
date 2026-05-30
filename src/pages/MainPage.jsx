@@ -80,17 +80,18 @@ export default function MainPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–800px — hero shrinks, input reveals
+  // Phase 1: 0–800px — hero shrinks, input rises into view
   const p1 = Math.min(scrollY / 800, 1)
-  const heroScale      = 1 - 0.15 * p1
-  const heroTranslateY = -150 * p1
+  const heroScale       = 1 - 0.15 * p1
+  const heroTranslateY  = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
-  const inputBlur      = 16 * (1 - p1)
-  const inputOpacity   = p1
+  const inputBlur       = 16 * (1 - p1)
+  const inputOpacity    = p1
 
-  // Phase 3: 900–1100px — fixed elements fade out as picker section arrives
-  const p3 = Math.min(Math.max((scrollY - 900) / 200, 0), 1)
-  const fixedOpacity = 1 - p3
+  // Phase 2: 800px+ — whole fixed zone scrolls naturally up and fades out
+  const exitPx           = Math.max(scrollY - 800, 0)
+  const scrollOutY       = -(exitPx * 0.9)                    // follows page scroll at ~90%
+  const scrollOutOpacity = Math.max(1 - exitPx / 380, 0)     // fades over 380px
 
   const handleReset = () => {
     reset()
@@ -107,87 +108,98 @@ export default function MainPage() {
 
       {(view === 'input' || view === 'error') && (
         <>
-          {/* Scroll spacer — creates room for phase 1 + fade-out before picker section */}
-          <div style={{ minHeight: 'calc(100vh + 1200px)', position: 'relative' }}>
+          {/* Scroll spacer — creates room for phase 1 before picker arrives */}
+          <div style={{ minHeight: 'calc(100vh + 1000px)', position: 'relative' }}>
 
-            {/* FIXED: hero — centered on load, rises + fades on scroll */}
+            {/*
+              Single fixed container for hero + input.
+              transform: translateY scrolls it upward at ~90% of scroll speed
+              once the user is past 800px, creating a natural "page flow" feel.
+              opacity fades it out over 380px of additional scroll.
+            */}
             <div style={{
               position: 'fixed',
-              top: 0, left: 0, right: 0, bottom: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              inset: 0,
               zIndex: 2,
               pointerEvents: 'none',
-              opacity: fixedOpacity,
+              transform: `translateY(${scrollOutY}px)`,
+              opacity: scrollOutOpacity,
             }}>
+              {/* Hero — centered inside the fixed container */}
               <div style={{
-                textAlign: 'center',
-                padding: '0 2.5rem',
-                maxWidth: '900px',
-                transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-                transformOrigin: 'center center',
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-                <h1 style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(3.5rem, 7vw, 6rem)',
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.04em',
-                  color: 'var(--text)',
-                  margin: '0 0 1rem',
+                <div style={{
+                  textAlign: 'center',
+                  padding: '0 2.5rem',
+                  maxWidth: '900px',
+                  transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                  transformOrigin: 'center center',
                 }}>
-                  Know your customer before they know{' '}
-                  <em style={{
+                  <h1 style={{
+                    fontFamily: "'Instrument Serif', serif",
                     fontStyle: 'italic',
-                    color: '#fb7185',
-                    WebkitTextFillColor: '#fb7185',
-                    background: 'none',
-                    WebkitBackgroundClip: 'unset',
-                    backgroundClip: 'unset',
-                  }}>you</em>
-                </h1>
-                <p style={{
-                  fontSize: '1.08rem',
-                  color: 'rgba(240, 240, 248, 0.6)',
-                  maxWidth: '560px',
-                  margin: '0 auto',
-                  lineHeight: 1.8,
-                }}>
-                  Type what you sell. Get three razor sharp customer profiles back in seconds.
-                </p>
+                    fontSize: 'clamp(3.5rem, 7vw, 6rem)',
+                    lineHeight: 1.05,
+                    letterSpacing: '-0.04em',
+                    color: 'var(--text)',
+                    margin: '0 0 1rem',
+                  }}>
+                    Know your customer before they know{' '}
+                    <em style={{
+                      fontStyle: 'italic',
+                      color: '#fb7185',
+                      WebkitTextFillColor: '#fb7185',
+                      background: 'none',
+                      WebkitBackgroundClip: 'unset',
+                      backgroundClip: 'unset',
+                    }}>you</em>
+                  </h1>
+                  <p style={{
+                    fontSize: '1.08rem',
+                    color: 'rgba(240, 240, 248, 0.6)',
+                    maxWidth: '560px',
+                    margin: '0 auto',
+                    lineHeight: 1.8,
+                  }}>
+                    Type what you sell. Get three razor sharp customer profiles back in seconds.
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* FIXED: input + pills — rises from below, fades with hero */}
-            <div style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              width: '100%',
-              maxWidth: '700px',
-              zIndex: 3,
-              transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
-              opacity: inputOpacity * fixedOpacity,
-              filter: `blur(${inputBlur}px)`,
-              pointerEvents: p1 > 0.75 && p3 < 0.5 ? 'auto' : 'none',
-            }}>
-              <InputPanel
-                value={inputText}
-                onChange={setInputText}
-                onGenerate={handleGenerate}
-              />
-              <div className="examples-row" style={{ padding: '0 0.75rem' }}>
-                <span className="examples-row-label">Try:</span>
-                {EXAMPLES.map(e => (
-                  <button
-                    key={e.label}
-                    className="example-pill"
-                    onClick={() => setInputText(e.text)}
-                  >
-                    {e.label}
-                  </button>
-                ))}
+              {/* Input + pills — rises from below during phase 1 */}
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '100%',
+                maxWidth: '700px',
+                transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
+                opacity: inputOpacity,
+                filter: `blur(${inputBlur}px)`,
+                pointerEvents: p1 > 0.75 && scrollOutOpacity > 0.5 ? 'auto' : 'none',
+              }}>
+                <InputPanel
+                  value={inputText}
+                  onChange={setInputText}
+                  onGenerate={handleGenerate}
+                />
+                <div className="examples-row" style={{ padding: '0 0.75rem' }}>
+                  <span className="examples-row-label">Try:</span>
+                  {EXAMPLES.map(e => (
+                    <button
+                      key={e.label}
+                      className="example-pill"
+                      onClick={() => setInputText(e.text)}
+                    >
+                      {e.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

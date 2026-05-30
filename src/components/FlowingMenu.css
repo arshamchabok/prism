@@ -9,7 +9,7 @@
   position: relative;
   overflow: hidden;
   flex: 1;
-  min-height: 22vh;
+  min-height: 24vh;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -17,6 +17,7 @@
   outline: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
 }
 
 .flow-item:first-child {
@@ -24,11 +25,25 @@
 }
 
 .flow-item:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.28);
+  outline: 2px solid rgba(255, 255, 255, 0.25);
   outline-offset: -2px;
 }
 
-/* Colored fill — GSAP controls translate */
+/* Left accent bar on selected item */
+.flow-item--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: var(--flow-accent, currentColor);
+  border-radius: 0 3px 3px 0;
+  z-index: 4;
+  opacity: 0.9;
+}
+
+/* Full-bleed colored fill — GSAP controls translate position */
 .flow-fill {
   position: absolute;
   inset: 0;
@@ -36,11 +51,11 @@
   will-change: transform;
 }
 
-/* Main label */
+/* Resting label */
 .flow-label {
   position: relative;
   z-index: 1;
-  padding: 0 2.5rem;
+  padding: 0 3rem;
   font-family: 'Instrument Serif', serif;
   font-style: italic;
   font-size: clamp(2.8rem, 5.5vw, 5rem);
@@ -51,34 +66,38 @@
 }
 
 .flow-label span {
-  transition: color 0.2s ease;
+  transition: color 0.22s ease;
   display: block;
 }
 
-/* Marquee container — GSAP controls vertical translate */
+/*
+  Marquee panel — GSAP controls vertical position.
+  Inset + border-radius make it a designed panel floating
+  over the accent fill rather than a raw full-bleed rectangle.
+  Dark semi-transparent bg keeps text legible on all accent colors.
+*/
 .flow-marquee {
   position: absolute;
-  inset: 0;
+  inset: 7px;
   z-index: 2;
   display: flex;
   align-items: center;
   overflow: hidden;
   pointer-events: none;
   will-change: transform;
+  border-radius: 12px;
+  background: rgba(5, 4, 12, 0.22);
 }
 
-/* Scrolling marquee text */
+/* Scrolling track */
 .flow-marquee-track {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
   white-space: nowrap;
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
-  font-size: clamp(2.8rem, 5.5vw, 5rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: rgba(5, 4, 12, 0.82);
-  padding-left: 2.5rem;
-  animation: flow-marquee-scroll 9s linear infinite;
+  flex-shrink: 0;
+  padding-left: 2rem;
+  animation: flow-marquee-scroll 10s linear infinite;
   will-change: transform;
 }
 
@@ -87,20 +106,46 @@
   to   { transform: translateX(-50%); }
 }
 
-/* Reduced motion: skip all animation, keep selection state */
+/* One repeated unit: thumbnail + label */
+.flow-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding-right: 3rem;
+}
+
+/* Small colored thumbnail */
+.flow-marquee-thumb {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 7px;
+  opacity: 0.88;
+  flex-shrink: 0;
+}
+
+/* Label text inside the marquee panel */
+.flow-marquee-word {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(5, 4, 12, 0.88);
+}
+
+/* Reduced motion: no animation, no fill, no marquee */
 @media (prefers-reduced-motion: reduce) {
-  .flow-fill          { display: none; }
-  .flow-marquee       { display: none; }
-  .flow-marquee-track { animation: none; }
+  .flow-fill              { display: none; }
+  .flow-marquee           { display: none; }
+  .flow-marquee-track     { animation: none; }
 }
 
 /* Mobile */
 @media (max-width: 640px) {
-  .flow-item { min-height: 18vw; }
-  .flow-label { padding: 0 1.5rem; }
+  .flow-item  { min-height: 20vw; }
+  .flow-label { padding: 0 1.75rem; }
   .flow-label,
-  .flow-marquee-track {
-    font-size: clamp(2rem, 9vw, 3rem);
-  }
-  .flow-marquee-track { padding-left: 1.5rem; }
+  .flow-marquee-word { font-size: clamp(2rem, 9vw, 3rem); }
+  .flow-marquee-thumb { width: 1.8rem; height: 1.8rem; }
 }
