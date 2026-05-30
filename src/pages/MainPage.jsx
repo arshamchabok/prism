@@ -10,6 +10,32 @@ import { usePersonaGeneration } from '../hooks/usePersonaGeneration.js'
 import { truncate } from '../utils/helpers.js'
 import { downloadPersonasPdf } from '../utils/downloadPdf.js'
 
+// Inline SVG icons for the FlowingMenu marquee (Lucide-style, no external dep)
+const FashionIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+    <line x1="7" y1="7" x2="7.01" y2="7" />
+  </svg>
+)
+const DeployIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 17 10 11 4 5" />
+    <line x1="12" y1="19" x2="20" y2="19" />
+  </svg>
+)
+const PlateIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+    <path d="M7 2v20" />
+    <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" />
+  </svg>
+)
+const FitnessIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </svg>
+)
+
 const EXAMPLES = [
   { label: 'Meal kit delivery', text: 'A meal kit delivery service targeting busy families who want to cook healthy dinners at home without the hassle of grocery shopping' },
   { label: 'B2B project management', text: 'A B2B project management platform built for remote software engineering teams who need real-time collaboration across time zones' },
@@ -23,6 +49,7 @@ const VERTICALS = [
     accent: '#60a5fa',
     accentDark: '#3b82f6',
     route: '/fashion',
+    icon: FashionIcon,
     tag: 'Consumer Brand',
     tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
     description: 'Upload a lookbook, describe your aesthetic, or paste a product description. Get three precision customer personas covering style archetype, monthly budget, discovery channels, and the exact message that converts.',
@@ -32,6 +59,7 @@ const VERTICALS = [
     accent: '#a78bfa',
     accentDark: '#7c6cfa',
     route: '/deploy',
+    icon: DeployIcon,
     tag: 'B2B SaaS',
     tagline: 'Map your buying committee before the first call.',
     description: 'Economic Buyer, Champion, and End User — built from your product description. Each comes with adoption blockers, churn risks, and the specific message that moves them from interested to signed.',
@@ -41,6 +69,7 @@ const VERTICALS = [
     accent: '#fbbf24',
     accentDark: '#d97706',
     route: '/plate',
+    icon: PlateIcon,
     tag: 'Food & Beverage',
     tagline: 'Know your diner before they order.',
     description: 'The Regular, the Occasion Diner, and the Discoverer — drawn from your restaurant\'s DNA. Includes dining frequency, discovery channel, loyalty drivers, and the message that fills seats.',
@@ -50,6 +79,7 @@ const VERTICALS = [
     accent: '#34d399',
     accentDark: '#059669',
     route: '/fitness',
+    icon: FitnessIcon,
     tag: 'Wellness & Gym',
     tagline: 'Know your member before they commit.',
     description: 'The Beginner, the Committed Regular, and the Comeback. Select a goal type for personas calibrated to that specific motivation — from weight loss psychology to performance periodization.',
