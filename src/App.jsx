@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import Prism from './components/Prism.jsx'
 import MainPage from './pages/MainPage.jsx'
 import FashionPage from './pages/FashionPage.jsx'
+import DeployPage from './pages/DeployPage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/fashion" element={<FashionPage />} />
+        <Route path="/deploy" element={<DeployPage />} />
         <Route path="/about" element={<AboutPage />} />
       </Routes>
     </HashRouter>

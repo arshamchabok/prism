@@ -26,7 +26,7 @@ function maybeNewPage(doc, y, needed = 30) {
   return y
 }
 
-export function downloadPersonasPdf(personas, description, isFashion = false) {
+export function downloadPersonasPdf(personas, description, isFashion = false, isDeploy = false) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const pageW = doc.internal.pageSize.getWidth()
   const contentW = pageW - MARGIN * 2
@@ -38,7 +38,8 @@ export function downloadPersonasPdf(personas, description, isFashion = false) {
   doc.setTextColor(240, 240, 248)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(18)
-  doc.text(isFashion ? 'Prism: Fashion' : 'Prism', MARGIN, 16)
+  const title = isFashion ? 'Prism: Fashion' : isDeploy ? 'Prism: Deploy' : 'Prism'
+  doc.text(title, MARGIN, 16)
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(9)
@@ -95,6 +96,23 @@ export function downloadPersonasPdf(personas, description, isFashion = false) {
       y += 7
     }
 
+    // Deploy badges
+    if (isDeploy && (p.buyingRole || p.companySize || p.technicalLevel)) {
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8.5)
+      doc.setTextColor(34, 211, 238)
+      const badges = [p.buyingRole && `◆ ${p.buyingRole}`, p.companySize, p.technicalLevel].filter(Boolean).join('    ')
+      doc.text(badges, MARGIN, y)
+      y += 5
+      if (p.roleInBuyingDecision) {
+        doc.setFont('helvetica', 'italic')
+        doc.setFontSize(8)
+        doc.setTextColor(100, 100, 130)
+        y = wrap(doc, p.roleInBuyingDecision, MARGIN, y, contentW)
+        y += 2
+      }
+    }
+
     // Quote
     y = maybeNewPage(doc, y, 18)
     doc.setFont('helvetica', 'italic')
@@ -145,6 +163,9 @@ export function downloadPersonasPdf(personas, description, isFashion = false) {
     section('Shopping Behavior', p.shoppingBehavior)
     section('Discovery Channels', p.discoveryChannels)
     prose('Image Reaction', p.imageReaction)
+    section('Adoption Blockers', p.adoptionBlockers)
+    section('Churn Risks', p.churnRisks)
+    prose('Reaction to URL', p.urlReaction)
 
     // Messaging hook — highlighted
     if (p.messagingHook) {

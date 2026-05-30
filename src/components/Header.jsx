@@ -15,7 +15,7 @@ export default function Header({ variant = 'main' }) {
         </svg>
         Prism
       </div>
-      {variant === 'fashion' && (
+      {(variant === 'fashion' || variant === 'deploy') && (
         <div className="header-right">
           <Link to="/" className="nav-link">← Back to Prism</Link>
         </div>
