@@ -21,34 +21,32 @@ const OFFSCREEN = {
   right:  { x: '110%',  y: '0%'    },
 }
 
-function hexToRgba(hex, alpha) {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgba(${r},${g},${b},${alpha})`
-}
-
 function MenuItem({ label, accent, isSelected, onClick }) {
-  const itemRef = useRef(null)
-  const fillRef = useRef(null)
+  const itemRef    = useRef(null)
+  const fillRef    = useRef(null)
+  const marqueeRef = useRef(null)
 
   useEffect(() => {
-    const item = itemRef.current
-    const fill = fillRef.current
-    if (!item || !fill || prefersReduced) return
+    const item    = itemRef.current
+    const fill    = fillRef.current
+    const marquee = marqueeRef.current
+    if (!item || !fill || !marquee || prefersReduced) return
 
-    gsap.set(fill, OFFSCREEN.left)
+    gsap.set(fill,    OFFSCREEN.left)
+    gsap.set(marquee, { y: '110%' })
 
     function onEnter(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
-      gsap.killTweensOf(fill)
-      gsap.fromTo(fill, { x, y }, { x: '0%', y: '0%', duration: 0.42, ease: 'power3.out' })
+      gsap.killTweensOf([fill, marquee])
+      gsap.fromTo(fill,    { x, y },      { x: '0%', y: '0%', duration: 0.55, ease: 'power3.out' })
+      gsap.fromTo(marquee, { y: '110%' }, { y: '0%',          duration: 0.5,  ease: 'power3.out' })
     }
 
     function onLeave(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
-      gsap.killTweensOf(fill)
-      gsap.to(fill, { x, y, duration: 0.38, ease: 'power3.in' })
+      gsap.killTweensOf([fill, marquee])
+      gsap.to(fill,    { x, y,       duration: 0.45, ease: 'power3.in' })
+      gsap.to(marquee, { y: '110%',  duration: 0.4,  ease: 'power3.in' })
     }
 
     item.addEventListener('mouseenter', onEnter)
@@ -56,7 +54,7 @@ function MenuItem({ label, accent, isSelected, onClick }) {
     return () => {
       item.removeEventListener('mouseenter', onEnter)
       item.removeEventListener('mouseleave', onLeave)
-      gsap.killTweensOf(fill)
+      gsap.killTweensOf([fill, marquee])
     }
   }, [])
 
@@ -64,23 +62,32 @@ function MenuItem({ label, accent, isSelected, onClick }) {
     <div
       ref={itemRef}
       className={`flow-item${isSelected ? ' flow-item--active' : ''}`}
-      style={{
-        '--flow-accent':        accent,
-        '--flow-accent-bg':     hexToRgba(accent, 0.07),
-        '--flow-accent-border': hexToRgba(accent, 0.32),
-        '--flow-accent-fill':   hexToRgba(accent, 0.22),
-        '--flow-accent-active': hexToRgba(accent, 0.14),
-      }}
+      style={{ '--flow-accent': accent }}
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
       aria-pressed={isSelected}
     >
-      {/* Directional fill — GSAP slides this in from cursor edge */}
-      <span ref={fillRef} className="flow-fill" />
-      {/* Single label — accent-colored, one source of truth, no overlap */}
-      <span className="flow-label">{label}</span>
+      {/* Full-bleed colored fill — GSAP translates this in */}
+      <span ref={fillRef} className="flow-fill" style={{ background: accent }} />
+
+      {/* Main resting label */}
+      <div className="flow-label">
+        <span style={isSelected ? { color: accent } : undefined}>{label}</span>
+      </div>
+
+      {/* Marquee panel — slides in over the fill */}
+      <div ref={marqueeRef} className="flow-marquee">
+        <div className="flow-marquee-track">
+          {Array(8).fill(null).map((_, i) => (
+            <span key={i} className="flow-marquee-item">
+              <span className="flow-marquee-thumb" style={{ background: accent }} />
+              <span className="flow-marquee-word">{label}</span>
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

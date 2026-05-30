@@ -1,7 +1,6 @@
 /* Full-height column — fills .vp-left */
 .flowing-menu {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -15,14 +14,9 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   outline: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-.flow-item:first-child {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .flow-item:focus-visible {
