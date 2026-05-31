@@ -22,8 +22,8 @@ function hexToRgba(hex, alpha) {
 }
 
 const OFFSCREEN = {
-  top:    { x: '0%',    y: '-110%' },
-  bottom: { x: '0%',    y: '110%'  },
+  top:    { x: '0%',    y: '-130%' },
+  bottom: { x: '0%',    y: '130%'  },
   left:   { x: '-110%', y: '0%'    },
   right:  { x: '110%',  y: '0%'    },
 }
@@ -39,21 +39,23 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
     const marquee = marqueeRef.current
     if (!item || !fill || !marquee || prefersReduced) return
 
-    gsap.set(fill,    OFFSCREEN.left)
-    gsap.set(marquee, { y: '110%' })
+    // Both start off-screen bottom, together
+    gsap.set([fill, marquee], OFFSCREEN.bottom)
 
     function onEnter(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
       gsap.killTweensOf([fill, marquee])
-      gsap.fromTo(fill,    { x, y },      { x: '0%', y: '0%', duration: 0.55, ease: 'power3.out' })
-      gsap.fromTo(marquee, { y: '110%' }, { y: '0%',          duration: 0.5,  ease: 'power3.out' })
+      // fromTo snaps both to the same entry edge simultaneously — they move as one unit
+      gsap.fromTo(fill,    { x, y }, { x: '0%', y: '0%', duration: 0.65, ease: 'power3.out' })
+      gsap.fromTo(marquee, { x, y }, { x: '0%', y: '0%', duration: 0.65, ease: 'power3.out' })
     }
 
     function onLeave(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
       gsap.killTweensOf([fill, marquee])
-      gsap.to(fill,    { x, y,       duration: 0.45, ease: 'power3.in' })
-      gsap.to(marquee, { y: '110%',  duration: 0.4,  ease: 'power3.in' })
+      // Both exit toward the same departure edge
+      gsap.to(fill,    { x, y, duration: 0.55, ease: 'power3.in' })
+      gsap.to(marquee, { x, y, duration: 0.55, ease: 'power3.in' })
     }
 
     item.addEventListener('mouseenter', onEnter)
