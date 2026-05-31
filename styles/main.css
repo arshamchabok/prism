@@ -229,7 +229,7 @@ textarea {
   padding: 1.5rem 1.75rem;
   resize: none;
   overflow: hidden;
-  min-height: 144px;
+  min-height: 194px;
 }
 textarea {
   scrollbar-width: thin;       /* Firefox — keep scrollbar in textarea */
@@ -954,7 +954,7 @@ footer {
 }
 .page-fashion textarea {
   font-size: 0.95rem;
-  min-height: 108px;
+  min-height: 146px;
   overflow-y: auto;
   padding: 1.1rem 1.5rem;
 }
@@ -1012,7 +1012,7 @@ footer {
 }
 .page-deploy textarea {
   font-size: 0.95rem;
-  min-height: 108px;
+  min-height: 146px;
   overflow-y: auto;
   padding: 1.1rem 1.5rem;
 }
@@ -1148,7 +1148,7 @@ footer {
 }
 .page-plate textarea {
   font-size: 0.95rem;
-  min-height: 108px;
+  min-height: 146px;
   overflow-y: auto;
   padding: 1.1rem 1.5rem;
 }
@@ -1190,7 +1190,7 @@ footer {
 }
 .page-fitness textarea {
   font-size: 0.95rem;
-  min-height: 108px;
+  min-height: 146px;
   overflow-y: auto;
   padding: 1.1rem 1.5rem;
 }
@@ -1271,7 +1271,7 @@ footer {
 }
 .page-main textarea {
   font-size: 0.95rem;
-  min-height: 108px;
+  min-height: 146px;
   overflow-y: auto;
   padding: 1.1rem 1.5rem;
 }
@@ -1347,11 +1347,10 @@ footer {
 .vp-inner {
   flex: 1;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  min-height: 100vh;
 }
 
 .vp-left {
