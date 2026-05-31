@@ -94,10 +94,12 @@ export default function MainPage() {
   const inputBlur       = 16 * (1 - p1)
   const inputOpacity    = p1
 
-  // Phase 2: 2700–3500px — blur overlay fades in, input fades out
-  const p2              = Math.min(Math.max((scrollY - 2700) / 800, 0), 1)
-  const blurAmount      = 12 * p2
-  const inputFinalOpacity = inputOpacity * (1 - p2)
+  // Phase 2: 2700px+ — whole fixed zone scrolls up and fades out completely
+  // translateY at 1× scroll speed = elements leave screen exactly like normal page flow
+  // opacity reaches 0 after 500px of additional scroll (at 3200px)
+  const exitPx           = Math.max(scrollY - 2700, 0)
+  const scrollOutY       = -(exitPx * 1.0)
+  const scrollOutOpacity = Math.max(1 - exitPx / 500, 0)
 
   const handleReset = () => {
     reset()
@@ -114,101 +116,99 @@ export default function MainPage() {
 
       {(view === 'input' || view === 'error') && (
         <>
-          {/* Scroll spacer — creates room for phase 1 + phase 2 before picker arrives */}
+          {/* Scroll spacer — spacer ends at calc(100vh+3600px); picker enters viewport
+               at scrollY≈3600px regardless of viewport height. scrollOutOpacity
+               reaches 0 at scrollY=3200px, so the wrapper is unmounted 400px
+               before the picker arrives — no overlap possible. */}
           <div style={{ minHeight: 'calc(100vh + 3600px)', position: 'relative' }}>
 
-            {/* FIXED: hero — centered, shrinks during phase 1 */}
-            <div style={{
-              position: 'fixed',
-              top: 0, left: 0, right: 0, bottom: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 2,
-              pointerEvents: 'none',
-            }}>
-              <div style={{
-                textAlign: 'center',
-                padding: '0 2.5rem',
-                maxWidth: '900px',
-                transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-                transformOrigin: 'center center',
-              }}>
-                <h1 style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(3.5rem, 7vw, 6rem)',
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.04em',
-                  color: 'var(--text)',
-                  margin: '0 0 1rem',
-                }}>
-                  Know your customer before they know{' '}
-                  <em style={{
-                    fontStyle: 'italic',
-                    color: '#fb7185',
-                    WebkitTextFillColor: '#fb7185',
-                    background: 'none',
-                    WebkitBackgroundClip: 'unset',
-                    backgroundClip: 'unset',
-                  }}>you</em>
-                </h1>
-                <p style={{
-                  fontSize: '1.08rem',
-                  color: 'rgba(240, 240, 248, 0.6)',
-                  maxWidth: '560px',
-                  margin: '0 auto',
-                  lineHeight: 1.8,
-                }}>
-                  Type what you sell. Get three razor sharp customer profiles back in seconds.
-                </p>
-              </div>
-            </div>
-
-            {/* FIXED: input + pills — rises during phase 1, fades out during phase 2 */}
-            <div style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              width: '100%',
-              maxWidth: '800px',
-              zIndex: 3,
-              transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
-              opacity: inputFinalOpacity,
-              filter: `blur(${inputBlur}px)`,
-              pointerEvents: p1 > 0.75 && p2 < 0.5 ? 'auto' : 'none',
-            }}>
-              <InputPanel
-                value={inputText}
-                onChange={setInputText}
-                onGenerate={handleGenerate}
-              />
-              <div className="examples-row" style={{ padding: '0 0.75rem' }}>
-                <span className="examples-row-label">Try:</span>
-                {EXAMPLES.map(e => (
-                  <button
-                    key={e.label}
-                    className="example-pill"
-                    onClick={() => setInputText(e.text)}
-                  >
-                    {e.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* FIXED: blur overlay — fades in during phase 2 */}
-            {p2 > 0 && (
+            {/* Single fixed wrapper: hero + input. Unmounted once fully transparent. */}
+            {scrollOutOpacity > 0 && (
               <div style={{
                 position: 'fixed',
                 inset: 0,
-                zIndex: 4,
-                backdropFilter: `blur(${blurAmount}px)`,
-                WebkitBackdropFilter: `blur(${blurAmount}px)`,
-                background: `rgba(5, 4, 12, ${0.4 * p2})`,
-                opacity: p2,
+                zIndex: 2,
                 pointerEvents: 'none',
-              }} />
+                transform: `translateY(${scrollOutY}px)`,
+                opacity: scrollOutOpacity,
+              }}>
+                {/* Hero — centered, shrinks during phase 1 */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '0 2.5rem',
+                    maxWidth: '900px',
+                    transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                    transformOrigin: 'center center',
+                  }}>
+                    <h1 style={{
+                      fontFamily: "'Instrument Serif', serif",
+                      fontStyle: 'italic',
+                      fontSize: 'clamp(3.5rem, 7vw, 6rem)',
+                      lineHeight: 1.05,
+                      letterSpacing: '-0.04em',
+                      color: 'var(--text)',
+                      margin: '0 0 1rem',
+                    }}>
+                      Know your customer before they know{' '}
+                      <em style={{
+                        fontStyle: 'italic',
+                        color: '#fb7185',
+                        WebkitTextFillColor: '#fb7185',
+                        background: 'none',
+                        WebkitBackgroundClip: 'unset',
+                        backgroundClip: 'unset',
+                      }}>you</em>
+                    </h1>
+                    <p style={{
+                      fontSize: '1.08rem',
+                      color: 'rgba(240, 240, 248, 0.6)',
+                      maxWidth: '560px',
+                      margin: '0 auto',
+                      lineHeight: 1.8,
+                    }}>
+                      Type what you sell. Get three razor sharp customer profiles back in seconds.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Input + pills — rises from below during phase 1 */}
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  width: '100%',
+                  maxWidth: '800px',
+                  transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
+                  opacity: inputOpacity,
+                  filter: `blur(${inputBlur}px)`,
+                  pointerEvents: p1 > 0.75 && scrollOutOpacity > 0.5 ? 'auto' : 'none',
+                }}>
+                  <InputPanel
+                    value={inputText}
+                    onChange={setInputText}
+                    onGenerate={handleGenerate}
+                  />
+                  <div className="examples-row" style={{ padding: '0 0.75rem' }}>
+                    <span className="examples-row-label">Try:</span>
+                    {EXAMPLES.map(e => (
+                      <button
+                        key={e.label}
+                        className="example-pill"
+                        onClick={() => setInputText(e.text)}
+                      >
+                        {e.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
