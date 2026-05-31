@@ -80,7 +80,7 @@
   align-items: center;
   white-space: nowrap;
   flex-shrink: 0;
-  animation: flow-marquee-scroll 56s linear infinite;
+  animation: flow-marquee-scroll 75s linear infinite;
   will-change: transform;
 }
 

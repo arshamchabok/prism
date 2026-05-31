@@ -14,6 +14,13 @@ function edgeDirection(e, el) {
   return ny > 0 ? 'bottom' : 'top'
 }
 
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r},${g},${b},${alpha})`
+}
+
 const OFFSCREEN = {
   top:    { x: '0%',    y: '-110%' },
   bottom: { x: '0%',    y: '110%'  },
@@ -75,11 +82,11 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
       {/* Static centered label */}
       <div className="flow-label">{label}</div>
 
-      {/* Marquee — slides up over the fill; accent-colored background with dark text */}
+      {/* Marquee — slides up over the fill; semi-transparent accent so prism bg shows through */}
       <div
         ref={marqueeRef}
         className="flow-marquee"
-        style={{ background: accent }}
+        style={{ background: hexToRgba(accent, 0.4) }}
       >
         <div className="flow-marquee-track">
           {Array(8).fill(null).map((_, i) => (
