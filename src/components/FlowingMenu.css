@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   flex: none;
-  height: 6rem;
+  height: 7.2rem;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -138,7 +138,7 @@
 
 /* ---- TABLET ---- */
 @media (max-width: 900px) {
-  .flow-item { height: 5.5rem; }
+  .flow-item { height: 6.6rem; }
   .flow-label,
   .flow-marquee-word { font-size: clamp(1.1rem, 4vw, 1.8rem); }
   .flow-marquee-thumb { width: 88px; height: 28px; }
@@ -148,7 +148,7 @@
 
 /* ---- MOBILE ---- */
 @media (max-width: 640px) {
-  .flow-item { height: 4.5rem; }
+  .flow-item { height: 5.4rem; }
   .flow-label,
   .flow-marquee-word { font-size: clamp(1rem, 5vw, 1.5rem); }
   .flow-marquee-thumb { width: 70px; height: 22px; }

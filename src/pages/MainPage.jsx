@@ -28,7 +28,7 @@ const VERTICALS = [
     imageUrl: `${BASE}assets/fashion.jpg`,
     tag: 'Consumer Brand',
     tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
-    description: 'Upload a lookbook, describe your aesthetic, or paste a product description. Get three precision customer personas covering style archetype, monthly budget, discovery channels, and the exact message that converts.',
+    description: 'Built for clothing and lifestyle brands. Upload a lookbook or describe your label, and Prism returns three precise customer profiles so you know exactly who to design and market for.',
   },
   {
     label: 'Deploy',
@@ -38,7 +38,7 @@ const VERTICALS = [
     imageUrl: `${BASE}assets/deploy.jpg`,
     tag: 'B2B SaaS',
     tagline: 'Map your buying committee before the first call.',
-    description: 'Economic Buyer, Champion, and End User — built from your product description. Each comes with adoption blockers, churn risks, and the specific message that moves them from interested to signed.',
+    description: 'Built for software founders and teams. Describe your product or paste your landing page, and Prism maps out the real people behind every buying decision so your messaging lands.',
   },
   {
     label: 'Plate',
@@ -48,7 +48,7 @@ const VERTICALS = [
     imageUrl: `${BASE}assets/plate.jpg`,
     tag: 'Food & Beverage',
     tagline: 'Know your diner before they order.',
-    description: 'The Regular, the Occasion Diner, and the Discoverer — drawn from your restaurant\'s DNA. Includes dining frequency, discovery channel, loyalty drivers, and the message that fills seats.',
+    description: 'Built for restaurants, cafes, and food brands. Upload a dish or describe your concept, and Prism reveals who walks in, who returns, and what brings them back.',
   },
   {
     label: 'Fitness',
@@ -58,7 +58,7 @@ const VERTICALS = [
     imageUrl: `${BASE}assets/fitness.jpg`,
     tag: 'Wellness & Gym',
     tagline: 'Know your member before they commit.',
-    description: 'The Beginner, the Committed Regular, and the Comeback. Select a goal type for personas calibrated to that specific motivation — from weight loss psychology to performance periodization.',
+    description: 'Built for gyms, trainers, and wellness brands. Pick a goal and describe your program, and Prism shows you who you are reaching and what keeps them committed.',
   },
 ]
 
@@ -94,10 +94,10 @@ export default function MainPage() {
   const inputBlur       = 16 * (1 - p1)
   const inputOpacity    = p1
 
-  // Phase 2: 2700px+ — whole fixed zone scrolls naturally up and fades out
-  const exitPx           = Math.max(scrollY - 2700, 0)
-  const scrollOutY       = -(exitPx * 0.9)                    // follows page scroll at ~90%
-  const scrollOutOpacity = Math.max(1 - exitPx / 380, 0)     // fades over 380px
+  // Phase 2: 2700–3500px — blur overlay fades in, input fades out
+  const p2              = Math.min(Math.max((scrollY - 2700) / 800, 0), 1)
+  const blurAmount      = 12 * p2
+  const inputFinalOpacity = inputOpacity * (1 - p2)
 
   const handleReset = () => {
     reset()
@@ -114,100 +114,102 @@ export default function MainPage() {
 
       {(view === 'input' || view === 'error') && (
         <>
-          {/* Scroll spacer — creates room for phase 1 before picker arrives */}
-          <div style={{ minHeight: 'calc(100vh + 3400px)', position: 'relative' }}>
+          {/* Scroll spacer — creates room for phase 1 + phase 2 before picker arrives */}
+          <div style={{ minHeight: 'calc(100vh + 3600px)', position: 'relative' }}>
 
-            {/*
-              Single fixed container for hero + input.
-              transform: translateY scrolls it upward at ~90% of scroll speed
-              once the user is past 800px, creating a natural "page flow" feel.
-              opacity fades it out over 380px of additional scroll.
-            */}
+            {/* FIXED: hero — centered, shrinks during phase 1 */}
             <div style={{
               position: 'fixed',
-              inset: 0,
+              top: 0, left: 0, right: 0, bottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               zIndex: 2,
               pointerEvents: 'none',
-              transform: `translateY(${scrollOutY}px)`,
-              opacity: scrollOutOpacity,
             }}>
-              {/* Hero — centered inside the fixed container */}
               <div style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                textAlign: 'center',
+                padding: '0 2.5rem',
+                maxWidth: '900px',
+                transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                transformOrigin: 'center center',
               }}>
-                <div style={{
-                  textAlign: 'center',
-                  padding: '0 2.5rem',
-                  maxWidth: '900px',
-                  transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-                  transformOrigin: 'center center',
+                <h1 style={{
+                  fontFamily: "'Instrument Serif', serif",
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(3.5rem, 7vw, 6rem)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.04em',
+                  color: 'var(--text)',
+                  margin: '0 0 1rem',
                 }}>
-                  <h1 style={{
-                    fontFamily: "'Instrument Serif', serif",
+                  Know your customer before they know{' '}
+                  <em style={{
                     fontStyle: 'italic',
-                    fontSize: 'clamp(3.5rem, 7vw, 6rem)',
-                    lineHeight: 1.05,
-                    letterSpacing: '-0.04em',
-                    color: 'var(--text)',
-                    margin: '0 0 1rem',
-                  }}>
-                    Know your customer before they know{' '}
-                    <em style={{
-                      fontStyle: 'italic',
-                      color: '#fb7185',
-                      WebkitTextFillColor: '#fb7185',
-                      background: 'none',
-                      WebkitBackgroundClip: 'unset',
-                      backgroundClip: 'unset',
-                    }}>you</em>
-                  </h1>
-                  <p style={{
-                    fontSize: '1.08rem',
-                    color: 'rgba(240, 240, 248, 0.6)',
-                    maxWidth: '560px',
-                    margin: '0 auto',
-                    lineHeight: 1.8,
-                  }}>
-                    Type what you sell. Get three razor sharp customer profiles back in seconds.
-                  </p>
-                </div>
-              </div>
-
-              {/* Input + pills — rises from below during phase 1 */}
-              <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '100%',
-                maxWidth: '800px',
-                transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
-                opacity: inputOpacity,
-                filter: `blur(${inputBlur}px)`,
-                pointerEvents: p1 > 0.75 && scrollOutOpacity > 0.5 ? 'auto' : 'none',
-              }}>
-                <InputPanel
-                  value={inputText}
-                  onChange={setInputText}
-                  onGenerate={handleGenerate}
-                />
-                <div className="examples-row" style={{ padding: '0 0.75rem' }}>
-                  <span className="examples-row-label">Try:</span>
-                  {EXAMPLES.map(e => (
-                    <button
-                      key={e.label}
-                      className="example-pill"
-                      onClick={() => setInputText(e.text)}
-                    >
-                      {e.label}
-                    </button>
-                  ))}
-                </div>
+                    color: '#fb7185',
+                    WebkitTextFillColor: '#fb7185',
+                    background: 'none',
+                    WebkitBackgroundClip: 'unset',
+                    backgroundClip: 'unset',
+                  }}>you</em>
+                </h1>
+                <p style={{
+                  fontSize: '1.08rem',
+                  color: 'rgba(240, 240, 248, 0.6)',
+                  maxWidth: '560px',
+                  margin: '0 auto',
+                  lineHeight: 1.8,
+                }}>
+                  Type what you sell. Get three razor sharp customer profiles back in seconds.
+                </p>
               </div>
             </div>
+
+            {/* FIXED: input + pills — rises during phase 1, fades out during phase 2 */}
+            <div style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              width: '100%',
+              maxWidth: '800px',
+              zIndex: 3,
+              transform: `translateX(-50%) translateY(${inputTranslateY}px)`,
+              opacity: inputFinalOpacity,
+              filter: `blur(${inputBlur}px)`,
+              pointerEvents: p1 > 0.75 && p2 < 0.5 ? 'auto' : 'none',
+            }}>
+              <InputPanel
+                value={inputText}
+                onChange={setInputText}
+                onGenerate={handleGenerate}
+              />
+              <div className="examples-row" style={{ padding: '0 0.75rem' }}>
+                <span className="examples-row-label">Try:</span>
+                {EXAMPLES.map(e => (
+                  <button
+                    key={e.label}
+                    className="example-pill"
+                    onClick={() => setInputText(e.text)}
+                  >
+                    {e.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* FIXED: blur overlay — fades in during phase 2 */}
+            {p2 > 0 && (
+              <div style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 4,
+                backdropFilter: `blur(${blurAmount}px)`,
+                WebkitBackdropFilter: `blur(${blurAmount}px)`,
+                background: `rgba(5, 4, 12, ${0.4 * p2})`,
+                opacity: p2,
+                pointerEvents: 'none',
+              }} />
+            )}
           </div>
 
           {/* NORMAL SCROLL: vertical picker section */}
