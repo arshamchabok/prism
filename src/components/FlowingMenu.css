@@ -11,7 +11,7 @@
   position: relative;
   overflow: hidden;
   flex: 1;
-  min-height: 14vh;
+  min-height: 10vh;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -39,33 +39,36 @@
   opacity: 0.9;
 }
 
-/* Directional fill — GSAP drives translate, color via inline style */
+/* Directional fill pill — GSAP drives translate, color via inline style */
 .flow-fill {
   position: absolute;
-  inset: 0;
+  inset: 10px 16px;
+  border-radius: 999px;
   z-index: 0;
   will-change: transform;
 }
 
-/* Static left-aligned label — Jost SemiBold */
+/* Static centered label — Jost SemiBold */
 .flow-label {
   position: relative;
   z-index: 1;
-  padding: 0 3rem;
+  width: 100%;
+  text-align: center;
   font-family: 'Jost', sans-serif;
   font-weight: 600;
-  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
+  font-size: clamp(1.4rem, 2.8vw, 2.4rem);
   line-height: 1;
   letter-spacing: 0.01em;
   color: var(--flow-accent);
   pointer-events: none;
 }
 
-/* ---- MARQUEE PANEL ---- */
-/* GSAP drives translateY; initialised at 110% (below item) */
+/* ---- MARQUEE PILL ---- */
+/* Pill overlay — inset from row edges, rounded ends; GSAP drives translateY */
 .flow-marquee {
   position: absolute;
-  inset: 0;
+  inset: 10px 16px;
+  border-radius: 999px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -136,17 +139,21 @@
 
 /* ---- TABLET ---- */
 @media (max-width: 900px) {
-  .flow-item { min-height: 13vw; }
+  .flow-item { min-height: 9vw; }
   .flow-label,
-  .flow-marquee-word { font-size: clamp(1.6rem, 6vw, 2.6rem); }
+  .flow-marquee-word { font-size: clamp(1.1rem, 4vw, 1.8rem); }
   .flow-marquee-thumb { width: 140px; height: 56px; }
+  .flow-fill,
+  .flow-marquee { inset: 7px 12px; }
 }
 
 /* ---- MOBILE ---- */
 @media (max-width: 640px) {
-  .flow-item { min-height: 14vw; }
+  .flow-item { min-height: 12vw; }
   .flow-label,
-  .flow-marquee-word { font-size: clamp(1.3rem, 8vw, 2rem); }
+  .flow-marquee-word { font-size: clamp(1rem, 5vw, 1.5rem); }
   .flow-marquee-thumb { width: 100px; height: 42px; }
   .flow-marquee-item { gap: 2.5rem; padding: 0 1.25rem; }
+  .flow-fill,
+  .flow-marquee { inset: 6px 10px; }
 }
