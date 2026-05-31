@@ -14,7 +14,6 @@
   min-height: 14vh;
   display: flex;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
   outline: none;
   user-select: none;
@@ -48,17 +47,16 @@
   will-change: transform;
 }
 
-/* Static centered label — Jost Light */
+/* Static left-aligned label — Jost SemiBold */
 .flow-label {
   position: relative;
   z-index: 1;
-  width: 100%;
-  text-align: center;
+  padding: 0 3rem;
   font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 600;
+  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--flow-accent);
   pointer-events: none;
 }
@@ -82,7 +80,7 @@
   align-items: center;
   white-space: nowrap;
   flex-shrink: 0;
-  animation: flow-marquee-scroll 36s linear infinite;
+  animation: flow-marquee-scroll 56s linear infinite;
   will-change: transform;
 }
 
@@ -119,11 +117,11 @@
   draggable: false;
 }
 
-/* Marquee word — Jost Light, dark text on accent background */
+/* Marquee word — Jost SemiBold, dark text on accent background */
 .flow-marquee-word {
   font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 600;
+  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
   line-height: 1;
   letter-spacing: 0.02em;
   color: rgba(10, 8, 20, 0.85);

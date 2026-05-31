@@ -1342,7 +1342,6 @@ footer {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .vp-inner {
@@ -1356,11 +1355,10 @@ footer {
 }
 
 .vp-left {
-  flex: 0 0 800px;
-  max-width: 800px;
+  flex: 0 0 520px;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .vp-right {
@@ -1467,8 +1465,6 @@ footer {
     flex: none;
     width: 100%;
     max-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
   .vp-right {
     min-width: unset;
