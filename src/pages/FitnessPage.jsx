@@ -33,16 +33,16 @@ export default function FitnessPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Phase 1: 0–1900px — hero shrinks + input reveals
-  const p1 = Math.min(scrollY / 1900, 1)
+  // Phase 1: 0–2700px — hero shrinks + input reveals
+  const p1 = Math.min(scrollY / 2700, 1)
   const heroScale = 1 - 0.15 * p1
   const heroTranslateY = -150 * p1
   const inputTranslateY = 120 * (1 - p1)
   const inputBlur = 16 * (1 - p1)
   const inputOpacity = p1
 
-  // Phase 2: 3400–4200px — card + blur overlay reveal, input fades out
-  const p2 = Math.min(Math.max((scrollY - 3400) / 800, 0), 1)
+  // Phase 2: 4800–5600px — card + blur overlay reveal, input fades out
+  const p2 = Math.min(Math.max((scrollY - 4800) / 800, 0), 1)
   const cardScale = 0.85 + 0.15 * p2
   const blurAmount = 12 * p2
   const inputFinalOpacity = inputOpacity * (1 - p2)
@@ -60,7 +60,7 @@ export default function FitnessPage() {
       <Header variant="fitness" />
 
       {(view === 'input' || view === 'error') && (
-        <div style={{ minHeight: '900vh', position: 'relative' }}>
+        <div style={{ minHeight: '1200vh', position: 'relative' }}>
 
           {/* FIXED: hero — centered on load, rises on scroll */}
           <div style={{
