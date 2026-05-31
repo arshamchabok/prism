@@ -21,7 +21,7 @@ const OFFSCREEN = {
   right:  { x: '110%',  y: '0%'    },
 }
 
-function MenuItem({ label, accent, icon: Icon, isSelected, onClick }) {
+function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
   const itemRef    = useRef(null)
   const fillRef    = useRef(null)
   const marqueeRef = useRef(null)
@@ -69,13 +69,13 @@ function MenuItem({ label, accent, icon: Icon, isSelected, onClick }) {
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
       aria-pressed={isSelected}
     >
-      {/* Full-bleed fill — GSAP slides it in from the edge */}
+      {/* Full-bleed fill — GSAP slides it in from the cursor edge */}
       <span ref={fillRef} className="flow-fill" style={{ background: accent }} />
 
       {/* Static centered label */}
       <div className="flow-label">{label}</div>
 
-      {/* Marquee — slides up over the fill; uses accent as its background */}
+      {/* Marquee — slides up over the fill; accent-colored background with dark text */}
       <div
         ref={marqueeRef}
         className="flow-marquee"
@@ -85,7 +85,12 @@ function MenuItem({ label, accent, icon: Icon, isSelected, onClick }) {
           {Array(8).fill(null).map((_, i) => (
             <span key={i} className="flow-marquee-item">
               <span className="flow-marquee-thumb">
-                {Icon && <Icon />}
+                <img
+                  src={imageUrl}
+                  alt=""
+                  draggable={false}
+                  onError={e => { e.currentTarget.style.visibility = 'hidden' }}
+                />
               </span>
               <span className="flow-marquee-word">{label}</span>
             </span>
@@ -104,7 +109,7 @@ export default function FlowingMenu({ items, selected, onSelect }) {
           key={item.label}
           label={item.label}
           accent={item.accent}
-          icon={item.icon}
+          imageUrl={item.imageUrl}
           isSelected={selected === i}
           onClick={() => onSelect(i)}
         />
