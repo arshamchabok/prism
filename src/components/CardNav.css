@@ -1,0 +1,246 @@
+/* ---- CARDNAV WRAPPER ---- */
+.cardnav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(20, 18, 28, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ---- TOP BAR ---- */
+.cardnav-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 54px;
+}
+
+/* ---- HAMBURGER ---- */
+.cardnav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  outline: none;
+  transition: background 0.18s ease;
+}
+
+.cardnav-toggle:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.cardnav-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.cardnav-line {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: rgba(240, 240, 248, 0.88);
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+}
+
+/* Two lines animate to ✕ when open */
+.cardnav--open .cardnav-line:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+.cardnav--open .cardnav-line:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* ---- LOGO (absolute-centered) ---- */
+.cardnav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.2rem;
+  color: #f0f0f8;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cardnav-logo:hover {
+  color: #ffffff;
+}
+
+.cardnav-prism-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Balances the hamburger for perfect centering */
+.cardnav-right {
+  width: 36px;
+  flex-shrink: 0;
+}
+
+/* ---- EXPANDABLE PANEL ---- */
+.cardnav-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: rgba(10, 8, 20, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 1.5rem 2rem 2rem;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+  /* z-index below bar so bar shadow overlaps */
+  z-index: -1;
+}
+
+/* ---- CARDS GRID ---- */
+.cardnav-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ---- SINGLE CARD ---- */
+.cardnav-card {
+  position: relative;
+  height: 180px;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(18, 14, 32, 0.9);
+  outline: none;
+  padding: 0;
+  text-align: left;
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cardnav-card:hover {
+  border-color: var(--accent, rgba(255, 255, 255, 0.2));
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.cardnav-card:focus-visible {
+  outline: 2px solid var(--accent, rgba(255, 255, 255, 0.4));
+  outline-offset: 2px;
+}
+
+/* Background image */
+.cardnav-card-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+}
+
+.cardnav-card:hover .cardnav-card-img {
+  opacity: 0.52;
+}
+
+/* Gradient overlay for AA contrast */
+.cardnav-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(5, 4, 14, 0.72) 0%, rgba(5, 4, 14, 0.28) 100%);
+  pointer-events: none;
+}
+
+/* Text + arrow row at bottom */
+.cardnav-card-content {
+  position: absolute;
+  inset: 0;
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.cardnav-card-label {
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #f0eff8;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.cardnav-card-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0eff8;
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.cardnav-card:hover .cardnav-card-arrow {
+  background: var(--accent, rgba(255, 255, 255, 0.25));
+  color: rgba(10, 8, 20, 0.9);
+  transform: translate(2px, -2px);
+}
+
+/* Accent bar along bottom edge */
+.cardnav-card-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent, rgba(255, 255, 255, 0.2));
+  opacity: 0.75;
+}
+
+/* ---- REDUCED MOTION ---- */
+@media (prefers-reduced-motion: reduce) {
+  .cardnav-line      { transition: none; }
+  .cardnav-card      { transition: none; }
+  .cardnav-card-img  { transition: none; }
+  .cardnav-card-arrow { transition: none; }
+}
+
+/* ---- TABLET ---- */
+@media (max-width: 900px) {
+  .cardnav-cards { grid-template-columns: repeat(2, 1fr); }
+  .cardnav-card  { height: 160px; }
+}
+
+/* ---- MOBILE ---- */
+@media (max-width: 640px) {
+  .cardnav-bar     { padding: 0 1.25rem; }
+  .cardnav-panel   { padding: 1.25rem 1.25rem 1.5rem; }
+  .cardnav-cards   { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .cardnav-card    { height: 140px; }
+  .cardnav-card-label { font-size: 0.95rem; }
+}

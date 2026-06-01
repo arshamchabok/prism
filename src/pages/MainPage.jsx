@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Header from '../components/Header.jsx'
+import CardNav from '../components/CardNav.jsx'
 import InputPanel from '../components/InputPanel.jsx'
 import TiltedCard from '../components/TiltedCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
@@ -110,7 +110,7 @@ export default function MainPage() {
 
   return (
     <div id="app" className="page-main">
-      <Header variant="main" />
+      <CardNav />
 
       {(view === 'input' || view === 'error') && (
         <>

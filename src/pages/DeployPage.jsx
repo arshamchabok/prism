@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Header from '../components/Header.jsx'
+import CardNav from '../components/CardNav.jsx'
 import DeployInputPanel from '../components/DeployInputPanel.jsx'
 import SpotlightCard from '../components/SpotlightCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
@@ -57,7 +57,7 @@ export default function DeployPage() {
 
   return (
     <div id="app" className="page-deploy">
-      <Header variant="deploy" />
+      <CardNav />
 
       {(view === 'input' || view === 'error') && (
         <div style={{ minHeight: '1200vh', position: 'relative' }}>

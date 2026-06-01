@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import Header from '../components/Header.jsx'
+import CardNav from '../components/CardNav.jsx'
 
 export default function AboutPage() {
   return (
     <div id="app">
-      <Header variant="main" />
+      <CardNav />
 
       <section className="about-section">
         <Link to="/" className="about-back">← Back to Prism</Link>
