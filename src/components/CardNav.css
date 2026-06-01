@@ -4,16 +4,17 @@
   top: 0;
   z-index: 200;
   background: transparent;
-  padding: 0.75rem 1.25rem 0;
+  /* 1.5rem top = lower position; calc() gives exactly -15% horizontal pill width */
+  padding: 1.5rem calc(7.5vw + 1rem) 0;
 }
 
-/* ── FLOATING PILL BAR ─────────────────────────────────────────────────── */
+/* ── FLOATING PILL BAR — 20% taller than original ─────────────────────── */
 .cardnav-bar {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
+  height: 60px;
   padding: 0 1rem 0 0.75rem;
   background: rgba(16, 14, 26, 0.88);
   backdrop-filter: blur(16px);
@@ -76,9 +77,9 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 11px;
   font-family: 'Instrument Serif', serif;
-  font-size: 1.15rem;
+  font-size: 1.5rem;   /* +30% from 1.15rem */
   color: #f0f0f8;
   letter-spacing: -0.03em;
   text-decoration: none;
@@ -90,8 +91,8 @@
 .cardnav-logo:hover { color: #ffffff; }
 
 .cardnav-prism-icon {
-  width: 22px;
-  height: 22px;
+  width: 29px;   /* +30% from 22px */
+  height: 29px;
   flex-shrink: 0;
 }
 
@@ -117,13 +118,12 @@
   color: rgba(240, 240, 248, 0.95);
 }
 
-/* ── EXPANDABLE PANEL ───────────────────────────────────────────────────── */
-/* Absolute to .cardnav so it lines up with the pill's side edges */
+/* ── EXPANDABLE PANEL — matches pill's side margins ────────────────────── */
 .cardnav-panel {
   position: absolute;
   top: calc(100% + 0.5rem);
-  left: 1.25rem;
-  right: 1.25rem;
+  left: calc(7.5vw + 1rem);
+  right: calc(7.5vw + 1rem);
   background: rgba(10, 8, 20, 0.97);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
@@ -188,22 +188,23 @@
   pointer-events: none;
 }
 
-/* Name + description stacked, arrow bottom-right */
+/* Name + description centered in the card */
 .cardnav-card-content {
   position: absolute;
   inset: 0;
-  padding: 1rem 1rem;
+  padding: 1rem;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cardnav-card-text {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  max-width: calc(100% - 38px);
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
 }
 
 .cardnav-card-label {
@@ -220,29 +221,9 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 400;
-  color: rgba(240, 239, 248, 0.68);
+  color: rgba(240, 239, 248, 0.7);
   line-height: 1.4;
   text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
-}
-
-.cardnav-card-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f0eff8;
-  flex-shrink: 0;
-  align-self: flex-end;
-  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
-}
-
-.cardnav-card:hover .cardnav-card-arrow {
-  background: var(--accent, rgba(255, 255, 255, 0.25));
-  color: rgba(10, 8, 20, 0.9);
-  transform: translate(2px, -2px);
 }
 
 /* Accent colour strip at card bottom */
@@ -272,7 +253,7 @@
 
 /* ── MOBILE ─────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .cardnav          { padding: 0.6rem 0.75rem 0; }
+  .cardnav          { padding: 1rem 0.75rem 0; }
   .cardnav-panel    { left: 0.75rem; right: 0.75rem; padding: 1rem; }
   .cardnav-cards    { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
   .cardnav-card     { height: 140px; }

@@ -186,11 +186,6 @@ export default function CardNav() {
                   <span className="cardnav-card-label">{v.label}</span>
                   <span className="cardnav-card-desc">{v.desc}</span>
                 </div>
-                <span className="cardnav-card-arrow" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
               </div>
 
               <div className="cardnav-card-bar" aria-hidden="true" />
