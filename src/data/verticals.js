@@ -1,0 +1,48 @@
+const BASE = import.meta.env.BASE_URL
+
+export const ALL_VERTICALS = [
+  {
+    label: 'Fashion',
+    accent: '#60a5fa',
+    accentDark: '#3b82f6',
+    route: '/fashion',
+    imageUrl: `${BASE}assets/fashion.jpg`,
+    cardImageUrl: `${BASE}assets/fashion-card.jpg`,
+    tag: 'Consumer Brand',
+    tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
+    description: 'Built for clothing and lifestyle brands. Upload a lookbook or describe your label, and Prism returns three precise customer profiles so you know exactly who to design and market for.',
+  },
+  {
+    label: 'Deploy',
+    accent: '#a78bfa',
+    accentDark: '#7c6cfa',
+    route: '/deploy',
+    imageUrl: `${BASE}assets/deploy.jpg`,
+    cardImageUrl: `${BASE}assets/deploy-card.jpg`,
+    tag: 'B2B SaaS',
+    tagline: 'Map your buying committee before the first call.',
+    description: 'Built for software founders and teams. Describe your product or paste your landing page, and Prism maps out the real people behind every buying decision so your messaging lands.',
+  },
+  {
+    label: 'Plate',
+    accent: '#fbbf24',
+    accentDark: '#d97706',
+    route: '/plate',
+    imageUrl: `${BASE}assets/plate.jpg`,
+    cardImageUrl: `${BASE}assets/plate-card.jpg`,
+    tag: 'Food & Beverage',
+    tagline: 'Know your diner before they order.',
+    description: 'Built for restaurants, cafes, and food brands. Upload a dish or describe your concept, and Prism reveals who walks in, who returns, and what brings them back.',
+  },
+  {
+    label: 'Fitness',
+    accent: '#34d399',
+    accentDark: '#059669',
+    route: '/fitness',
+    imageUrl: `${BASE}assets/fitness.jpg`,
+    cardImageUrl: `${BASE}assets/fitness-card.jpg`,
+    tag: 'Wellness & Gym',
+    tagline: 'Know your member before they commit.',
+    description: 'Built for gyms, trainers, and wellness brands. Pick a goal and describe your program, and Prism shows you who you are reaching and what keeps them committed.',
+  },
+]
