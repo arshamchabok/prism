@@ -1,25 +1,29 @@
-/* ---- CARDNAV WRAPPER ---- */
+/* ── WRAPPER — transparent so prism bg shows around the pill ──────────── */
 .cardnav {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(20, 18, 28, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: transparent;
+  padding: 0.75rem 1.25rem 0;
 }
 
-/* ---- TOP BAR ---- */
+/* ── FLOATING PILL BAR ─────────────────────────────────────────────────── */
 .cardnav-bar {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  height: 54px;
+  height: 50px;
+  padding: 0 1rem 0 0.75rem;
+  background: rgba(16, 14, 26, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
 }
 
-/* ---- HAMBURGER ---- */
+/* ── HAMBURGER ─────────────────────────────────────────────────────────── */
 .cardnav-toggle {
   display: flex;
   flex-direction: column;
@@ -49,16 +53,15 @@
 
 .cardnav-line {
   display: block;
-  width: 20px;
+  width: 18px;
   height: 1.5px;
-  background: rgba(240, 240, 248, 0.88);
+  background: rgba(240, 240, 248, 0.85);
   border-radius: 2px;
   transform-origin: center;
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.2s ease;
 }
 
-/* Two lines animate to ✕ when open */
 .cardnav--open .cardnav-line:first-child {
   transform: translateY(3.25px) rotate(45deg);
 }
@@ -66,69 +69,83 @@
   transform: translateY(-3.25px) rotate(-45deg);
 }
 
-/* ---- LOGO (absolute-centered) ---- */
+/* ── LOGO — absolute-centered so left/right widths don't shift it ─────── */
 .cardnav-logo {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   font-family: 'Instrument Serif', serif;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #f0f0f8;
   letter-spacing: -0.03em;
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
 
-.cardnav-logo:hover {
-  color: #ffffff;
-}
+.cardnav-logo:hover { color: #ffffff; }
 
 .cardnav-prism-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
 
-/* Balances the hamburger for perfect centering */
+/* ── RIGHT NAV LINKS ────────────────────────────────────────────────────── */
 .cardnav-right {
-  width: 36px;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
   flex-shrink: 0;
 }
 
-/* ---- EXPANDABLE PANEL ---- */
+.cardnav-nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(240, 240, 248, 0.6);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.18s ease;
+}
+
+.cardnav-nav-link:hover {
+  color: rgba(240, 240, 248, 0.95);
+}
+
+/* ── EXPANDABLE PANEL ───────────────────────────────────────────────────── */
+/* Absolute to .cardnav so it lines up with the pill's side edges */
 .cardnav-panel {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
+  top: calc(100% + 0.5rem);
+  left: 1.25rem;
+  right: 1.25rem;
   background: rgba(10, 8, 20, 0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 1.5rem 2rem 2rem;
-  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
-  /* z-index below bar so bar shadow overlaps */
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
 
-/* ---- CARDS GRID ---- */
+/* ── CARDS GRID ─────────────────────────────────────────────────────────── */
 .cardnav-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  max-width: 960px;
-  margin: 0 auto;
+  gap: 0.85rem;
 }
 
-/* ---- SINGLE CARD ---- */
+/* ── SINGLE CARD ────────────────────────────────────────────────────────── */
 .cardnav-card {
   position: relative;
-  height: 180px;
-  border-radius: 14px;
+  height: 170px;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -142,7 +159,7 @@
 .cardnav-card:hover {
   border-color: var(--accent, rgba(255, 255, 255, 0.2));
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
 }
 
 .cardnav-card:focus-visible {
@@ -150,58 +167,75 @@
   outline-offset: 2px;
 }
 
-/* Background image */
+/* Card background photo */
 .cardnav-card-img {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  opacity: 0.3;
+  opacity: 0.28;
   transition: opacity 0.22s ease;
   pointer-events: none;
 }
 
-.cardnav-card:hover .cardnav-card-img {
-  opacity: 0.52;
-}
+.cardnav-card:hover .cardnav-card-img { opacity: 0.5; }
 
-/* Gradient overlay for AA contrast */
+/* Gradient for AA text contrast */
 .cardnav-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(155deg, rgba(5, 4, 14, 0.72) 0%, rgba(5, 4, 14, 0.28) 100%);
+  background: linear-gradient(170deg, rgba(5,4,14,0.65) 0%, rgba(5,4,14,0.22) 100%);
   pointer-events: none;
 }
 
-/* Text + arrow row at bottom */
+/* Name + description stacked, arrow bottom-right */
 .cardnav-card-content {
   position: absolute;
   inset: 0;
-  padding: 1rem 1.1rem;
+  padding: 1rem 1rem;
   display: flex;
+  flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
+}
+
+.cardnav-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: calc(100% - 38px);
 }
 
 .cardnav-card-label {
   font-family: 'Jost', sans-serif;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #f0eff8;
   letter-spacing: 0.01em;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  line-height: 1;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+.cardnav-card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(240, 239, 248, 0.68);
+  line-height: 1.4;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
 }
 
 .cardnav-card-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   background: rgba(255, 255, 255, 0.1);
   color: #f0eff8;
   flex-shrink: 0;
+  align-self: flex-end;
   transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
@@ -211,7 +245,7 @@
   transform: translate(2px, -2px);
 }
 
-/* Accent bar along bottom edge */
+/* Accent colour strip at card bottom */
 .cardnav-card-bar {
   position: absolute;
   bottom: 0;
@@ -219,28 +253,28 @@
   right: 0;
   height: 2px;
   background: var(--accent, rgba(255, 255, 255, 0.2));
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
-/* ---- REDUCED MOTION ---- */
+/* ── REDUCED MOTION ─────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .cardnav-line      { transition: none; }
-  .cardnav-card      { transition: none; }
-  .cardnav-card-img  { transition: none; }
+  .cardnav-line       { transition: none; }
+  .cardnav-card       { transition: none; }
+  .cardnav-card-img   { transition: none; }
   .cardnav-card-arrow { transition: none; }
 }
 
-/* ---- TABLET ---- */
+/* ── TABLET ─────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .cardnav-cards { grid-template-columns: repeat(2, 1fr); }
-  .cardnav-card  { height: 160px; }
+  .cardnav-card  { height: 155px; }
 }
 
-/* ---- MOBILE ---- */
+/* ── MOBILE ─────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .cardnav-bar     { padding: 0 1.25rem; }
-  .cardnav-panel   { padding: 1.25rem 1.25rem 1.5rem; }
-  .cardnav-cards   { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-  .cardnav-card    { height: 140px; }
-  .cardnav-card-label { font-size: 0.95rem; }
+  .cardnav          { padding: 0.6rem 0.75rem 0; }
+  .cardnav-panel    { left: 0.75rem; right: 0.75rem; padding: 1rem; }
+  .cardnav-cards    { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
+  .cardnav-card     { height: 140px; }
+  .cardnav-nav-link { display: none; }
 }

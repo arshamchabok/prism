@@ -1,15 +1,39 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import gsap from 'gsap'
 import './CardNav.css'
 
 const BASE = import.meta.env.BASE_URL
 
 const VERTICALS = [
-  { label: 'Fashion', route: '/fashion', accent: '#60a5fa', image: `${BASE}assets/fashion-card.jpg` },
-  { label: 'Deploy',  route: '/deploy',  accent: '#a78bfa', image: `${BASE}assets/deploy-card.jpg` },
-  { label: 'Plate',   route: '/plate',   accent: '#fbbf24', image: `${BASE}assets/plate-card.jpg` },
-  { label: 'Fitness', route: '/fitness', accent: '#34d399', image: `${BASE}assets/fitness-card.jpg` },
+  {
+    label: 'Fashion',
+    desc:  'Clothing and lifestyle brands. Upload a lookbook and get three precise buyer profiles.',
+    route: '/fashion',
+    accent: '#60a5fa',
+    image: `${BASE}assets/fashion-card.jpg`,
+  },
+  {
+    label: 'Deploy',
+    desc:  'Software products and SaaS. Map every real person behind the buying decision.',
+    route: '/deploy',
+    accent: '#a78bfa',
+    image: `${BASE}assets/deploy-card.jpg`,
+  },
+  {
+    label: 'Plate',
+    desc:  'Restaurants, cafes and food brands. See who walks in and who keeps coming back.',
+    route: '/plate',
+    accent: '#fbbf24',
+    image: `${BASE}assets/plate-card.jpg`,
+  },
+  {
+    label: 'Fitness',
+    desc:  'Gyms, trainers and wellness brands. Know your member before they commit.',
+    route: '/fitness',
+    accent: '#34d399',
+    image: `${BASE}assets/fitness-card.jpg`,
+  },
 ]
 
 const prefersReduced =
@@ -24,7 +48,6 @@ export default function CardNav() {
   const cardsRef = useRef([])
   const tlRef    = useRef(null)
 
-  // Set initial hidden state after mount
   useEffect(() => {
     const panel = panelRef.current
     const cards = cardsRef.current.filter(Boolean)
@@ -33,14 +56,12 @@ export default function CardNav() {
     gsap.set(cards, { y: 28, opacity: 0 })
   }, [])
 
-  // Close on Escape
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape' && open) doClose() }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [open])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return
     const onDown = (e) => { if (!e.target.closest('.cardnav')) doClose() }
@@ -64,7 +85,6 @@ export default function CardNav() {
       .to(cards, { y: 0, opacity: 1, duration: 0.36, stagger: 0.07, ease: 'power3.out' }, '-=0.22')
   }, [])
 
-  // Accepts an optional onComplete callback so card clicks can navigate after animation
   const doClose = useCallback((onComplete) => {
     const panel = panelRef.current
     const cards = cardsRef.current.filter(Boolean)
@@ -91,9 +111,14 @@ export default function CardNav() {
   }, [doClose, navigate])
 
   return (
-    <nav className={`cardnav${open ? ' cardnav--open' : ''}`} role="navigation" aria-label="Main navigation">
-      {/* ── Top bar ─────────────────────────────────────── */}
+    <nav
+      className={`cardnav${open ? ' cardnav--open' : ''}`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      {/* ── Floating pill bar ──────────────────────────── */}
       <div className="cardnav-bar">
+        {/* Hamburger */}
         <button
           className="cardnav-toggle"
           onClick={toggle}
@@ -105,7 +130,7 @@ export default function CardNav() {
           <span className="cardnav-line" />
         </button>
 
-        {/* Centered logo */}
+        {/* Logo — absolutely centered so left/right widths don't affect it */}
         <a
           href="/"
           className="cardnav-logo"
@@ -124,8 +149,11 @@ export default function CardNav() {
           <span>Prism</span>
         </a>
 
-        {/* Spacer — mirrors hamburger width so logo is visually centered */}
-        <div className="cardnav-right" aria-hidden="true" />
+        {/* Right: About + Privacy links */}
+        <div className="cardnav-right">
+          <Link to="/about" className="cardnav-nav-link">About</Link>
+          <a href="#" className="cardnav-nav-link">Privacy</a>
+        </div>
       </div>
 
       {/* ── Expandable panel ────────────────────────────── */}
@@ -146,27 +174,25 @@ export default function CardNav() {
               aria-label={`Go to Prism ${v.label}`}
               tabIndex={open ? 0 : -1}
             >
-              {/* Photo background */}
               <div
                 className="cardnav-card-img"
                 style={{ backgroundImage: `url(${v.image})` }}
                 aria-hidden="true"
               />
-
-              {/* Legibility overlay */}
               <div className="cardnav-card-overlay" aria-hidden="true" />
 
-              {/* Label + arrow */}
               <div className="cardnav-card-content">
-                <span className="cardnav-card-label">{v.label}</span>
+                <div className="cardnav-card-text">
+                  <span className="cardnav-card-label">{v.label}</span>
+                  <span className="cardnav-card-desc">{v.desc}</span>
+                </div>
                 <span className="cardnav-card-arrow" aria-hidden="true">
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
               </div>
 
-              {/* Accent bottom bar */}
               <div className="cardnav-card-bar" aria-hidden="true" />
             </button>
           ))}
