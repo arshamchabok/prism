@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header.jsx'
 import InputPanel from '../components/InputPanel.jsx'
-import SpotlightCard from '../components/SpotlightCard.jsx'
+import TiltedCard from '../components/TiltedCard.jsx'
 import LoadingPanel from '../components/LoadingPanel.jsx'
 import PersonaCard from '../components/PersonaCard.jsx'
 import FlowingMenu from '../components/FlowingMenu.jsx'
@@ -26,6 +26,7 @@ const VERTICALS = [
     accentDark: '#3b82f6',
     route: '/fashion',
     imageUrl: `${BASE}assets/fashion.jpg`,
+    cardImageUrl: `${BASE}assets/fashion-card.jpg`,
     tag: 'Consumer Brand',
     tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
     description: 'Built for clothing and lifestyle brands. Upload a lookbook or describe your label, and Prism returns three precise customer profiles so you know exactly who to design and market for.',
@@ -36,6 +37,7 @@ const VERTICALS = [
     accentDark: '#7c6cfa',
     route: '/deploy',
     imageUrl: `${BASE}assets/deploy.jpg`,
+    cardImageUrl: `${BASE}assets/deploy-card.jpg`,
     tag: 'B2B SaaS',
     tagline: 'Map your buying committee before the first call.',
     description: 'Built for software founders and teams. Describe your product or paste your landing page, and Prism maps out the real people behind every buying decision so your messaging lands.',
@@ -46,6 +48,7 @@ const VERTICALS = [
     accentDark: '#d97706',
     route: '/plate',
     imageUrl: `${BASE}assets/plate.jpg`,
+    cardImageUrl: `${BASE}assets/plate-card.jpg`,
     tag: 'Food & Beverage',
     tagline: 'Know your diner before they order.',
     description: 'Built for restaurants, cafes, and food brands. Upload a dish or describe your concept, and Prism reveals who walks in, who returns, and what brings them back.',
@@ -56,18 +59,13 @@ const VERTICALS = [
     accentDark: '#059669',
     route: '/fitness',
     imageUrl: `${BASE}assets/fitness.jpg`,
+    cardImageUrl: `${BASE}assets/fitness-card.jpg`,
     tag: 'Wellness & Gym',
     tagline: 'Know your member before they commit.',
     description: 'Built for gyms, trainers, and wellness brands. Pick a goal and describe your program, and Prism shows you who you are reaching and what keeps them committed.',
   },
 ]
 
-function hexToRgba(hex, alpha) {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgba(${r},${g},${b},${alpha})`
-}
 
 export default function MainPage() {
   const { view, personas, productInput, error, handleGenerate, reset } = usePersonaGeneration()
@@ -224,39 +222,17 @@ export default function MainPage() {
               </div>
 
               <div className="vp-right">
-                <SpotlightCard
-                  className="vp-card"
-                  spotlightColor={hexToRgba(v.accent, 0.18)}
-                  style={{ borderColor: hexToRgba(v.accent, 0.28) }}
-                >
-                  <div key={selectedVertical} className="vp-content-anim">
-                    <span className="vp-tag" style={{ borderColor: hexToRgba(v.accent, 0.3), color: v.accent }}>
-                      {v.tag}
-                    </span>
-
-                    <h2 className="vp-name">
-                      Prism:{' '}
-                      <em style={{ color: v.accent, fontStyle: 'italic' }}>{v.label}</em>
-                    </h2>
-
-                    <p className="vp-tagline">{v.tagline}</p>
-                    <p className="vp-desc">{v.description}</p>
-
-                    <button
-                      className="vp-launch-btn"
-                      onClick={() => navigate(v.route)}
-                      style={{
-                        background: `linear-gradient(135deg, ${v.accentDark}, ${v.accent})`,
-                        boxShadow: `0 14px 35px ${hexToRgba(v.accent, 0.25)}`,
-                      }}
-                    >
-                      Launch
-                      <svg width="13" height="13" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                        <path d="M7.5 1L13 7.5L7.5 14M1 7.5H13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                  </div>
-                </SpotlightCard>
+                <TiltedCard
+                  key={selectedVertical}
+                  imageUrl={v.cardImageUrl}
+                  tag={v.tag}
+                  label={v.label}
+                  accent={v.accent}
+                  accentDark={v.accentDark}
+                  tagline={v.tagline}
+                  description={v.description}
+                  onLaunch={() => navigate(v.route)}
+                />
               </div>
             </div>
           </section>
