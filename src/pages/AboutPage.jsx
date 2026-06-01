@@ -12,31 +12,37 @@ export default function AboutPage() {
         <h1 className="about-headline">What is Prism?</h1>
 
         <div className="about-body">
-          <p>Prism is an AI-powered customer intelligence tool built for founders, marketers, and business owners who are tired of guessing who their customer actually is.</p>
+          <p>Prism is an AI-powered customer intelligence tool built for founders, marketers, and business owners who need to understand their audience before they can sell to them. Describe what you offer and Prism returns three precise, distinct customer profiles in seconds.</p>
 
-          <p>You type a short description of your product or service. Prism's AI thinks like a senior market strategist and returns three completely distinct customer personas in under ten seconds.</p>
+          <p>Every Prism tool works the same way. You give it context about your product, service, or brand, and the AI does the strategic thinking for you. Each profile covers who the customer is, what motivates them, how they discover things, and the message most likely to convert them.</p>
 
-          <p>Each persona is a different type of buyer — not three versions of the same person. They have different jobs, different budgets, different reasons for buying, and different ways of discovering products like yours.</p>
-
-          <p>The three personas typically represent:</p>
+          <p>Prism is available across five focused tools, each built for a specific industry.</p>
 
           <div className="about-persona-list">
             <div className="about-persona-item">
-              <strong>The Power User</strong>
-              <p>Someone deeply embedded in the problem space, technical or experienced, who wants the most out of your product and will advocate for it if you win them over.</p>
+              <strong>Prism</strong>
+              <p>The general purpose tool. Describe any product or service and get three customer profiles covering demographics, motivations, objections, and the single message that moves someone from interested to bought in.</p>
             </div>
             <div className="about-persona-item">
-              <strong>The Pragmatist</strong>
-              <p>A busy decision-maker or mid-level professional who just needs the problem solved, doesn't want complexity, and is comparing you against alternatives.</p>
+              <strong>Prism Fashion</strong>
+              <p>Built for clothing and lifestyle brands. Upload a lookbook or describe your label and Prism returns profiles calibrated to style, budget, and how your customers actually discover and shop for what you make.</p>
             </div>
             <div className="about-persona-item">
-              <strong>The Skeptic</strong>
-              <p>Someone who has the pain point but hasn't committed to solving it yet, needs to be convinced the juice is worth the squeeze, and responds to social proof and clear ROI.</p>
+              <strong>Prism Deploy</strong>
+              <p>Built for software products and SaaS companies. Describe your product or paste your landing page and Prism maps out the real people behind every buying decision so your outreach and messaging hit the right person with the right angle.</p>
+            </div>
+            <div className="about-persona-item">
+              <strong>Prism Plate</strong>
+              <p>Built for restaurants, cafes, and food brands. Describe your concept and Prism reveals who your diners are, what brings them through the door, and what keeps them coming back so you can fill seats and build loyalty.</p>
+            </div>
+            <div className="about-persona-item">
+              <strong>Prism Fitness</strong>
+              <p>Built for gyms, trainers, and wellness brands. Pick a goal type, describe your program, and Prism shows you exactly who you are reaching and what keeps them committed so you can grow your membership and reduce churn.</p>
             </div>
           </div>
 
           <div className="about-includes">
-            <p>Each persona includes: name, age, job title, location, a quote in their own voice, their goals, their daily pain points, how they discover products, and the exact messaging hook most likely to make them act.</p>
+            <p>Every profile includes a name, age, job title, location, a quote in their own voice, their goals, daily frustrations, how they find products, and the one message most likely to make them act.</p>
           </div>
         </div>
       </section>
