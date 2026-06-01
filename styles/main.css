@@ -294,8 +294,10 @@ textarea::placeholder { color: var(--text-dim); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding: 4rem 2rem;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 2.5rem;
+  padding: 2rem;
   max-width: 780px;
   margin: 0 auto;
 }
@@ -304,14 +306,13 @@ textarea::placeholder { color: var(--text-dim); }
   font-size: 1.5rem;
   color: var(--text-muted);
   letter-spacing: -0.01em;
-  margin-top: 0.5rem;
 }
 
 /* ---- PYRAMID LOADER ---- */
 .pyramid-loader {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 360px;
+  height: 360px;
   display: block;
   transform-style: preserve-3d;
   transform: rotateX(-20deg);
@@ -327,8 +328,8 @@ textarea::placeholder { color: var(--text-dim); }
   100% { transform: rotateY(360deg); }
 }
 .pyramid-loader .wrapper .side {
-  width: 70px;
-  height: 70px;
+  width: 84px;
+  height: 84px;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   margin: auto;
@@ -340,13 +341,13 @@ textarea::placeholder { color: var(--text-dim); }
 .pyramid-loader .wrapper .side3 { transform: rotateX(30deg); }
 .pyramid-loader .wrapper .side4 { transform: rotateX(-30deg); }
 .pyramid-loader .wrapper .shadow {
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 72px;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   margin: auto;
   transform: rotateX(90deg) translateZ(-40px);
-  filter: blur(12px);
+  filter: blur(14px);
 }
 @media (prefers-reduced-motion: reduce) {
   .pyramid-loader .wrapper { animation: none; }

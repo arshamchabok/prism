@@ -101,7 +101,6 @@ export default function TiltedCard({
             <em style={{ color: accent, fontStyle: 'italic' }}>{label}</em>
           </h2>
 
-          <p className="vp-tagline">{tagline}</p>
           <p className="vp-desc">{description}</p>
 
           <button
