@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import './FlowingMenu.css'
 
@@ -28,24 +29,23 @@ const OFFSCREEN = {
   right:  { x: '110%',  y: '0%'    },
 }
 
-function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
-  const itemRef    = useRef(null)
-  const fillRef    = useRef(null)
+function MenuItem({ label, tag, accent, imageUrl, route, isSelected, onSelect }) {
+  const itemRef = useRef(null)
+  const fillRef = useRef(null)
   const marqueeRef = useRef(null)
 
   useEffect(() => {
-    const item    = itemRef.current
-    const fill    = fillRef.current
+    const item = itemRef.current
+    const fill = fillRef.current
     const marquee = marqueeRef.current
     if (!item || !fill || !marquee || prefersReduced) return
 
-    // Both start off-screen bottom, together
+    // Fill and marquee start off-screen together and always travel as one unit.
     gsap.set([fill, marquee], OFFSCREEN.bottom)
 
     function onEnter(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
       gsap.killTweensOf([fill, marquee])
-      // fromTo snaps both to the same entry edge simultaneously — they move as one unit
       gsap.fromTo(fill,    { x, y }, { x: '0%', y: '0%', duration: 0.65, ease: 'power3.out' })
       gsap.fromTo(marquee, { x, y }, { x: '0%', y: '0%', duration: 0.65, ease: 'power3.out' })
     }
@@ -53,7 +53,6 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
     function onLeave(e) {
       const { x, y } = OFFSCREEN[edgeDirection(e, item)]
       gsap.killTweensOf([fill, marquee])
-      // Both exit toward the same departure edge
       gsap.to(fill,    { x, y, duration: 0.55, ease: 'power3.in' })
       gsap.to(marquee, { x, y, duration: 0.55, ease: 'power3.in' })
     }
@@ -68,62 +67,59 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
   }, [])
 
   return (
-    <div
+    <Link
       ref={itemRef}
+      to={route}
+      aria-label={`Go to Prism ${label}`}
       className={`flow-item${isSelected ? ' flow-item--active' : ''}`}
       style={{ '--flow-accent': accent }}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
-      aria-pressed={isSelected}
+      onMouseEnter={onSelect}
+      onFocus={onSelect}
     >
-      {/* Full-bleed fill — GSAP slides it in from the cursor edge */}
-      <span ref={fillRef} className="flow-fill" style={{ background: accent }} />
+      <span ref={fillRef} className="flow-fill" style={{ background: accent }} aria-hidden="true" />
 
-      {/* Static centered label */}
-      <div className="flow-label">{label}</div>
+      <span className="flow-label">
+        <span className="flow-name">{label}</span>
+        <span className="flow-tag">{tag}</span>
+      </span>
 
-      {/* Marquee — slides up over the fill; semi-transparent accent so prism bg shows through */}
-      <div
+      {/* Marquee — rides in over the fill on the same vector. */}
+      <span
         ref={marqueeRef}
         aria-hidden="true"
         className="flow-marquee"
         style={{ background: hexToRgba(accent, 0.4) }}
       >
-        <div className="flow-marquee-track">
+        <span className="flow-marquee-track">
           {Array(8).fill(null).map((_, i) => (
             <span key={i} className="flow-marquee-item">
               <span className="flow-marquee-thumb">
-                <img
-                  src={imageUrl}
-                  alt=""
-                  draggable={false}
-                  onError={e => { e.currentTarget.style.visibility = 'hidden' }}
-                />
+                <img src={imageUrl} alt="" draggable={false} onError={e => { e.currentTarget.style.visibility = 'hidden' }} />
               </span>
               <span className="flow-marquee-word">{label}</span>
             </span>
           ))}
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </Link>
   )
 }
 
 export default function FlowingMenu({ items, selected, onSelect }) {
   return (
-    <nav className="flowing-menu" aria-label="Choose a vertical">
+    <div className="flowing-menu">
       {items.map((item, i) => (
         <MenuItem
           key={item.label}
           label={item.label}
+          tag={item.tag}
           accent={item.accent}
           imageUrl={item.imageUrl}
+          route={item.route}
           isSelected={selected === i}
-          onClick={() => onSelect(i)}
+          onSelect={() => onSelect(i)}
         />
       ))}
-    </nav>
+    </div>
   )
 }

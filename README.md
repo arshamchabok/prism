@@ -2,6 +2,8 @@
 
 A React application for exploring fictional customer personas across general products, fashion, B2B software, restaurants, and fitness. Vite builds the frontend for GitHub Pages at `/prism/`; a separate Cloudflare Worker calls Anthropic.
 
+The landing page is two screens: a hero, then the input on its own. Scroll snapping stops the page there, so a fast scroll cannot throw the input off screen. The four industry tools live in the toolbar menu rather than below the input.
+
 ## Local development
 
 Use Node 22.12+ (Node 22 LTS is used in CI).
@@ -23,13 +25,13 @@ npm run worker:check
 npm audit
 ```
 
-Browser tests use installed Microsoft Edge on Windows and Playwright Chromium elsewhere. Install Chromium with `npx playwright install --with-deps chromium` on Linux. Tests mock AI responses; they cover all five generation flows, malformed output, errors, cancellation, image validation, sensitive URL removal, mobile layouts, keyboard navigation, accessibility, and PDF downloads without sending test inputs to Anthropic. `npm run preview` serves the production build at `http://localhost:4173/prism/`.
+Browser tests use installed Microsoft Edge on Windows and Playwright Chromium elsewhere. Install Chromium with `npx playwright install --with-deps chromium` on Linux. Tests mock AI responses; they cover all five generation flows, malformed output, errors, cancellation, image validation, sensitive URL removal, mobile layouts, keyboard navigation, WCAG 2.1 AA checks with axe on every view, and PDF downloads without sending test inputs to Anthropic. `npm run preview` serves the production build at `http://localhost:4173/prism/`.
 
 ## Deployment
 
 Pushing `main` runs `.github/workflows/deploy.yml`. Unit tests, production build, and browser tests must pass before GitHub Pages publishes. The frontend uses the existing Worker endpoint unless `VITE_API_URL` is supplied during the build.
 
-**The API Worker is deployed separately.** Log in with `npx wrangler login`, ensure the `ANTHROPIC_API_KEY` Worker secret is configured (`npx wrangler secret put ANTHROPIC_API_KEY`), then run:
+**The API Worker is deployed separately, and this release changes the request format — deploy it whenever the frontend ships.** Log in with `npx wrangler login`, ensure the `ANTHROPIC_API_KEY` Worker secret is configured (`npx wrangler secret put ANTHROPIC_API_KEY`), then run:
 
 ```sh
 npm run worker:check
@@ -38,7 +40,20 @@ npm run worker:deploy
 
 `wrangler.toml` includes both required rate-limiter bindings. The Worker fails closed if either binding or the API key is missing. Production accepts only `https://arshamchabok.github.io`; custom frontend hosts require an explicit comma-separated `ALLOWED_ORIGINS` Worker variable. Local origins belong in `.dev.vars`, not the production allowlist.
 
-The request envelope remains compatible with the earlier frontend deployment. The updated Worker accepts only the five exact shared prompt templates, one bounded user message, supported image formats, and a fixed model/output-token ceiling. Deploy the Worker before changing prompt templates in future releases.
+## Request format and model cost
+
+The browser sends `{ "tool": "main" | "fashion" | "deploy" | "plate" | "fitness", "messages": [one user message] }` and nothing else. The Worker owns the model, the system prompt, the token ceiling and every tuning flag, so none of them can be set from a browser. Any other key is rejected before a request reaches Anthropic.
+
+Generation cost is controlled in four places:
+
+- **Model.** `claude-sonnet-5`, the current generation of the tier this app already used, at $2/$10 per million tokens against $3/$15 for `claude-sonnet-4-5`.
+- **Thinking off.** This is structured writing, not reasoning, and thinking tokens bill at output rates. Sonnet 5 runs adaptive thinking when the field is omitted, so leaving it out would have raised the bill for no gain.
+- **Prompts.** The five prompts share one core block covering the output contract, distinctness, the specificity test, voice and safety; each tool block carries only its schema, its archetypes and its industry calibration. The industry prompts are 33–58% smaller than the previous ones and more directive.
+- **Per-tool `max_tokens`.** Between 2,600 and 3,600 instead of a flat 5,000, set above the observed ceiling — truncated output costs a full retry, which is more expensive than the headroom.
+
+The system prompt carries a `cache_control` breakpoint, so repeat generations of the same tool inside the five-minute window read the prompt at cache rates. If the account or model rejects the optional tuning fields, the Worker retries the same generation once without them rather than failing.
+
+These limits are cost *shaping*, not a cap. Set a spend limit in the Anthropic console as well.
 
 ## Privacy and operational limits
 

@@ -1,11 +1,11 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import worker from '../worker.js'
-import { PROMPTS } from '../shared/prompts.js'
+import { MAX_TOKENS, PROMPTS } from '../shared/prompts.js'
 import { apiResponse } from './fixtures.js'
 
 const origin = 'https://arshamchabok.github.io'
-const payload = kind => ({ model: 'claude-sonnet-4-5', max_tokens: 5000, system: PROMPTS[kind], messages: [{ role: 'user', content: 'A service for busy families' }] })
+const payload = kind => ({ tool: kind, messages: [{ role: 'user', content: 'A service for busy families' }] })
 const env = () => ({ ANTHROPIC_API_KEY: 'test-secret', PER_IP_LIMITER: { limit: async () => ({ success: true }) }, GLOBAL_LIMITER: { limit: async () => ({ success: true }) } })
 const request = (body = payload('main'), headers = {}, method = 'POST', path = '/') => new Request(`https://worker.example${path}`, { method, headers: { Origin: origin, 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.1', ...headers }, ...(method === 'POST' ? { body: typeof body === 'string' ? body : JSON.stringify(body) } : {}) })
 
@@ -21,9 +21,17 @@ test('rejects other origins, missing origins, unknown routes, and unsupported me
 
 test('rejects malformed, excessive, and arbitrary upstream requests before fetch', async t => {
   const fetch = t.mock.method(globalThis, 'fetch', async () => { throw Error('must not call upstream') })
-  for (const body of ['invalid json', { ...payload('main'), system: 'Arbitrary chat prompt' }, { ...payload('main'), model: 'other' }, { ...payload('main'), max_tokens: 999999 }, { ...payload('main'), tools: [] }, { ...payload('main'), messages: [{ role: 'assistant', content: 'hello' }] }]) {
-    assert.equal((await worker.fetch(request(body), env())).status, 400)
-  }
+  const bodies = [
+    'invalid json',
+    { ...payload('main'), system: 'Arbitrary chat prompt' },
+    { ...payload('main'), model: 'other' },
+    { ...payload('main'), max_tokens: 999999 },
+    { ...payload('main'), tools: [] },
+    { ...payload('main'), tool: 'unknown' },
+    { messages: payload('main').messages },
+    { ...payload('main'), messages: [{ role: 'assistant', content: 'hello' }] },
+  ]
+  for (const body of bodies) assert.equal((await worker.fetch(request(body), env())).status, 400)
   assert.equal((await worker.fetch(request(undefined, { 'Content-Type': 'text/plain' }), env())).status, 415)
   assert.equal((await worker.fetch(request('x'.repeat(6 * 1024 * 1024 + 1)), env())).status, 413)
   assert.equal(fetch.mock.callCount(), 0)
@@ -45,7 +53,12 @@ test('validates all five persona schemas and strips provider headers and private
     const fetch = t.mock.method(globalThis, 'fetch', async (url, init) => {
       assert.equal(url, 'https://api.anthropic.com/v1/messages')
       assert.equal(init.headers['x-api-key'], 'test-secret')
-      assert.equal(JSON.parse(init.body).max_tokens, 5000)
+      const sent = JSON.parse(init.body)
+      assert.equal(sent.model, 'claude-sonnet-5')
+      assert.equal(sent.max_tokens, MAX_TOKENS[kind])
+      assert.equal(sent.system[0].text, PROMPTS[kind])
+      assert.equal(sent.system[0].cache_control.type, 'ephemeral')
+      assert.equal(sent.thinking.type, 'disabled')
       return Response.json({ ...apiResponse(kind), private: 'hidden' }, { headers: { 'x-provider-secret': 'hidden' } })
     })
     const response = await worker.fetch(request(payload(kind)), env())
@@ -57,6 +70,20 @@ test('validates all five persona schemas and strips provider headers and private
     assert.equal(JSON.parse(data.content[0].text).length, 3)
     fetch.mock.restore()
   }
+})
+
+test('retries once without optional tuning fields when the provider rejects them', async t => {
+  const bodies = []
+  t.mock.method(globalThis, 'fetch', async (url, init) => {
+    bodies.push(JSON.parse(init.body))
+    return bodies.length === 1 ? new Response('unsupported parameter', { status: 400 }) : Response.json(apiResponse('main'))
+  })
+  const response = await worker.fetch(request(), env())
+  assert.equal(response.status, 200)
+  assert.equal(bodies.length, 2)
+  assert.equal(bodies[1].thinking, undefined)
+  assert.equal(bodies[1].output_config, undefined)
+  assert.equal(bodies[1].system, PROMPTS.main)
 })
 
 test('returns controlled errors for upstream rejection, timeout, and malformed results', async t => {
@@ -76,6 +103,6 @@ test('checks image signatures, formats, sizes, and allowed tools', async t => {
   body.messages[0].content[0].source.data = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aM1sAAAAASUVORK5CYII='
   t.mock.method(globalThis, 'fetch', async () => Response.json(apiResponse('fashion')))
   assert.equal((await worker.fetch(request(body), env())).status, 200)
-  body.system = PROMPTS.main
+  body.tool = 'main'
   assert.equal((await worker.fetch(request(body), env())).status, 400)
 })

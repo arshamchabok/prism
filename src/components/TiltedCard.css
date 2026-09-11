@@ -1,7 +1,8 @@
-/* Perspective container — enables 3-D tilt on the card */
+/* Preview card for the selected tool — tilts toward the cursor. */
+
 .tc-scene {
   width: 100%;
-  max-width: 520px;
+  max-width: 26rem;
   perspective: 900px;
   perspective-origin: center center;
 }
@@ -9,25 +10,15 @@
 .tc-card {
   position: relative;
   width: 100%;
-  border-radius: 20px;
+  border-radius: var(--r-lg);
   overflow: hidden;
-  cursor: pointer;
   will-change: transform;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  box-shadow:
-    0 40px 90px rgba(0, 0, 0, 0.65),
-    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
-  outline: none;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.65), inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
   user-select: none;
   -webkit-user-select: none;
 }
 
-.tc-card:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.4);
-  outline-offset: 3px;
-}
-
-/* Background photo — keyed on src, fades in on swap */
 .tc-bg {
   position: absolute;
   inset: 0;
@@ -38,48 +29,64 @@
   animation: tc-bg-in 0.5s ease both;
   pointer-events: none;
 }
+@keyframes tc-bg-in { from { opacity: 0; } to { opacity: 1; } }
 
-@keyframes tc-bg-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* Dark directional gradient — keeps foreground text WCAG AA compliant */
 .tc-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    155deg,
-    rgba(4, 3, 12, 0.80) 0%,
-    rgba(4, 3, 12, 0.48) 45%,
-    rgba(4, 3, 12, 0.84) 100%
-  );
+  background: linear-gradient(155deg, rgba(4, 3, 12, 0.86) 0%, rgba(4, 3, 12, 0.6) 45%, rgba(4, 3, 12, 0.92) 100%);
   pointer-events: none;
 }
 
-/* Content layer sits above the image and overlay */
-.tc-body {
-  position: relative;
-  z-index: 1;
+.tc-body { position: relative; z-index: 1; }
+
+.vp-content-anim {
+  animation: vp-fade-in 0.35s ease both;
+  padding: 1.6rem 1.6rem 1.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+@keyframes vp-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
 }
 
-/* Extra readability helpers on top of the image */
-.tc-body .vp-name {
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+.vp-name {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #f3f1fb;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
 
-.tc-body .vp-tagline {
-  color: rgba(240, 240, 248, 0.9);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+.vp-desc {
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: rgba(240, 240, 248, 0.78);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
-.tc-body .vp-desc {
-  color: rgba(240, 240, 248, 0.72);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+.vp-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  color: #0a0912;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease;
 }
+.vp-launch-btn svg path { stroke: currentColor; }
+.vp-launch-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
 
-/* Reduced motion: freeze tilt, disable bg crossfade */
 @media (prefers-reduced-motion: reduce) {
   .tc-card { transform: none !important; will-change: auto; }
-  .tc-bg   { animation: none; }
+  .tc-bg, .vp-content-anim { animation: none; }
 }

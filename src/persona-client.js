@@ -1,4 +1,3 @@
-import { PROMPTS } from '../shared/prompts.js'
 import { cleanUrl, GOALS, IMAGE_LIMIT, parsePersonas, TEXT_LIMIT } from '../shared/personas.js'
 
 export async function requestPersonas(kind, description, extra, signal) {
@@ -25,7 +24,9 @@ export async function requestPersonas(kind, description, extra, signal) {
     const response = await fetch(import.meta.env.VITE_API_URL || 'https://prismapi.arshamchabok.workers.dev', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store', signal: controller.signal,
-      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 5000, system: PROMPTS[kind], messages: [{ role: 'user', content }] }),
+      // The browser names a tool; the Worker owns the model, the prompt and
+      // the token ceiling, so none of them can be changed from here.
+      body: JSON.stringify({ tool: kind, messages: [{ role: 'user', content }] }),
     })
     if (!response.ok) {
       if (response.status === 429) throw new Error('Too many requests. Please wait a minute and try again.')

@@ -84,10 +84,9 @@ export default function TiltedCard({
 
         {/* Content — key change re-triggers vp-fade-in on vertical swap */}
         <div key={label} className="tc-body vp-content-anim">
-          <h2 className="vp-name">
-            Prism:{' '}
-            <em style={{ color: accent, fontStyle: 'italic' }}>{label}</em>
-          </h2>
+          <p className="vp-name">
+            Prism <em style={{ color: accent, fontStyle: 'italic' }}>{label}</em>
+          </p>
 
           <p className="vp-desc">{description}</p>
 
