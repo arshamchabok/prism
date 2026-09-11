@@ -25,6 +25,7 @@ export default function FitnessInputPanel({ value, onChange, goalType, onGoalTyp
             <button
               key={g}
               type="button"
+              aria-pressed={goalType === g}
               className={`fitness-goal-pill${goalType === g ? ' active' : ''}`}
               onClick={() => onGoalTypeChange(goalType === g ? null : g)}
             >
@@ -33,7 +34,9 @@ export default function FitnessInputPanel({ value, onChange, goalType, onGoalTyp
           ))}
         </div>
 
+        <label className="input-label" htmlFor="fitness-description">Gym or wellness brand description</label>
         <textarea
+          id="fitness-description"
           value={value}
           onChange={handleChange}
           placeholder='Describe your gym or wellness brand… e.g. "A boutique HIIT studio offering 45-minute group classes for busy professionals who want results without a 2-hour gym commitment"'

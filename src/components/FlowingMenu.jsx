@@ -75,7 +75,7 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
       onClick={onClick}
       role="button"
       tabIndex={0}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
       aria-pressed={isSelected}
     >
       {/* Full-bleed fill — GSAP slides it in from the cursor edge */}
@@ -87,6 +87,7 @@ function MenuItem({ label, accent, imageUrl, isSelected, onClick }) {
       {/* Marquee — slides up over the fill; semi-transparent accent so prism bg shows through */}
       <div
         ref={marqueeRef}
+        aria-hidden="true"
         className="flow-marquee"
         style={{ background: hexToRgba(accent, 0.4) }}
       >

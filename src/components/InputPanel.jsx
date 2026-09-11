@@ -13,7 +13,9 @@ export default function InputPanel({ value, onChange, onGenerate }) {
   return (
     <section className="input-section">
       <div className="input-card">
+        <label className="input-label" htmlFor="product-description">Product or service description</label>
         <textarea
+          id="product-description"
           value={value}
           onChange={handleChange}
           placeholder='Describe your product or service… e.g. "A SaaS tool that helps freelancers send invoices and track payments automatically"'

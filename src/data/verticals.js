@@ -10,7 +10,7 @@ export const ALL_VERTICALS = [
     cardImageUrl: `${BASE}assets/fashion-card.jpg`,
     tag: 'Consumer Brand',
     tagline: 'Three style-aware buyer profiles for clothing and lifestyle brands.',
-    description: 'Built for clothing and lifestyle brands. Upload a lookbook or describe your label, and Prism returns three precise customer profiles so you know exactly who to design and market for.',
+    description: 'Built for clothing and lifestyle brands. Upload an image or describe your label to explore three potential customer profiles, their style preferences, and shopping habits.',
   },
   {
     label: 'Deploy',
@@ -21,7 +21,7 @@ export const ALL_VERTICALS = [
     cardImageUrl: `${BASE}assets/deploy-card.jpg`,
     tag: 'B2B SaaS',
     tagline: 'Map your buying committee before the first call.',
-    description: 'Built for software founders and teams. Describe your product or paste your landing page, and Prism maps out the real people behind every buying decision so your messaging lands.',
+    description: 'Built for software founders and teams. Describe your product to explore potential economic buyers, internal champions, and end users. Optional URLs provide context without fetching the page.',
   },
   {
     label: 'Plate',

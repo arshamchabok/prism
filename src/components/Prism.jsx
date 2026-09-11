@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import './Prism.css';
 
@@ -20,10 +20,17 @@ const Prism = ({
   timeScale = 0.5
 }) => {
   const containerRef = useRef(null);
+  const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const change = () => setReducedMotion(media.matches);
+    media.addEventListener('change', change);
+    return () => media.removeEventListener('change', change);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || reducedMotion) return;
 
     const H = Math.max(0.001, height);
     const BW = Math.max(0.001, baseWidth);
@@ -40,17 +47,19 @@ const Prism = ({
     const RSX = 1;
     const RSY = 1;
     const RSZ = 1;
-    const TS = Math.max(0, timeScale || 1);
+    const TS = Math.max(0, timeScale ?? 1);
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const renderer = new Renderer({
+    const dpr = Math.min(1.25, window.devicePixelRatio || 1);
+    let renderer;
+    try { renderer = new Renderer({
       dpr,
       alpha: transparent,
       antialias: false
-    });
+    }); } catch { return; }
     const gl = renderer.gl;
+    if (!gl) return;
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.CULL_FACE);
     gl.disable(gl.BLEND);
@@ -340,13 +349,15 @@ const Prism = ({
       }
 
       renderer.render({ scene: mesh });
-      if (continueRAF) {
+      if (continueRAF && !document.hidden) {
         raf = requestAnimationFrame(render);
       } else {
         raf = 0;
       }
     };
 
+    const visibilityChange = () => { if (document.hidden) stopRAF(); else startRAF(); };
+    document.addEventListener('visibilitychange', visibilityChange);
     if (suspendWhenOffscreen) {
       const io = new IntersectionObserver(entries => {
         const vis = entries.some(e => e.isIntersecting);
@@ -361,6 +372,7 @@ const Prism = ({
 
     return () => {
       stopRAF();
+      document.removeEventListener('visibilitychange', visibilityChange);
       ro.disconnect();
       if (animationType === 'hover') {
         if (onPointerMove) window.removeEventListener('pointermove', onPointerMove);
@@ -373,12 +385,15 @@ const Prism = ({
         delete container.__prismIO;
       }
       if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
+      geometry.remove();
+      program.remove();
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [
     height, baseWidth, animationType, glow, noise,
     offset?.x, offset?.y, scale, transparent, hueShift,
     colorFrequency, timeScale, hoverStrength, inertia, bloom,
-    suspendWhenOffscreen
+    suspendWhenOffscreen, reducedMotion
   ]);
 
   return <div className="prism-container" ref={containerRef} />;

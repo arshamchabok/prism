@@ -1,18 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-const STEPS = [
-  { threshold: 0,  label: 'Analyzing your input' },
-  { threshold: 25, label: 'Identifying distinct segments' },
-  { threshold: 50, label: 'Building persona profiles' },
-  { threshold: 75, label: 'Crafting messaging hooks' },
-]
-
-function getLabel(pct) {
-  let label = STEPS[0].label
-  for (const s of STEPS) { if (pct >= s.threshold) label = s.label }
-  return label
-}
-
 function buildGradient(hex) {
   const r = parseInt(hex.slice(1, 3), 16)
   const g = parseInt(hex.slice(3, 5), 16)
@@ -57,14 +44,13 @@ export default function LoadingPanel({ message = 'Refracting your audience…', 
     return () => clearInterval(intervalRef.current)
   }, [])
 
-  const label = getLabel(progress)
   const gradient = buildGradient(accentColor)
   const sideStyle = { background: gradient }
   const shadowStyle = { background: accentColor }
 
   return (
-    <section className="loading-section">
-      <div className="pyramid-loader">
+    <section className="loading-section" role="status" aria-live="polite">
+      <div className="pyramid-loader" aria-hidden="true">
         <div className="wrapper">
           <span className="side side1" style={sideStyle}></span>
           <span className="side side2" style={sideStyle}></span>
@@ -77,8 +63,8 @@ export default function LoadingPanel({ message = 'Refracting your audience…', 
       <div className="loading-text">{message}</div>
 
       <div className="loading-progress-wrap">
-        <div className="loading-progress-label">{label}</div>
-        <div className="loading-progress-track">
+        <div className="loading-progress-label">Generating your profiles. This can take up to 90 seconds.</div>
+        <div className="loading-progress-track" aria-hidden="true">
           <div
             className="loading-progress-bar"
             style={{

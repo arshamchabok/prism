@@ -68,11 +68,6 @@ export default function TiltedCard({
         ref={cardRef}
         className="tc-card"
         style={{ rotateX: rotX, rotateY: rotY, scale }}
-        onClick={onLaunch}
-        role="button"
-        tabIndex={0}
-        aria-label={`Launch Prism ${label}`}
-        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onLaunch?.()}
       >
         {/* Background photo — key change triggers fade-in on vertical swap */}
         <img
@@ -98,6 +93,7 @@ export default function TiltedCard({
 
           <button
             className="vp-launch-btn"
+            aria-label={`Launch Prism ${label}`}
             onClick={(e) => { e.stopPropagation(); onLaunch?.() }}
             style={{
               background: `linear-gradient(135deg, ${accentDark}, ${accent})`,

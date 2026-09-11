@@ -6,13 +6,13 @@ export default function AboutPage() {
     <div id="app">
       <CardNav />
 
-      <section className="about-section">
+      <main id="main-content" className="about-section">
         <Link to="/" className="about-back">← Back to Prism</Link>
 
         <h1 className="about-headline">What is Prism?</h1>
 
         <div className="about-body">
-          <p>Prism is an AI-powered customer intelligence tool built for founders, marketers, and business owners who need to understand their audience before they can sell to them. Describe what you offer and Prism returns three precise, distinct customer profiles in seconds.</p>
+          <p>Prism helps founders, marketers, and business owners explore possible audiences. Describe what you offer and get three fictional customer profiles to use as starting points for research. These profiles, names, quotes, and statistics are generated hypotheses, not verified customer research.</p>
 
           <p>Every Prism tool works the same way. You give it context about your product, service, or brand, and the AI does the strategic thinking for you. Each profile covers who the customer is, what motivates them, how they discover things, and the message most likely to convert them.</p>
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
             </div>
             <div className="about-persona-item">
               <strong>Prism Deploy</strong>
-              <p>Built for software products and SaaS companies. Describe your product or paste your landing page and Prism maps out the real people behind every buying decision so your outreach and messaging hit the right person with the right angle.</p>
+              <p>Built for software products and SaaS companies. Describe your product to explore the economic buyer, internal champion, and end user. An optional public URL adds context; Prism does not fetch or inspect the page.</p>
             </div>
             <div className="about-persona-item">
               <strong>Prism Plate</strong>
@@ -45,7 +45,7 @@ export default function AboutPage() {
             <p>Every profile includes a name, age, job title, location, a quote in their own voice, their goals, daily frustrations, how they find products, and the one message most likely to make them act.</p>
           </div>
         </div>
-      </section>
+      </main>
 
       <div style={{ flex: 1 }} />
 
@@ -53,7 +53,7 @@ export default function AboutPage() {
         <span className="footer-left">Prism &mdash; AI-powered customer intelligence</span>
         <div className="footer-right">
           <Link to="/about">About</Link>
-          <a href="#">Privacy</a>
+          <Link to="/privacy">Privacy</Link>
         </div>
       </footer>
     </div>
