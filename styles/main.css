@@ -155,7 +155,7 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 }
 /* Leftover height goes above the block, not below it, so the title sits
    clear of the bar and the panel lands low with the examples just under. */
-.stage::before { content: ''; flex: 6 1 0; }
+.stage::before { content: ''; flex: 2.5 1 0; }
 .stage::after  { content: ''; flex: 1 1 0; }
 
 .stage-head {
@@ -196,8 +196,8 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
 .hero-sub {
   color: var(--text-2);
-  font-size: clamp(1.05rem, 1.75vw, 1.45rem);
-  line-height: 1.6;
+  font-size: clamp(1.55rem, 2.6vw, 2.18rem);
+  line-height: 1.45;
   max-width: 54ch;
   text-wrap: pretty;
 }
@@ -208,12 +208,12 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 @media (max-height: 840px) {
   .stage { padding-top: clamp(0.6rem, 1.5vh, 1.25rem); padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem); }
   .hero-title { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
-  .hero-sub { font-size: clamp(1rem, 1.5vw, 1.2rem); }
+  .hero-sub { font-size: clamp(1.3rem, 2.1vw, 1.75rem); }
   .stage-head { gap: clamp(0.7rem, 1.8vh, 1.2rem); }
 }
 @media (max-height: 720px) {
   .hero-title { font-size: clamp(1.9rem, 3.6vw, 2.9rem); }
-  .hero-sub { font-size: 1rem; }
+  .hero-sub { font-size: 1.35rem; }
   .stage textarea { min-height: 110px; }
 }
 @media (max-height: 600px) {
