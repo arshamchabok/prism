@@ -21,6 +21,11 @@ for (const kind of kinds) {
     await expect(page.locator('.persona-card')).toHaveCount(3)
     expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([])
     await page.screenshot({ path: `test-results/${kind}-results.png`, fullPage: true })
+    await page.locator('.persona-slot').nth(1).click()
+    await expect(page.locator('.persona-slot.is-open')).toHaveCount(1)
+    expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([])
+    await page.locator('.persona-slot.is-open').getByRole('button', { name: /^Collapse/ }).click()
+    await expect(page.locator('.persona-slot.is-open')).toHaveCount(0)
     const downloadEvent = page.waitForEvent('download')
     await page.getByRole('button', { name: 'Download as PDF' }).click()
     const download = await downloadEvent

@@ -142,163 +142,66 @@ main { flex: 1; min-width: 0; }
 html[data-route='about'] .prism-container,
 html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
-/* ---------------------------------------------------------- stage (hero + console) */
+/* ---------------------------------------------------------- stage
+   Everything a tool needs on one screen: headline, input, examples.
+   Nothing below it, so there is nothing to scroll past. */
 
-.stage-hero,
-.stage-console {
-  position: relative;
+.stage {
+  min-height: calc(100svh - var(--nav-h) - 0.85rem);
   display: flex;
-  flex-direction: column;
-  padding: 0 var(--page-x);
-}
-
-.stage-hero {
-  min-height: calc(100svh - var(--nav-h));
   align-items: center;
   justify-content: center;
-  text-align: center;
-  gap: 1.4rem;
-  padding-top: 2rem;
-  padding-bottom: 4.5rem;
+  padding: 1rem var(--page-x) 2rem;
 }
 
-.hero-tool {
-  display: inline-flex;
+.stage-inner {
+  width: 100%;
+  max-width: 62rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.86rem;
-  color: var(--text-3);
-  padding: 0.3rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(11, 10, 20, 0.5);
+  gap: 1.15rem;
+  text-align: center;
+  animation: stage-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-.hero-tool span { color: var(--beam); font-weight: 600; }
+@keyframes stage-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .hero-title {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
-  font-size: clamp(2.9rem, 7.4vw, 6rem);
+  font-size: clamp(2.4rem, 5.6vw, 4.6rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
-  max-width: 17ch;
+  max-width: 18ch;
   text-wrap: balance;
 }
 .hero-title em { font-style: inherit; color: var(--beam); }
 
 .hero-sub {
   color: var(--text-2);
-  font-size: clamp(1rem, 1.6vw, 1.12rem);
-  max-width: 54ch;
+  font-size: clamp(0.95rem, 1.4vw, 1.06rem);
+  max-width: 56ch;
   text-wrap: pretty;
 }
 
-/* Three output bands — the spectrum this tool splits one input into. */
-.hero-spectrum {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 0.4rem;
-}
-.hero-band {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
-  text-align: left;
-  min-width: 11.5rem;
-  flex: 0 1 14rem;
-  padding: 0.75rem 0.95rem;
-  border: 1px solid var(--line);
-  border-top: 2px solid var(--band, var(--beam));
-  border-radius: 2px var(--r-sm) var(--r-sm) 2px;
-  background: rgba(11, 10, 20, 0.68);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.hero-band b { font-size: 0.86rem; font-weight: 600; color: var(--text); }
-.hero-band span { font-size: 0.78rem; color: var(--text-3); line-height: 1.5; }
+.stage .input-section,
+.stage .error-box { width: 100%; text-align: left; }
+.stage .examples-row { justify-content: center; }
 
-.hero-cue {
-  position: absolute;
-  bottom: 1.6rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(10, 9, 18, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--text-2);
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+/* Short screens: give the input the room instead of the headline. */
+@media (max-height: 800px) {
+  .stage-inner { gap: 0.85rem; }
+  .hero-title { font-size: clamp(2rem, 4vw, 3.1rem); }
+  .hero-sub { font-size: 0.95rem; }
+  .stage textarea { min-height: 112px; }
+  .input-label { padding-top: 0.9rem; }
 }
-.hero-cue:hover { color: var(--text); border-color: var(--line-strong); background: rgba(20, 18, 34, 0.75); }
-.hero-cue svg { animation: cue-drift 2.6s ease-in-out infinite; }
-@keyframes cue-drift {
-  0%, 100% { transform: translateY(-1px); opacity: 0.6; }
-  50%      { transform: translateY(3px); opacity: 1; }
-}
-
-/* The console holds nothing but the input — scrolling down lands here and stops. */
-.stage-console {
-  min-height: calc(100svh - var(--nav-h));
-  justify-content: center;
-  align-items: center;
-  padding-top: 1.5rem;
-  padding-bottom: 1rem;
-}
-.console-inner {
-  width: 100%;
-  max-width: 62rem;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.console-lead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.console-lead h2 {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-size: 1.6rem;
-  color: var(--text);
-}
-.console-lead p { font-size: 0.83rem; color: var(--text-3); }
-
-/* Snap so a fast wheel gesture cannot throw the input off screen. */
-@media (min-width: 820px) and (min-height: 620px) and (pointer: fine) {
-  html.stage-snap { scroll-snap-type: y mandatory; }
-  html.stage-snap .stage-hero,
-  html.stage-snap .stage-console {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-}
-
-/* Scroll-linked reveal: the console rises as it enters, no JS. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
-    .console-inner {
-      animation: console-rise linear both;
-      animation-timeline: view();
-      animation-range: entry 8% entry 78%;
-    }
-    @keyframes console-rise {
-      from { opacity: 0; transform: translateY(34px) scale(0.985); }
-      to   { opacity: 1; transform: none; }
-    }
-  }
+@media (max-height: 660px) {
+  .hero-sub { display: none; }
+  .stage textarea { min-height: 92px; }
 }
 
 /* ---------------------------------------------------------- input card */
@@ -367,7 +270,7 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
 .input-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.75rem;
   padding: 0.75rem 1rem 0.85rem 1.5rem;
   border-top: 1px solid var(--line);
@@ -650,7 +553,63 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   gap: 1.15rem;
+  align-items: start;
 }
+
+/* A card and its open/close control behave as one surface. */
+.persona-slot {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: pointer;
+}
+.persona-slot .persona-card { border-radius: var(--r-lg) var(--r-lg) 0 0; height: 100%; }
+
+.persona-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.79rem;
+  font-weight: 500;
+  color: var(--text-3);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+.persona-slot:hover .persona-toggle { color: var(--text); background: rgba(255, 255, 255, 0.07); }
+
+/* Open: the profile takes the full row and reads at a comfortable size.
+   The other two pair up above it, so the grid never leaves a hole. */
+.personas-grid.has-open { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: dense; }
+.persona-slot.is-open { grid-column: 1 / -1; }
+.persona-slot.is-open .persona-card { border-color: var(--line-strong); }
+.persona-slot.is-open .card-header { padding: 1.7rem 1.8rem 1.3rem; }
+.persona-slot.is-open .persona-avatar { width: 54px; height: 54px; font-size: 0.95rem; }
+.persona-slot.is-open .persona-name { font-size: 1.3rem; }
+.persona-slot.is-open .persona-title { font-size: 0.92rem; }
+.persona-slot.is-open .persona-summary { font-size: 0.98rem; max-width: 80ch; }
+.persona-slot.is-open .card-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.4rem 2rem;
+  padding: 1.5rem 1.8rem 1.8rem;
+  align-content: start;
+}
+.persona-slot.is-open .persona-quote { grid-column: 1 / -1; font-size: 1.4rem; padding-left: 1.2rem; }
+.persona-slot.is-open .hook-box { grid-column: 1 / -1; margin-top: 0; padding: 1.1rem 1.3rem; }
+.persona-slot.is-open .hook-text { font-size: 1rem; }
+.persona-slot.is-open .section-label { font-size: 0.82rem; }
+.persona-slot.is-open .list-item,
+.persona-slot.is-open .image-reaction-text,
+.persona-slot.is-open .url-reaction-text { font-size: 0.95rem; }
+.persona-slot.is-open .tag { font-size: 0.84rem; padding: 0.3rem 0.85rem; }
+.persona-slot.is-open .persona-toggle { color: var(--text-2); }
 
 .persona-card {
   --card-beam: var(--beam);
@@ -674,10 +633,10 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   height: 2px;
   background: linear-gradient(90deg, var(--card-beam), transparent 85%);
 }
-.persona-card:nth-child(1) { --card-beam: #fb7185; animation-delay: 0.04s; }
-.persona-card:nth-child(2) { --card-beam: #fbbf24; animation-delay: 0.12s; }
-.persona-card:nth-child(3) { --card-beam: #22d3ee; animation-delay: 0.2s; }
-.persona-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.persona-slot:nth-child(1) .persona-card { --card-beam: #fb7185; animation-delay: 0.04s; }
+.persona-slot:nth-child(2) .persona-card { --card-beam: #fbbf24; animation-delay: 0.12s; }
+.persona-slot:nth-child(3) .persona-card { --card-beam: #22d3ee; animation-delay: 0.2s; }
+.persona-slot:hover .persona-card { border-color: var(--line-strong); }
 @keyframes card-in {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
@@ -919,7 +878,7 @@ a.tool-entry:hover { background: var(--panel-raised); transform: translateX(2px)
 footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 0.8rem;
   padding: 1.3rem var(--page-x);
@@ -927,8 +886,6 @@ footer {
   color: var(--text-3);
   font-size: 0.78rem;
 }
-.footer-left { max-width: 52ch; }
-.stage-console footer { width: 100%; border-top: none; padding-left: 0; padding-right: 0; }
 .footer-right { display: flex; flex-wrap: wrap; gap: 1.1rem; }
 .footer-right a { color: var(--text-3); text-decoration: none; transition: color 0.18s ease; }
 .footer-right a:hover { color: var(--text); }
@@ -943,12 +900,11 @@ footer {
 
 @media (max-width: 640px) {
   body { font-size: 0.92rem; }
-  .stage-hero { gap: 1.1rem; padding-bottom: 5rem; padding-top: 1rem; }
-  .hero-title { font-size: clamp(2.4rem, 11vw, 3.4rem); }
-  .hero-spectrum { flex-direction: column; width: 100%; }
-  .hero-band { flex: 1 1 auto; width: 100%; }
-  .stage-console { min-height: auto; padding-top: 0; padding-bottom: 2.5rem; }
-  .hero-cue { display: none; }
+  .stage { min-height: 0; padding-top: 1.5rem; padding-bottom: 3rem; align-items: flex-start; }
+  .hero-title { font-size: clamp(2.2rem, 10vw, 3.2rem); }
+  .persona-slot.is-open .card-body { padding: 1.2rem 1.1rem 1.4rem; }
+  .persona-slot.is-open .card-header { padding: 1.3rem 1.1rem 1rem; }
+  .persona-slot.is-open .persona-quote { font-size: 1.2rem; }
   .input-label, .input-help, .upload-error, .upload-preview, .url-input-row, .fitness-goal-row { padding-left: 1rem; padding-right: 1rem; }
   textarea { padding-left: 1rem; padding-right: 1rem; }
   .input-footer { padding: 0.7rem 0.85rem 0.7rem 1rem; }
