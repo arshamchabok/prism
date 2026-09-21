@@ -19,7 +19,6 @@ const settings = {
   main: {
     title: 'Know your customer before they know',
     emphasis: 'you.',
-    subtitle: 'Describe what you sell. Prism splits it into three customer profiles you can argue with, test, and take to a real interview.',
     accent: '#fb7185',
     Panel: InputPanel,
     Card: PersonaCard,
@@ -28,7 +27,6 @@ const settings = {
   fashion: {
     title: 'Know your shopper’s style before they know',
     emphasis: 'yours.',
-    subtitle: 'Describe your label or upload a lookbook image. Prism reads the aesthetic and returns three shoppers who would wear it.',
     accent: '#60a5fa',
     Panel: FashionInputPanel,
     Card: FashionPersonaCard,
@@ -37,7 +35,6 @@ const settings = {
   deploy: {
     title: 'Know your buyer before they',
     emphasis: 'sign.',
-    subtitle: 'Describe your software. Prism maps the three people behind every B2B deal — and what each one needs before they say yes.',
     accent: '#a78bfa',
     Panel: DeployInputPanel,
     Card: DeployPersonaCard,
@@ -46,7 +43,6 @@ const settings = {
   plate: {
     title: 'Know your diners before they',
     emphasis: 'walk in.',
-    subtitle: 'Describe your restaurant or upload a dish. Prism returns the three people who fill your room on a normal week.',
     accent: '#fbbf24',
     Panel: PlateInputPanel,
     Card: PlatePersonaCard,
@@ -55,7 +51,6 @@ const settings = {
   fitness: {
     title: 'Know your members before they',
     emphasis: 'commit.',
-    subtitle: 'Pick a goal and describe your programme. Prism returns three members, what brought them in, and what makes them stay.',
     accent: '#34d399',
     Panel: FitnessInputPanel,
     Card: FitnessPersonaCard,
@@ -63,7 +58,7 @@ const settings = {
   },
 }
 
-export default function GeneratorPage({ kind, examples }) {
+export default function GeneratorPage({ kind }) {
   const { view, personas, description, error, handleGenerate, reset, cancel } = useGeneration(kind)
   const [input, setInput] = useState('')
   const [extra, setExtra] = useState(null)
@@ -106,7 +101,6 @@ export default function GeneratorPage({ kind, examples }) {
           <section className="stage" aria-labelledby="generator-title">
             <div className="stage-inner">
               <h1 className="hero-title" id="generator-title">{config.title} <em>{config.emphasis}</em></h1>
-              <p className="hero-sub">{config.subtitle}</p>
               {error && <div className="error-box" role="alert">{error}</div>}
               <Panel
                 value={input}
@@ -119,12 +113,6 @@ export default function GeneratorPage({ kind, examples }) {
                 onGoalTypeChange={setExtra}
                 onGenerate={handleGenerate}
               />
-              <div className="examples-row">
-                <span className="examples-row-label">Try one:</span>
-                {examples.map(example => (
-                  <button key={example.label} className="example-pill" onClick={() => setInput(example.text)}>{example.label}</button>
-                ))}
-              </div>
             </div>
           </section>
         )}

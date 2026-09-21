@@ -180,28 +180,21 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 }
 .hero-title em { font-style: inherit; color: var(--beam); }
 
-.hero-sub {
-  color: var(--text-2);
-  font-size: clamp(0.95rem, 1.4vw, 1.06rem);
-  max-width: 56ch;
-  text-wrap: pretty;
-}
-
 .stage .input-section,
 .stage .error-box { width: 100%; text-align: left; }
-.stage .examples-row { justify-content: center; }
 
 /* Short screens: give the input the room instead of the headline. */
-@media (max-height: 800px) {
-  .stage-inner { gap: 0.85rem; }
-  .hero-title { font-size: clamp(2rem, 4vw, 3.1rem); }
-  .hero-sub { font-size: 0.95rem; }
-  .stage textarea { min-height: 112px; }
+@media (max-height: 820px) {
+  .stage-inner { gap: 1.1rem; }
+  .hero-title { font-size: clamp(2rem, 4.2vw, 3.4rem); }
+}
+@media (max-height: 700px) {
+  .hero-title { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+  .stage textarea { min-height: 108px; }
   .input-label { padding-top: 0.9rem; }
 }
-@media (max-height: 660px) {
-  .hero-sub { display: none; }
-  .stage textarea { min-height: 92px; }
+@media (max-height: 580px) {
+  .stage textarea { min-height: 84px; }
 }
 
 /* ---------------------------------------------------------- input card */
@@ -392,24 +385,6 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   font-weight: 600;
 }
 
-.examples-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-}
-.examples-row-label { font-size: 0.78rem; color: var(--text-3); }
-.example-pill {
-  font-size: 0.78rem;
-  color: var(--text-2);
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  cursor: pointer;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-}
-.example-pill:hover { color: var(--text); border-color: var(--line-strong); background: rgba(255, 255, 255, 0.06); }
 
 .privacy-note, .results-note {
   font-size: 0.79rem;
@@ -900,7 +875,7 @@ footer {
 
 @media (max-width: 640px) {
   body { font-size: 0.92rem; }
-  .stage { min-height: 0; padding-top: 1.5rem; padding-bottom: 3rem; align-items: flex-start; }
+  .stage { min-height: calc(100svh - var(--nav-h) - 3rem); padding-top: 1rem; padding-bottom: 2rem; }
   .hero-title { font-size: clamp(2.2rem, 10vw, 3.2rem); }
   .persona-slot.is-open .card-body { padding: 1.2rem 1.1rem 1.4rem; }
   .persona-slot.is-open .card-header { padding: 1.3rem 1.1rem 1rem; }
