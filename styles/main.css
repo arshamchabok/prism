@@ -155,7 +155,7 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 }
 /* Leftover height goes above the block, not below it, so the title sits
    clear of the bar and the panel lands low with the examples just under. */
-.stage::before { content: ''; flex: 9 1 0; }
+.stage::before { content: ''; flex: 1.4 1 0; }
 .stage::after  { content: ''; flex: 1 1 0; }
 
 .stage-head {
@@ -164,7 +164,7 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.9rem, 2.4vh, 1.8rem);
+  gap: clamp(0.7rem, 1.8vh, 1.25rem);
   animation: stage-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -172,7 +172,7 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
   flex: 0 0 auto;
   width: 100%;
   max-width: 62rem;
-  margin-top: clamp(1.1rem, 3.2vh, 2.5rem);
+  margin-top: clamp(0.9rem, 2.2vh, 1.6rem);
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -196,9 +196,9 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
 .hero-sub {
   color: var(--text-2);
-  font-size: clamp(1.6rem, 3.9vw, 3.27rem);
-  line-height: 1.32;
-  max-width: 30ch;
+  font-size: clamp(1.9rem, 5.85vw, 4.9rem);
+  line-height: 1.24;
+  max-width: 26ch;
   text-wrap: pretty;
 }
 
@@ -208,12 +208,12 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 @media (max-height: 840px) {
   .stage { padding-top: clamp(0.6rem, 1.5vh, 1.25rem); padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem); }
   .hero-title { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
-  .hero-sub { font-size: clamp(1.35rem, 2.6vw, 2.2rem); max-width: 34ch; }
+  .hero-sub { font-size: clamp(1.7rem, 3.9vw, 3.3rem); max-width: 26ch; }
   .stage-head { gap: clamp(0.7rem, 1.8vh, 1.2rem); }
 }
 @media (max-height: 720px) {
   .hero-title { font-size: clamp(1.9rem, 3.6vw, 2.9rem); }
-  .hero-sub { font-size: 1.5rem; max-width: 40ch; }
+  .hero-sub { font-size: 2.2rem; max-width: 28ch; }
   .stage textarea { min-height: 110px; }
 }
 @media (max-height: 600px) {
@@ -276,8 +276,8 @@ textarea {
   resize: vertical;
   font-size: 1.02rem;
   line-height: 1.7;
-  padding: 1.3rem 1.5rem 0.9rem;
-  min-height: 148px;
+  padding: 1.15rem 1.5rem 0.8rem;
+  min-height: 128px;
   max-height: 360px;
   scrollbar-width: thin;
 }

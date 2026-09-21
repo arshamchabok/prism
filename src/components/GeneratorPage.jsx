@@ -19,16 +19,16 @@ const settings = {
   main: {
     title: 'Know your customer before they know',
     emphasis: 'you.',
-    subtitle: 'Describe what you sell. Prism splits it into three customer profiles you can argue with, test, and take to a real interview.',
+    subtitle: 'Describe what you sell. Meet the three people who buy it.',
     accent: '#fb7185',
     Panel: InputPanel,
     Card: PersonaCard,
     results: 'Your customer personas',
   },
   fashion: {
-    title: 'Know your shopper’s style before they know',
+    title: 'Know your shopper before they know',
     emphasis: 'yours.',
-    subtitle: 'Describe your label or upload a lookbook image. Prism reads the aesthetic and returns three shoppers who would wear it.',
+    subtitle: 'Describe your label. Meet the three shoppers who wear it.',
     accent: '#60a5fa',
     Panel: FashionInputPanel,
     Card: FashionPersonaCard,
@@ -37,7 +37,7 @@ const settings = {
   deploy: {
     title: 'Know your buyer before they',
     emphasis: 'sign.',
-    subtitle: 'Describe your software. Prism maps the three people behind every B2B deal — and what each one needs before they say yes.',
+    subtitle: 'Describe your product. Meet the three people who sign for it.',
     accent: '#a78bfa',
     Panel: DeployInputPanel,
     Card: DeployPersonaCard,
@@ -46,7 +46,7 @@ const settings = {
   plate: {
     title: 'Know your diners before they',
     emphasis: 'walk in.',
-    subtitle: 'Describe your restaurant or upload a dish. Prism returns the three people who fill your room on a normal week.',
+    subtitle: 'Describe your restaurant. Meet the three people who book it.',
     accent: '#fbbf24',
     Panel: PlateInputPanel,
     Card: PlatePersonaCard,
@@ -55,7 +55,7 @@ const settings = {
   fitness: {
     title: 'Know your members before they',
     emphasis: 'commit.',
-    subtitle: 'Pick a goal and describe your programme. Prism returns three members, what brought them in, and what makes them stay.',
+    subtitle: 'Pick a goal. Meet the three members who show up for it.',
     accent: '#34d399',
     Panel: FitnessInputPanel,
     Card: FitnessPersonaCard,
