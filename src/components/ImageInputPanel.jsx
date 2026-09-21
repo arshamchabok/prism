@@ -36,7 +36,7 @@ export default function ImageInputPanel({ value, onChange, image, onImageChange,
       <label className="input-label" htmlFor="brand-description">{label}</label>
       <textarea id="brand-description" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} maxLength={800} aria-describedby="image-help" />
       {image && <div className="upload-preview"><img src={image.previewUrl} alt="Image prepared for generation" /><span className="upload-filename">{image.name}</span><button type="button" className="upload-clear" onClick={clear} aria-label="Remove image">×</button></div>}
-      <p id="image-help" className="input-help">JPEG, PNG, or WebP, up to 4 MB. Images are resized and file metadata is removed before sending.</p>
+      <p id="image-help" className="input-help visually-hidden">JPEG, PNG, or WebP, up to 4 MB. Images are resized and file metadata is removed before sending.</p>
       {error && <p className="upload-error" role="alert">{error}</p>}
       {processing && <p className="input-help" role="status">Preparing image…</p>}
       <div className="input-footer">

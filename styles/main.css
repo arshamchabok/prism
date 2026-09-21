@@ -247,12 +247,19 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 .input-card :is(textarea, input[type="url"]):focus-visible { outline: none; }
 .input-card.drag-over { border-color: var(--beam); }
 
-.input-label {
-  display: block;
-  padding: 1.15rem 1.5rem 0.2rem;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--text-2);
+/* Field labels and the image-format note stay in the accessibility tree —
+   they name and describe the inputs — but nothing is drawn for them. */
+.input-label,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 textarea {
@@ -263,7 +270,7 @@ textarea {
   resize: vertical;
   font-size: 1.02rem;
   line-height: 1.7;
-  padding: 0.5rem 1.5rem 0.9rem;
+  padding: 1.3rem 1.5rem 0.9rem;
   min-height: 148px;
   max-height: 360px;
   scrollbar-width: thin;
@@ -917,7 +924,7 @@ footer {
   .persona-slot.is-open .card-body { padding: 1.2rem 1.1rem 1.4rem; }
   .persona-slot.is-open .card-header { padding: 1.3rem 1.1rem 1rem; }
   .persona-slot.is-open .persona-quote { font-size: 1.2rem; }
-  .input-label, .input-help, .upload-error, .upload-preview, .url-input-row, .fitness-goal-row { padding-left: 1rem; padding-right: 1rem; }
+  .input-help, .upload-error, .upload-preview, .url-input-row, .fitness-goal-row { padding-left: 1rem; padding-right: 1rem; }
   textarea { padding-left: 1rem; padding-right: 1rem; }
   .input-footer { padding: 0.7rem 0.85rem 0.7rem 1rem; }
   .results-header { flex-direction: column; align-items: flex-start; }
