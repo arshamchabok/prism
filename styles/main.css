@@ -148,26 +148,31 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
 .stage {
   min-height: calc(100svh - var(--nav-h) - 0.85rem);
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  justify-items: center;
-  gap: clamp(1.25rem, 4vh, 3rem);
-  padding: clamp(1.5rem, 5vh, 4rem) var(--page-x) clamp(1.25rem, 4vh, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(0.75rem, 2vh, 1.75rem) var(--page-x) clamp(0.75rem, 2vh, 1.5rem);
 }
+/* Leftover height goes above the block, not below it, so the title sits
+   clear of the bar and the panel lands low with the examples just under. */
+.stage::before { content: ''; flex: 6 1 0; }
+.stage::after  { content: ''; flex: 1 1 0; }
 
 .stage-head {
+  flex: 0 0 auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1rem, 2.8vh, 2.1rem);
+  gap: clamp(0.9rem, 2.4vh, 1.8rem);
   animation: stage-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .stage-console {
+  flex: 0 0 auto;
   width: 100%;
   max-width: 62rem;
-  align-self: center;
+  margin-top: clamp(1.1rem, 3.2vh, 2.5rem);
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -201,13 +206,12 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
 /* Short screens: the title gives up size before the panel gives up room. */
 @media (max-height: 840px) {
-  .stage { gap: clamp(1rem, 2.5vh, 1.75rem); padding-top: clamp(1.25rem, 3.5vh, 2.5rem); padding-bottom: clamp(1rem, 2.5vh, 1.75rem); }
+  .stage { padding-top: clamp(0.6rem, 1.5vh, 1.25rem); padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem); }
   .hero-title { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
   .hero-sub { font-size: clamp(1rem, 1.5vw, 1.2rem); }
   .stage-head { gap: clamp(0.7rem, 1.8vh, 1.2rem); }
 }
 @media (max-height: 720px) {
-  .stage { gap: 1rem; }
   .hero-title { font-size: clamp(1.9rem, 3.6vw, 2.9rem); }
   .hero-sub { font-size: 1rem; }
   .stage textarea { min-height: 110px; }
