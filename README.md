@@ -2,7 +2,7 @@
 
 A React application for exploring fictional customer personas across general products, fashion, B2B software, restaurants, and fitness. Vite builds the frontend for GitHub Pages at `/prism/`; a separate Cloudflare Worker calls Anthropic.
 
-Every tool is one screen: a headline and the input box, nothing else and nothing below it, so there is no scrolling on the way to generating (measured at 0px overflow from 1920x1080 down to 1024x640). The four industry tools live in the toolbar menu. On the results view, clicking a profile opens it full width at a larger reading size.
+Every tool is one screen: the title sits high, the input panel sits low in the space beneath it, with example prompts under the panel and nothing below that. No scrolling on the way to generating, measured at 0px overflow on all five tools from 1920x1080 down to 1024x640. The panel draws no internal rules — the panel edge carries the focus state instead. The four industry tools live in the toolbar menu. On the results view, clicking a profile opens it full width at a larger reading size.
 
 ## Local development
 

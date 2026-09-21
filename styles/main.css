@@ -143,58 +143,76 @@ html[data-route='about'] .prism-container,
 html[data-route='privacy'] .prism-container { opacity: 0.28; }
 
 /* ---------------------------------------------------------- stage
-   Everything a tool needs on one screen: headline, input, examples.
-   Nothing below it, so there is nothing to scroll past. */
+   A console layout: the title sits high, the input panel sits low in the
+   space under it. One screen, nothing below it, nothing to scroll past. */
 
 .stage {
   min-height: calc(100svh - var(--nav-h) - 0.85rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem var(--page-x) 2rem;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  justify-items: center;
+  gap: clamp(1.25rem, 4vh, 3rem);
+  padding: clamp(1.5rem, 5vh, 4rem) var(--page-x) clamp(1.25rem, 4vh, 2.5rem);
 }
 
-.stage-inner {
-  width: 100%;
-  max-width: 62rem;
+.stage-head {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.15rem;
-  text-align: center;
-  animation: stage-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  gap: 0.85rem;
+  animation: stage-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stage-console {
+  width: 100%;
+  max-width: 62rem;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  animation: stage-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.07s both;
 }
 @keyframes stage-in {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
 
 .hero-title {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
-  font-size: clamp(2.4rem, 5.6vw, 4.6rem);
+  font-size: clamp(2.8rem, 6.2vw, 5.2rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
-  max-width: 18ch;
+  max-width: 17ch;
   text-wrap: balance;
 }
 .hero-title em { font-style: inherit; color: var(--beam); }
 
-.stage .input-section,
-.stage .error-box { width: 100%; text-align: left; }
+.hero-sub {
+  color: var(--text-2);
+  font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+  max-width: 58ch;
+  text-wrap: pretty;
+}
 
-/* Short screens: give the input the room instead of the headline. */
-@media (max-height: 820px) {
-  .stage-inner { gap: 1.1rem; }
-  .hero-title { font-size: clamp(2rem, 4.2vw, 3.4rem); }
+.stage .examples-row { justify-content: center; }
+
+/* Short screens: the title gives up size before the panel gives up room. */
+@media (max-height: 840px) {
+  .stage { gap: clamp(1rem, 2.5vh, 1.75rem); padding-top: clamp(1.25rem, 3.5vh, 2.5rem); padding-bottom: clamp(1rem, 2.5vh, 1.75rem); }
+  .hero-title { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
+  .stage-head { gap: 0.6rem; }
 }
-@media (max-height: 700px) {
-  .hero-title { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
-  .stage textarea { min-height: 108px; }
-  .input-label { padding-top: 0.9rem; }
+@media (max-height: 720px) {
+  .stage { gap: 1rem; }
+  .hero-title { font-size: clamp(1.9rem, 3.6vw, 2.9rem); }
+  .hero-sub { font-size: 0.92rem; }
+  .stage textarea { min-height: 110px; }
 }
-@media (max-height: 580px) {
-  .stage textarea { min-height: 84px; }
+@media (max-height: 600px) {
+  .hero-sub { display: none; }
+  .stage textarea { min-height: 88px; }
 }
 
 /* ---------------------------------------------------------- input card */
@@ -221,9 +239,12 @@ html[data-route='privacy'] .prism-container { opacity: 0.28; }
   opacity: 0.55;
 }
 .input-card:focus-within {
-  border-color: color-mix(in srgb, var(--beam) 45%, transparent);
-  box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--beam) 22%, transparent);
+  border-color: color-mix(in srgb, var(--beam) 55%, transparent);
+  box-shadow: var(--shadow), 0 0 0 2px color-mix(in srgb, var(--beam) 26%, transparent);
 }
+/* No rules, rectangles or bands inside the panel: the panel itself carries
+   the focus ring and the caret shows which field you are in. */
+.input-card :is(textarea, input[type="url"]):focus-visible { outline: none; }
 .input-card.drag-over { border-color: var(--beam); }
 
 .input-label {
@@ -265,9 +286,7 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
-  padding: 0.75rem 1rem 0.85rem 1.5rem;
-  border-top: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.015);
+  padding: 0.35rem 1rem 1rem 1.5rem;
 }
 .char-count { font-size: 0.75rem; color: var(--text-3); }
 
@@ -345,7 +364,6 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 1.5rem;
-  border-top: 1px solid var(--line);
 }
 .url-input-label { display: flex; align-items: center; color: var(--text-3); flex-shrink: 0; }
 .url-input-row input[type="url"] {
@@ -385,6 +403,25 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); borde
   font-weight: 600;
 }
 
+
+.examples-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.examples-row-label { font-size: 0.78rem; color: var(--text-3); }
+.example-pill {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.example-pill:hover { color: var(--text); border-color: var(--line-strong); background: rgba(255, 255, 255, 0.06); }
 
 .privacy-note, .results-note {
   font-size: 0.79rem;
